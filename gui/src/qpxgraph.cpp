@@ -23,15 +23,15 @@
 
 #include <sys/time.h>
 
-#define SHOW_P95ERRC
+//#define SHOW_P95ERRC
 //#define SHOW_P95JB
 
 #define MARGIN_DEFL	40
 #define MARGIN_DEFR	40
 #define MARGIN_DEFB	18
 
-#define GRID_STYLE Qt::DotLine
-//#define GRID_STYLE Qt::DashLine
+//#define GRID_STYLE Qt::DotLine
+#define GRID_STYLE Qt::DashLine
 
 class IntList : public QList<int>
 {
@@ -307,7 +307,7 @@ void QPxGraph::drawGraph(QPainter *p, QSize s, device *dev, int ttype, const QRe
 			HscaleLBA = (1<<19) * 5 * dev->media.ilayers/sg.width();
 			Vscale1X = Vscale * 3;
 		} else if (dev->media.type.startsWith("BD")) {
-			HscaleLBA = (1<<19) * 25 * dev->media.ilayers/sg.width();
+			HscaleLBA = (1<<19) * dev->media.igbpl * dev->media.ilayers/sg.width();
 			Vscale1X = Vscale * 4;
 		}
 
@@ -516,7 +516,7 @@ void QPxGraph::drawErrc(QPainter* p, const QSize& s, device *dev, const QRect&)
 				if (x!=xo || i==(dev->testData.errc.size()-1)) {
 // min-max
 					p->setPen(QPen(*settings->col_errc.raw[e], 1));
-					p->drawLine(xo, errc2h(s.height(), min),
+					p->drawLine(xo, errc2h(s.height(), 0),
 								xo, errc2h(s.height(), max));
 
 // P=0.95
@@ -866,7 +866,7 @@ void QPxGraph::drawGrid(QPainter* p, const QSize& s, device *dev, int ttype)
 		GBperLayer = 5;
 	} else if (dev->media.type.startsWith("BD")) {
 		isCD = 0;
-		GBperLayer = 25;
+		GBperLayer = dev->media.igbpl;
 	}
 
 	if (isCD) {
