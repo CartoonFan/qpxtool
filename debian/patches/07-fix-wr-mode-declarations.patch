@@ -1,0 +1,17 @@
+Description: Fix declarations of unsigned char in wr_mode
+Author: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Last-Update: 2017-02-27
+
+--- qpxtool-0.7.2.orig/lib/qpxtransport/include/qpx_mmc_defs.h
++++ qpxtool-0.7.2/lib/qpxtransport/include/qpx_mmc_defs.h
+@@ -581,8 +581,8 @@ static const	dev_desc _devtbl[]= {
+ #define WTYPE_LJ		4
+ 
+ typedef struct {
+-	char wtype;
+-	char dtype;
++	signed char wtype;
++	signed char dtype;
+ 	uint32_t	id;
+ 	char		name[32];
+ } wr_mode;
