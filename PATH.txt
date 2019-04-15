@@ -1,0 +1,2 @@
+Example path:
+SET PATH=%PATH%;C:\MinGW\msys\1.0\bin;C:\Qt\bin;C:\Qt\lib;C:\Qt\qmake

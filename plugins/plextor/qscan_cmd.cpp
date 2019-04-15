@@ -18,6 +18,7 @@
 #include <math.h>
 #include <unistd.h>
 #include <common_functions.h>
+#include <algorithm>
 
 #include <qpx_transport.h>
 #include <qpx_mmc.h>
@@ -568,7 +569,7 @@ int scan_plextor::build_TA_histogram_px716(unsigned char* response_data, int* de
 		v = ntoh16u(response_data+idx);
 		pit = !!(v & 0x8000);
 		v &=~0x8000;
-		dest[pit][min(v, len-1)]++;
+		dest[pit][std::min(v, len-1)]++;
 		idx+=2;
 	}
 	return 0;
@@ -585,9 +586,9 @@ int scan_plextor::build_TA_histogram_px755(unsigned char* response_data, int* de
 		pit = !!(v & 0x8000);
 		v &=~0x8000;
 		if (dt & DISC_DVDplus)
-			dest[pit][min( (int)(v*1.452), len-1)]++; // DVD+R(W), speed 2.4x
+			dest[pit][std::min( (int)(v*1.452), len-1)]++; // DVD+R(W), speed 2.4x
 		else
-			dest[pit][min( (int)(v*1.21), len-1)]++; // DVD-R(W), speed 2x
+			dest[pit][std::min( (int)(v*1.21), len-1)]++; // DVD-R(W), speed 2x
 		idx+=2;
 	}
 	return 0;
