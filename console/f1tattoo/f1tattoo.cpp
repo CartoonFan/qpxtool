@@ -58,9 +58,9 @@ auto get_device_info(drive_info *drive) -> int {
 
   if ((flags & FL_SUPPORTED) != 0U) {
     printf("\n** Supported features:\n");
-    //		printf("AudioMaster Q.R.    : %s\n", drive->ven_features & YMH_AMQR
-    //? "YES" : "---"); 		printf("ForceSpeed          : %s\n",
-    //drive->ven_features & YMH_FORCESPEED ? "YES" : "---");
+    //		printf("AudioMaster Q.R.    : %s\n", drive->ven_features &
+    //YMH_AMQR ? "YES" : "---"); 		printf("ForceSpeed          :
+    //%s\n", drive->ven_features & YMH_FORCESPEED ? "YES" : "---");
     printf("DiscT@2             : %s\n",
            (drive->ven_features & YMH_TATTOO) != 0U ? "YES" : "---");
   }
@@ -277,7 +277,7 @@ auto tattoo_read_png(unsigned char *buf, uint32_t rows, FILE *fp) -> bool {
       for (col = 0; col < my_png_get_image_width(png_ptr, info_ptr); col++) {
         raw_row_pointer[col] = png_row_pointer[col] ^ 0xFF;
         //					memcpy(raw_row_pointer,
-        //png_row_pointer, 3744);
+        // png_row_pointer, 3744);
       }
       break;
     case PNG_COLOR_TYPE_PALETTE:
