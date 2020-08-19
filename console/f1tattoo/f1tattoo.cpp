@@ -59,7 +59,7 @@ auto get_device_info(drive_info *drive) -> int {
   if ((flags & FL_SUPPORTED) != 0U) {
     printf("\n** Supported features:\n");
     //		printf("AudioMaster Q.R.    : %s\n", drive->ven_features &
-    //YMH_AMQR ? "YES" : "---"); 		printf("ForceSpeed          :
+    // YMH_AMQR ? "YES" : "---"); 		printf("ForceSpeed          :
     //%s\n", drive->ven_features & YMH_FORCESPEED ? "YES" : "---");
     printf("DiscT@2             : %s\n",
            (drive->ven_features & YMH_TATTOO) != 0U ? "YES" : "---");
