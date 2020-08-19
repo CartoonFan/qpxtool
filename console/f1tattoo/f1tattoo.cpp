@@ -10,8 +10,9 @@
  */
 
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
+#include <array>
 
 #include <qpx_mmc.h>
 #include <yamaha_features.h>
@@ -39,49 +40,52 @@ const	uint32_t	FL_TATTOO		= FL_TATTOO_RAW | FL_TATTOO_TEST;
 
 uint32_t	flags = 0;
 
-int get_device_info(drive_info* drive)
+auto get_device_info(drive_info* drive) -> int
 {
 	drive->ven_features=0;
 	drive->chk_features=0;
 	detect_capabilities(drive);
 //	detect_check_capabilities(drive);
 	determine_disc_type(drive);
-	if (!isYamaha(drive)) {
+	if (isYamaha(drive)==0) {
 		printf ("%s: drive not supported\n", drive->device);
 		return 1;
 	}
 //	if (!yamaha_check_amqr(drive)) drive->ven_features|=YMH_AMQR;
 //	if (!yamaha_check_forcespeed(drive)) drive->ven_features|=YMH_FORCESPEED;
-	if (!yamaha_f1_get_tattoo(drive)) drive->ven_features|=YMH_TATTOO;
+	if (yamaha_f1_get_tattoo(drive)==0) { 
+        drive->ven_features|=YMH_TATTOO;
+    }
 
-	if (flags & FL_SUPPORTED) {
+	if ((flags & FL_SUPPORTED)!=0U) {
 		printf("\n** Supported features:\n");
 //		printf("AudioMaster Q.R.    : %s\n", drive->ven_features & YMH_AMQR ? "YES" : "---");
 //		printf("ForceSpeed          : %s\n", drive->ven_features & YMH_FORCESPEED ? "YES" : "---");
-		printf("DiscT@2             : %s\n", drive->ven_features & YMH_TATTOO ? "YES" : "---");
+		printf("DiscT@2             : %s\n", (drive->ven_features & YMH_TATTOO)!=0U ? "YES" : "---");
 	}
 
-	if (flags & FL_CURRENT) {
+	if ((flags & FL_CURRENT)!=0U) {
 		printf("\n** Current drive settings:\n");
 	}
-	if ((flags & (FL_CURRENT | FL_TATTOO | FL_TATTOO_TEST)) && (drive->ven_features & YMH_TATTOO)) {
-		if (drive->yamaha.tattoo_rows) {
+	if ((flags & (FL_CURRENT | FL_TATTOO | FL_TATTOO_TEST))!=0U && (drive->ven_features & YMH_TATTOO)!=0U) {
+		if ((drive->yamaha.tattoo_rows) != 0U) {
 			printf("DiscT@2 info:\ninner: %d\nouter: %d\nimage: 3744x%d\n",
 				drive->yamaha.tattoo_i,
 				drive->yamaha.tattoo_o,
 				drive->yamaha.tattoo_rows);
 		} else {
-			if (drive->media.type & DISC_CD)
+			if ((drive->media.type & DISC_CD) != 0U) {
 				printf("Can't write DiscT@2 on inserted disc!\n");
-			else
+            } else {
 				printf("No disc found! Can't get DiscT@2 info!\n");
+            }
 		}
 	}
 	return 0;
 }
 
 #ifdef USE_LIBPNG
-static int my_png_get_image_width(png_structp png_ptr, png_infop info_ptr) {
+static auto my_png_get_image_width(png_structp png_ptr, png_infop info_ptr) -> int {
 #if PNG_LIBPNG_VER_MAJOR == 1 && PNG_LIBPNG_VER_MINOR >= 4 
 	return png_get_image_width(png_ptr, info_ptr);
 #else
@@ -89,7 +93,7 @@ static int my_png_get_image_width(png_structp png_ptr, png_infop info_ptr) {
 #endif
 }
 
-static int my_png_get_image_height(png_structp png_ptr, png_infop info_ptr) {
+static auto my_png_get_image_height(png_structp png_ptr, png_infop info_ptr) -> int {
 #if PNG_LIBPNG_VER_MAJOR == 1 && PNG_LIBPNG_VER_MINOR >= 4 
 	return png_get_image_height(png_ptr, info_ptr);
 #else
@@ -97,7 +101,7 @@ static int my_png_get_image_height(png_structp png_ptr, png_infop info_ptr) {
 #endif
 }
 
-static png_byte my_png_get_color_type(png_structp png_ptr, png_infop info_ptr)
+static auto my_png_get_color_type(png_structp png_ptr, png_infop info_ptr) -> png_byte
 {
 #if PNG_LIBPNG_VER_MAJOR == 1 && PNG_LIBPNG_VER_MINOR >= 4
 	return png_get_color_type(png_ptr, info_ptr);
@@ -106,7 +110,7 @@ static png_byte my_png_get_color_type(png_structp png_ptr, png_infop info_ptr)
 #endif
 }
 
-static png_uint_32 my_png_get_valid(png_structp png_ptr, png_infop info_ptr, png_uint_32 flags)
+static auto my_png_get_valid(png_structp png_ptr, png_infop info_ptr, png_uint_32 flags) -> png_uint_32
 {
 #if PNG_LIBPNG_VER_MAJOR == 1 && PNG_LIBPNG_VER_MINOR >= 4
 	return png_get_valid(png_ptr, info_ptr, PNG_INFO_PLTE);
@@ -115,7 +119,7 @@ static png_uint_32 my_png_get_valid(png_structp png_ptr, png_infop info_ptr, png
 #endif
 }
 
-static int my_png_get_bit_depth(png_structp png_ptr, png_infop info_ptr)
+static auto my_png_get_bit_depth(png_structp png_ptr, png_infop info_ptr) -> int
 {
 #if PNG_LIBPNG_VER_MAJOR == 1 && PNG_LIBPNG_VER_MINOR >= 4
 	return png_get_bit_depth(png_ptr, info_ptr);
@@ -124,7 +128,7 @@ static int my_png_get_bit_depth(png_structp png_ptr, png_infop info_ptr)
 #endif
 }
 
-static int my_png_get_rowbytes(png_structp png_ptr, png_infop info_ptr)
+static auto my_png_get_rowbytes(png_structp png_ptr, png_infop info_ptr) -> int
 {
 #if PNG_LIBPNG_VER_MAJOR == 1 && PNG_LIBPNG_VER_MINOR >= 4
 	return png_get_rowbytes(png_ptr, info_ptr);
@@ -133,55 +137,59 @@ static int my_png_get_rowbytes(png_structp png_ptr, png_infop info_ptr)
 #endif
 }
 
-bool tattoo_read_png(unsigned char *buf, uint32_t rows, FILE *fp)
+auto tattoo_read_png(unsigned char *buf, uint32_t rows, FILE *fp) -> bool
 {
-	png_byte	header[8];	// 8 is the maximum size that can be checked
-	png_structp	png_ptr;
-	png_infop	info_ptr;
-	uint32_t	number_of_passes;
-	png_bytep	png_row_pointer = NULL;
-	unsigned char *raw_row_pointer;
+    const int byte_size = 8;
+	png_byte header[byte_size];	// 8 is the maximum size that can be checked
+	png_structp	png_ptr = nullptr;
+	png_infop	info_ptr = nullptr;
+	uint32_t	number_of_passes = 0;
+	png_bytep	png_row_pointer = nullptr;
+	unsigned char *raw_row_pointer = nullptr;
 //	unsigned char *tp = NULL;
 
 //	int width;
-	uint32_t row, col;
-	int      c;
-	int32_t  r,g,b;
-	int num_palette;
+	uint32_t row = 0;
+    uint32_t col = 0;
+	int      c = 0;
+	int32_t  r = 0;
+    int32_t  g = 0;
+    int32_t  b = 0;
+	int num_palette = 0;
 #if PNG_LIBPNG_VER_MAJOR == 1 && PNG_LIBPNG_VER_MINOR >= 4
-	png_colorp palette;
+	png_colorp palette = nullptr;
 #endif
 
-	if (fread(header, 1, 8, fp) < 8) {
+	if (fread(header, 1, byte_size, fp) < byte_size) {
 		printf("Error reading PNG header\n");
 		fclose(fp);	
-		return 1;
+		return true;
 	}
-	if (png_sig_cmp(header, 0, 8)) {
+	if (png_sig_cmp(header, 0, byte_size) !=0) {
 		printf("File not recognized as a PNG\n");
 		fclose(fp);
-		return 1;
+		return true;
 	}
-	png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);	
-	if (!png_ptr) {
+	png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);	
+	if (png_ptr == nullptr ) {
 		printf("png_create_read_struct failed!\n");
 		fclose(fp);
-		return 1;
+		return true;
 	}
 	info_ptr = png_create_info_struct(png_ptr);
-	if (!info_ptr) {
+	if (info_ptr == nullptr)  {
 		printf("png_create_info_struct failed!\n");
 		fclose(fp);
-		return 1;
+		return true;
 	}
 	if (setjmp(png_jmpbuf(png_ptr))) {
 		printf("png_jmpbuf failed!\n");
 		fclose(fp);
-		return 1;
+		return true;
 	}
 
 	png_init_io(png_ptr, fp);
-	png_set_sig_bytes(png_ptr, 8);
+	png_set_sig_bytes(png_ptr, byte_size);
 
 	png_read_info(png_ptr, info_ptr);
 
@@ -191,7 +199,7 @@ bool tattoo_read_png(unsigned char *buf, uint32_t rows, FILE *fp)
 
 	if (my_png_get_image_width(png_ptr, info_ptr) != 3744U || my_png_get_image_height(png_ptr, info_ptr) != rows ) {
 		printf("Image should be 3744 x %d", rows);
-		return 1;
+		return true;
 	}
 
 //	width = info_ptr->width;
@@ -212,7 +220,7 @@ bool tattoo_read_png(unsigned char *buf, uint32_t rows, FILE *fp)
 			break;
 	    case PNG_COLOR_TYPE_PALETTE:
 			printf("PNG_COLOR_TYPE_PALETTE\n");
-			if (!(my_png_get_valid(png_ptr, info_ptr, PNG_INFO_PLTE))) {
+			if ((my_png_get_valid(png_ptr, info_ptr, PNG_INFO_PLTE))==0U) {
 				printf("PNG color type is indexed, but no palette found!");
 				goto err_read_png;
 			}
@@ -231,7 +239,7 @@ bool tattoo_read_png(unsigned char *buf, uint32_t rows, FILE *fp)
 			goto err_read_png;
 	}
 	printf("Bit depth : %d\n", my_png_get_bit_depth(png_ptr, info_ptr));
-	if (my_png_get_bit_depth(png_ptr, info_ptr) != 8) {
+	if (my_png_get_bit_depth(png_ptr, info_ptr) != byte_size) {
 		printf("Unsupported bit depth!\n");
 		goto err_read_png;
 	}
@@ -241,7 +249,7 @@ bool tattoo_read_png(unsigned char *buf, uint32_t rows, FILE *fp)
 #else
 	num_palette = info_ptr->num_palette;
 #endif
-	if (my_png_get_valid(png_ptr, info_ptr, PNG_INFO_PLTE)) {
+	if (my_png_get_valid(png_ptr, info_ptr, PNG_INFO_PLTE) != 0U) {
 		printf("Palette   : %d colors\n", num_palette);
 	} else {
 		printf("Palette   : NO\n");
@@ -250,15 +258,16 @@ bool tattoo_read_png(unsigned char *buf, uint32_t rows, FILE *fp)
 
 
 	raw_row_pointer = buf;
-	png_row_pointer = (png_byte*) malloc(my_png_get_rowbytes(png_ptr, info_ptr));
+	png_row_pointer = static_cast<png_byte*>(malloc(my_png_get_rowbytes(png_ptr, info_ptr)));
 	for (row=0; row<rows; row++) {
 		if (setjmp(png_jmpbuf(png_ptr))) {
 			printf("png_jmpbuf failed!\n");
 			goto err_read_png;
 		}
-		png_read_row(png_ptr, png_row_pointer, NULL);
-		if (my_png_get_image_width(png_ptr, info_ptr) < 3744U)
+		png_read_row(png_ptr, png_row_pointer, nullptr);
+		if (my_png_get_image_width(png_ptr, info_ptr) < 3744U) {
 			memset(raw_row_pointer, 0, 3744);
+        }
 
 		switch (my_png_get_color_type(png_ptr, info_ptr)) {
 		    case PNG_COLOR_TYPE_GRAY:
@@ -314,13 +323,17 @@ bool tattoo_read_png(unsigned char *buf, uint32_t rows, FILE *fp)
 	}
 
 //	if (tp) free(tp);
-	if (png_row_pointer) free(png_row_pointer);
-	return 1;
+	if (png_row_pointer != nullptr)  { 
+        free(png_row_pointer);
+    }
+	return true;
 
 err_read_png:
 //	if (tp) free(tp);
-	if (png_row_pointer) free(png_row_pointer);
-	return 0;
+	if (png_row_pointer != nullptr)  { 
+        free(png_row_pointer);
+    }
+	return false;
 }
 #endif
 
@@ -344,22 +357,19 @@ void usage(char* bin) {
 	printf("\t-v, --verbose                be verbose\n");
 }
 
-int main(int argc, char* argv[])
+auto main(int argc, char* argv[]) -> int
 {
-	int	i;
-	int	drvcnt=0;
-	char	*device   = NULL;
-	char	*tattoofn = NULL;
-	unsigned char	*tattoobuf = NULL;
-	FILE	*tattoof;
-	drive_info* drive;
-	bool fr=0;
+	int	i = 0;
+	char	*device   = nullptr;
+	char	*tattoofn = nullptr;
+	unsigned char	*tattoobuf = nullptr;
+	drive_info* drive = nullptr;
 
 	printf("**  DiscT@2 writer for Yamaha CRW-F1  v%s (c) 2005-2006,2009  Gennady \"ShultZ\" Kozlov  **\n", VERSION);
 
 	for (i=1; i<argc; i++) {
 //		printf("arg[%02d]: %s\n",i,argv[i]);
-		if(!strcmp(argv[i],"-d")) {
+		if(strcmp(argv[i],"-d")==0) {
 				if(argc>(i+1)) {
 					i++;
 					flags |= FL_DEVICE;
@@ -369,18 +379,40 @@ int main(int argc, char* argv[])
 					exit (1);
 				}
 		}
-		else if (!strcmp(argv[i],"-h")) flags |= FL_HELP;
-		else if(!strcmp(argv[i],"--help")) flags |= FL_HELP;
-		else if(!strcmp(argv[i],"-c")) flags |= FL_CURRENT;
-		else if(!strcmp(argv[i],"--current")) flags |= FL_CURRENT;
-		else if(!strcmp(argv[i],"-l")) flags |= FL_SCAN;
-		else if(!strcmp(argv[i],"--scanbus")) flags |= FL_SCAN;
-		else if(!strcmp(argv[i],"-s")) flags |= FL_SUPPORTED;
-		else if(!strcmp(argv[i],"--supported")) flags |= FL_SUPPORTED;
-		else if(!strcmp(argv[i],"-v")) flags |= FL_VERBOSE;
-		else if(!strcmp(argv[i],"--verbose")) flags |= FL_VERBOSE;
-		else if(!strcmp(argv[i],"--tattoo-test")) flags |= FL_TATTOO_TEST;
-		else if(!strcmp(argv[i],"--tattoo-raw")) {
+		else if (strcmp(argv[i],"-h")== 0)  { 
+            flags |= FL_HELP;
+        }
+		else if(strcmp(argv[i],"--help")== 0)   {
+            flags |= FL_HELP;
+        }
+		else if(strcmp(argv[i],"-c")== 0)   {
+            flags |= FL_CURRENT;
+        }
+		else if(strcmp(argv[i],"--current")== 0)   {
+            flags |= FL_CURRENT;
+        }
+		else if(strcmp(argv[i],"-l")== 0)   {
+            flags |= FL_SCAN;
+        }
+		else if(strcmp(argv[i],"--scanbus")== 0)   {
+            flags |= FL_SCAN;
+        }
+		else if(strcmp(argv[i],"-s")== 0)   {
+            flags |= FL_SUPPORTED;
+        }
+		else if(strcmp(argv[i],"--supported")== 0)   {
+            flags |= FL_SUPPORTED;
+        }
+		else if(strcmp(argv[i],"-v")== 0)   { 
+            flags |= FL_VERBOSE;
+        }
+		else if(strcmp(argv[i],"--verbose")== 0)   {
+            flags |= FL_VERBOSE;
+        }
+		else if(strcmp(argv[i],"--tattoo-test")== 0)   {
+            flags |= FL_TATTOO_TEST;
+        }
+		else if(strcmp(argv[i],"--tattoo-raw")== 0)   {
 			flags |= FL_TATTOO_RAW;
 			if (argc>(i+1)) {
 				i++;
@@ -389,7 +421,7 @@ int main(int argc, char* argv[])
 				printf("option %s needs parameter!\n", argv[i]);
 				return 5;
 			}
-		} else if(!strcmp(argv[i],"--tattoo-png")) {
+		} else if(strcmp(argv[i],"--tattoo-png")== 0)   {
 #ifdef USE_LIBPNG
 			flags |= FL_TATTOO_PNG;
 			if (argc>(i+1)) {
@@ -408,20 +440,23 @@ int main(int argc, char* argv[])
 		}
 	}
 
-	if (flags & FL_HELP) {
+	if ((flags & FL_HELP)!=0U) {
 		usage(argv[0]);
 		return 0;
 	}
-	if (!flags) {
+	if (flags==0U) {
 		usage(argv[0]);
 		return 1;
 	}
-	if (flags & FL_SCAN) {
+	if ((flags & FL_SCAN)!=0U) {
+        int	drvcnt=0;
 		drvcnt = scanbus(DEV_YAMAHA);
-		if (!drvcnt) printf("ERR: no drives found!\n");
+		if (drvcnt == 0) {
+            printf("ERR: no drives found!\n");
+        }
 		return 2;
 	}
-	if (!(flags & FL_DEVICE)) {
+	if ((flags & FL_DEVICE) == 0U) {
 		printf("** ERR: no device selected\n");
 		return 3;
 	}
@@ -429,7 +464,7 @@ int main(int argc, char* argv[])
 //	printf("____________________________\n");
 	printf("Device : %s\n", device);
 	drive = new drive_info(device);
-	if (drive->err) {
+	if ((drive->err) != 0) {
 		printf("%s: device open error!\n", argv[0]);
 		delete drive;
 		return 4;
@@ -439,43 +474,65 @@ int main(int argc, char* argv[])
 	printf("Vendor : '%s'\n",drive->ven);
 	printf("Model  : '%s'\n",drive->dev);
 	printf("F/W    : '%s'\n",drive->fw);
-	if (!(flags & FL_VERBOSE)) drive->silent++;
-	if (get_drive_serial_number(drive)) printf("Serial#: %s\n",drive->serial);
+	if ((flags & FL_VERBOSE)==0U) {
+        drive->silent++;
+    }
+	if (get_drive_serial_number(drive) != 0) {
+        printf("Serial#: %s\n",drive->serial);
+    }
 
-	if (flags) {
+	if (flags != 0U) {
 //	if (flags & FL_VERBOSE) {
 		printf("\nf1tattoo flags : ");
-		if (flags & FL_DEVICE)		printf(" DEVICE");
-		if (flags & FL_HELP)		printf(" HELP");
-		if (flags & FL_CURRENT)		printf(" CURRENT");
-		if (flags & FL_SCAN)		printf(" SCAN");
-		if (flags & FL_VERBOSE)		printf(" VERBOSE");
-		if (flags & FL_SUPPORTED)	printf(" SUPPORTED");
-		if (flags & FL_TATTOO)		printf(" TATTOO");
-		if (flags & FL_TATTOO_TEST)	printf(" TATTOO_TEST");
+		if ((flags & FL_DEVICE) != 0U)		{
+            printf(" DEVICE");
+        }
+		if ((flags & FL_HELP) != 0U)		{
+            printf(" HELP");
+        }
+		if ((flags & FL_CURRENT) != 0U)	{
+            printf(" CURRENT");
+        }
+		if ((flags & FL_SCAN) != 0U)		{
+            printf(" SCAN");
+        }
+		if ((flags & FL_VERBOSE) != 0U)		{
+            printf(" VERBOSE");
+        }
+		if ((flags & FL_SUPPORTED) != 0U)	{
+            printf(" SUPPORTED");
+        }
+		if ((flags & FL_TATTOO) != 0U)		{
+            printf(" TATTOO");
+        }
+		if ((flags & FL_TATTOO_TEST) != 0U)	{
+            printf(" TATTOO_TEST");
+        }
 		printf("\n\n");
 	}
 	get_device_info(drive);
 //	printf("____________________________\n");
 
-	if (flags & FL_TATTOO) {
-		if (!(drive->ven_features & YMH_TATTOO)) {
+	if ((flags & FL_TATTOO) != 0U) {
+        FILE	*tattoof = nullptr;
+        bool fr = false;
+		if ((drive->ven_features & YMH_TATTOO) == 0U) {
 			printf("Selected device doesn't have DiscT@2 feature!\n");
 			delete drive;
 			return 1;
 		}
-		if (flags & FL_TATTOO_TEST) {
+		if ((flags & FL_TATTOO_TEST) != 0U) {
 			printf("%s: writing T@2 test image...\n", device);
-			yamaha_f1_do_tattoo(drive, NULL, 0);
+			yamaha_f1_do_tattoo(drive, nullptr, 0);
 		} else {
 			tattoof = fopen(tattoofn, "r");
-			if (!tattoof) {
+			if (tattoof == nullptr) {
 				printf("Can't open tattoo file: %s", tattoofn);
 			} else {
 				printf("Reading tattoo file...\n");
-				tattoobuf = (unsigned char*) malloc (drive->yamaha.tattoo_rows * 3744);
+				tattoobuf = static_cast<unsigned char*>(malloc (drive->yamaha.tattoo_rows * 3744));
 #ifdef USE_LIBPNG
-				if (flags & FL_TATTOO_PNG) {
+				if ((flags & FL_TATTOO_PNG) != 0U) {
 					fr = tattoo_read_png(tattoobuf, drive->yamaha.tattoo_rows, tattoof);
 				} else {
 #endif
@@ -486,7 +543,7 @@ int main(int argc, char* argv[])
 #endif
 				fclose(tattoof);
 				if (fr) {
-					yamaha_f1_do_tattoo(drive, tattoobuf, fr * 3744);
+					yamaha_f1_do_tattoo(drive, tattoobuf, static_cast<int>(fr) * 3744);
 				} else {
 					printf("Error reading T@2 image!\n");
 				}
@@ -494,7 +551,9 @@ int main(int argc, char* argv[])
 			}
 		}
 	}
-	if (!(flags & FL_VERBOSE)) drive->silent--;
+	if ((flags & FL_VERBOSE) == 0U) {
+        drive->silent--;
+    }
 	delete drive;
 	return 0;
 }
