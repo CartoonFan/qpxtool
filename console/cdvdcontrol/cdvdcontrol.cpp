@@ -187,48 +187,48 @@ auto get_device_info(drive_info *dev) -> int {
   if ((flags & FL_SUPPORTED) != 0U) {
     //      printf("____________________________\n");
     cout << "\n** Supported features:\n";
-    cout << "AudioMaster Q.R.    : " << (dev->ven_features & YMH_AMQR) != 0U
+    cout << "AudioMaster Q.R.    : " << ((dev->ven_features & YMH_AMQR) != 0U)
         ? "YES"
         : "-"
               << "\n";
     printf("Yamaha ForceSpeed   : %s\n",
-           (dev->ven_features & YMH_FORCESPEED) != 0U ? "YES" : "-");
+           ((dev->ven_features & YMH_FORCESPEED) != 0U) ? "YES" : "-");
     printf("Yamaha DiscT@2      : %s\n",
-           dev->ven_features & YMH_TATTOO ? "YES" : "-");
+           (dev->ven_features & YMH_TATTOO) ? "YES" : "-");
     printf("Hide CD-R           : %s\n",
-           dev->ven_features & PX_HCDRSS ? "YES" : "-");
+           (dev->ven_features & PX_HCDRSS) ? "YES" : "-");
     printf("SingleSession       : %s\n",
-           dev->ven_features & PX_HCDRSS ? "YES" : "-");
+           (dev->ven_features & PX_HCDRSS) ? "YES" : "-");
     printf("SpeedRead           : %s\n",
-           dev->ven_features & PX_SPDREAD ? "YES" : "-");
+           (dev->ven_features & PX_SPDREAD) ? "YES" : "-");
     printf("PoweRec             : %s\n",
-           dev->ven_features & PX_POWEREC ? "YES" : "-");
+           (dev->ven_features & PX_POWEREC) ? "YES" : "-");
     printf("GigaRec             : %s\n",
-           dev->ven_features & PX_GIGAREC ? "YES" : "-");
+           (dev->ven_features & PX_GIGAREC) ? "YES" : "-");
     printf("VariRec CD          : %s\n",
-           dev->ven_features & PX_VARIREC_CD ? "YES" : "-");
+           (dev->ven_features & PX_VARIREC_CD) ? "YES" : "-");
     printf("VariRec DVD         : %s\n",
-           dev->ven_features & PX_VARIREC_DVD ? "YES" : "-");
+           (dev->ven_features & PX_VARIREC_DVD) ? "YES" : "-");
     printf("SecuRec             : %s\n",
-           dev->ven_features & PX_SECUREC ? "YES" : "-");
+           (dev->ven_features & PX_SECUREC) ? "YES" : "-");
     printf("Silent mode         : %s\n",
-           dev->ven_features & PX_SILENT ? "YES" : "-");
+           (dev->ven_features & PX_SILENT) ? "YES" : "-");
     printf("DVD+R bitsetting    : %s\n",
-           dev->ven_features & PX_BITSET_R ? "YES" : "-");
+           (dev->ven_features & PX_BITSET_R) ? "YES" : "-");
     printf("DVD+R DL bitsetting : %s\n",
-           dev->ven_features & PX_BITSET_RDL ? "YES" : "-");
+           (dev->ven_features & PX_BITSET_RDL) ? "YES" : "-");
     printf("DVD+R(W) testwrite  : %s\n",
-           dev->ven_features & PX_SIMUL_PLUS ? "YES" : "-");
+           (dev->ven_features & PX_SIMUL_PLUS) ? "YES" : "-");
     printf("AutoStrategy        : %s%s\n",
-           dev->ven_features & PX_ASTRATEGY ? "YES" : "-",
+           (dev->ven_features & PX_ASTRATEGY) ? "YES" : "-",
            (dev->ven_features & PX_ASTRATEGY) &&
                    (dev->dev_ID & (PLEXTOR_755 | PLEXTOR_760))
                ? " (EXTENDED)"
                : "");
     printf("PlexEraser          : %s\n",
-           dev->ven_features & PX_ERASER ? "YES" : "-");
+           (dev->ven_features & PX_ERASER) ? "YES" : "-");
     printf("Pioneer QuietMode   : %s\n",
-           dev->ven_features & PIO_QUIET ? "YES" : "-");
+           (dev->ven_features & PIO_QUIET) ? "YES" : "-");
   }
 
   //  get_media_info(dev);
