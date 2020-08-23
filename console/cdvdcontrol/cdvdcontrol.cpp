@@ -74,8 +74,8 @@ const   uint32_t    FLAS_ACT        = 0x00000020;
 const   uint32_t    FLAS_DEACT      = 0x00000040;
 const   uint32_t    FLAS_CLEAR      = 0x00000080;
 
-    uint32_t    flags = 0;
-    uint32_t    flags_as = 0;
+uint32_t    flags = 0;
+uint32_t    flags_as = 0;
 
 auto get_device_info(drive_info* dev) -> int
 {
@@ -199,8 +199,8 @@ auto get_device_info(drive_info* dev) -> int
         printf("DVD+R DL bitsetting : %s\n", dev->ven_features & PX_BITSET_RDL ? "YES" : "-");
         printf("DVD+R(W) testwrite  : %s\n", dev->ven_features & PX_SIMUL_PLUS ? "YES" : "-");
         printf("AutoStrategy        : %s%s\n",
-            dev->ven_features & PX_ASTRATEGY ? "YES" : "-",
-            (dev->ven_features & PX_ASTRATEGY) && (dev->dev_ID & (PLEXTOR_755 | PLEXTOR_760)) ? " (EXTENDED)" : "");
+               dev->ven_features & PX_ASTRATEGY ? "YES" : "-",
+               (dev->ven_features & PX_ASTRATEGY) && (dev->dev_ID & (PLEXTOR_755 | PLEXTOR_760)) ? " (EXTENDED)" : "");
         printf("PlexEraser          : %s\n", dev->ven_features & PX_ERASER ? "YES" : "-");
         printf("Pioneer QuietMode   : %s\n", dev->ven_features & PIO_QUIET ? "YES" : "-");
     }
@@ -214,8 +214,9 @@ auto get_device_info(drive_info* dev) -> int
         printf("\n** Current drive settings:\n");
     }
     if ((dev->capabilities & CAP_LOCK)      && (flags & FL_CURRENT))
-        { get_lock(dev);
-        printf("Lock state          : %s\n", (dev->parms.status & STATUS_LOCK) ? "ON":"OFF"); }
+    {   get_lock(dev);
+        printf("Lock state          : %s\n", (dev->parms.status & STATUS_LOCK) ? "ON":"OFF");
+    }
 //  if ((dev->ven_features & YMH_AMQR)       && ((flags & FL_CURRENT) || (flags & FL_YMH_AMQR)))
 //      printf("AudioMaster Q.R.    : %s\n", dev->yamaha.amqr ? "ON":"OFF");
 //  if ((dev->ven_features & YMH_FORCESPEED)       && ((flags & FL_CURRENT) || (flags & FL_YMH_FORCESPEED)))
@@ -223,9 +224,9 @@ auto get_device_info(drive_info* dev) -> int
     if ((dev->ven_features & YMH_TATTOO) && (flags & FL_CURRENT)) {
         if (dev->yamaha.tattoo_rows) {
             printf("Yamaha DiscT@2      : inner %d   outer %d   image 3744 x %d\n",
-                dev->yamaha.tattoo_i,
-                dev->yamaha.tattoo_o,
-                dev->yamaha.tattoo_rows);
+                   dev->yamaha.tattoo_i,
+                   dev->yamaha.tattoo_o,
+                   dev->yamaha.tattoo_rows);
         } else {
             if (dev->media.type & DISC_CD)
                 printf("DiscT@2: Can't write T@2 on inserted disc! No space left?\n");
@@ -250,16 +251,19 @@ auto get_device_info(drive_info* dev) -> int
     if ((dev->ven_features & PX_GIGAREC)     && ((flags & FL_CURRENT) || (flags & FL_GIGAREC)))
         print_gigarec_value(dev);
     if ((dev->ven_features & PX_VARIREC_CD)  && ((flags & FL_CURRENT) || (flags & FL_VARIREC_CD)))
-        { printf("VariRec CD state    : %s\n", dev->plextor.varirec_state_cd ? "ON":"OFF");
-        if (dev->plextor.varirec_state_cd) print_varirec(dev, VARIREC_CD); }
+    {   printf("VariRec CD state    : %s\n", dev->plextor.varirec_state_cd ? "ON":"OFF");
+        if (dev->plextor.varirec_state_cd) print_varirec(dev, VARIREC_CD);
+    }
     if ((dev->ven_features & PX_VARIREC_DVD) && ((flags & FL_CURRENT) || (flags & FL_VARIREC_DVD)))
-        { printf("VariRec DVD state   : %s\n", dev->plextor.varirec_state_dvd ? "ON":"OFF");
-        if (dev->plextor.varirec_state_dvd) print_varirec(dev, VARIREC_DVD); }
+    {   printf("VariRec DVD state   : %s\n", dev->plextor.varirec_state_dvd ? "ON":"OFF");
+        if (dev->plextor.varirec_state_dvd) print_varirec(dev, VARIREC_DVD);
+    }
     if ((dev->ven_features & PX_SECUREC)     && ((flags & FL_CURRENT) || (flags & FL_SECUREC)))
         printf("SecuRec state       : %s\n", dev->plextor.securec ? "ON":"OFF");
     if ((dev->ven_features & PX_SILENT)      && ((flags & FL_CURRENT) || (flags & FL_SILENT)))
-        { printf("Silent mode         : %s\n",dev->plextor_silent.state ? "ON":"OFF");
-        if (dev->plextor_silent.state) plextor_print_silentmode_state(dev); }
+    {   printf("Silent mode         : %s\n",dev->plextor_silent.state ? "ON":"OFF");
+        if (dev->plextor_silent.state) plextor_print_silentmode_state(dev);
+    }
     if ((dev->ven_features & PX_BITSET_R)    && ((flags & FL_CURRENT) || (flags & FL_BOOK_R)))
         printf("DVD+R bitsetting    : %s\n", dev->book_plus_r ? "ON":"OFF");
     if ((dev->ven_features & PX_BITSET_RDL)  && ((flags & FL_CURRENT) || (flags & FL_BOOK_RDL)))
@@ -412,14 +416,14 @@ int main (int argc, char* argv[])
     for (i=1; i<argc; i++) {
 //      printf("arg[%02d]: %s\n",i,argv[i]);
         if(!strcmp(argv[i],"-d")) {
-                if(argc>(i+1)) {
-                    i++;
-                    flags |= FL_DEVICE;
-                    device = argv[i];
-                } else {
-                    printf("Option %s needs parameter\n",argv[i]);
-                    exit (1);
-                }
+            if(argc>(i+1)) {
+                i++;
+                flags |= FL_DEVICE;
+                device = argv[i];
+            } else {
+                printf("Option %s needs parameter\n",argv[i]);
+                exit (1);
+            }
         }
         else if(!strcmp(argv[i],"-h")) flags |= FL_HELP;
         else if(!strcmp(argv[i],"--help")) flags |= FL_HELP;
@@ -432,42 +436,48 @@ int main (int argc, char* argv[])
 //  ************   Lock
         else if(!strcmp(argv[i],"--unlock")) {
             if ( !(flags & FL_LOCK)) {
-                flags |= FL_LOCK; lock=0;
+                flags |= FL_LOCK;
+                lock=0;
             } else {
                 printf("Conflicting/duplicated lock/unlock option!\n");
             }
         }
         else if(!strcmp(argv[i],"--lock")) {
             if ( !(flags & FL_LOCK)) {
-                flags |= FL_LOCK; lock=1;
+                flags |= FL_LOCK;
+                lock=1;
             } else {
                 printf("Conflicting/duplicated lock/unlock option!\n");
             }
         }
         else if(!strcmp(argv[i],"--lockt")) {
             if ( !(flags & FL_LOCK)) {
-                flags |= FL_LOCK; lock=2;
+                flags |= FL_LOCK;
+                lock=2;
             } else {
                 printf("Conflicting/duplicated lock/unlock option!\n");
             }
         }
         else if(!strcmp(argv[i],"--load")) {
             if ( !(flags & FL_LOEJ)) {
-                flags |= FL_LOEJ; eject=0;
+                flags |= FL_LOEJ;
+                eject=0;
             } else {
                 printf("Conflicting/duplicated load/eject option!\n");
             }
         }
         else if(!strcmp(argv[i],"--eject")) {
             if ( !(flags & FL_LOEJ)) {
-                flags |= FL_LOEJ; eject=1;
+                flags |= FL_LOEJ;
+                eject=1;
             } else {
                 printf("Conflicting/duplicated load/eject option!\n");
             }
         }
         else if(!strcmp(argv[i],"--loej")) {
             if ( !(flags & FL_LOEJ)) {
-                flags |= FL_LOEJ; eject=2;
+                flags |= FL_LOEJ;
+                eject=2;
             } else {
                 printf("Conflicting/duplicated load/eject option!\n");
             }
@@ -568,16 +578,34 @@ int main (int argc, char* argv[])
                         printf("Illegal VariREC CD power value: %s\n", argv[i]);
                         return 5;
                     } else switch(val) {
-                        case -4: varirec_cd_pwr = VARIREC_MINUS_4; break;
-                        case -3: varirec_cd_pwr = VARIREC_MINUS_3; break;
-                        case -2: varirec_cd_pwr = VARIREC_MINUS_2; break;
-                        case -1: varirec_cd_pwr = VARIREC_MINUS_1; break;
-                        case  0: varirec_cd_pwr = VARIREC_NULL; break;
-                        case  1: varirec_cd_pwr = VARIREC_PLUS_1; break;
-                        case  2: varirec_cd_pwr = VARIREC_PLUS_2; break;
-                        case  3: varirec_cd_pwr = VARIREC_PLUS_3; break;
-                        case  4: varirec_cd_pwr = VARIREC_PLUS_4; break;
-                    }
+                        case -4:
+                            varirec_cd_pwr = VARIREC_MINUS_4;
+                            break;
+                        case -3:
+                            varirec_cd_pwr = VARIREC_MINUS_3;
+                            break;
+                        case -2:
+                            varirec_cd_pwr = VARIREC_MINUS_2;
+                            break;
+                        case -1:
+                            varirec_cd_pwr = VARIREC_MINUS_1;
+                            break;
+                        case  0:
+                            varirec_cd_pwr = VARIREC_NULL;
+                            break;
+                        case  1:
+                            varirec_cd_pwr = VARIREC_PLUS_1;
+                            break;
+                        case  2:
+                            varirec_cd_pwr = VARIREC_PLUS_2;
+                            break;
+                        case  3:
+                            varirec_cd_pwr = VARIREC_PLUS_3;
+                            break;
+                        case  4:
+                            varirec_cd_pwr = VARIREC_PLUS_4;
+                            break;
+                        }
                 }
             } else {
                 printf("option %s needs parameter!\n", argv[i]);
@@ -590,8 +618,7 @@ int main (int argc, char* argv[])
                 int val = atol(argv[i]);
                 if (!errno && val>=-1 && val<6) {
                     varirec_cd_str = val+1;
-                } else
-                if (!strcmp(argv[i],"default"))  varirec_cd_str = 0;
+                } else if (!strcmp(argv[i],"default"))  varirec_cd_str = 0;
                 else if (!strcmp(argv[i],"azo")) varirec_cd_str = 1;
                 else if (!strcmp(argv[i],"cya")) varirec_cd_str = 2;
                 else if (!strcmp(argv[i],"pha")) varirec_cd_str = 3;
@@ -619,16 +646,34 @@ int main (int argc, char* argv[])
                         printf("Illegal VariREC DVD power value: %s\n", argv[i]);
                         return 5;
                     } else switch(val) {
-                        case -4: varirec_dvd_pwr = VARIREC_MINUS_4; break;
-                        case -3: varirec_dvd_pwr = VARIREC_MINUS_3; break;
-                        case -2: varirec_dvd_pwr = VARIREC_MINUS_2; break;
-                        case -1: varirec_dvd_pwr = VARIREC_MINUS_1; break;
-                        case  0: varirec_dvd_pwr = VARIREC_NULL; break;
-                        case  1: varirec_dvd_pwr = VARIREC_PLUS_1; break;
-                        case  2: varirec_dvd_pwr = VARIREC_PLUS_2; break;
-                        case  3: varirec_dvd_pwr = VARIREC_PLUS_3; break;
-                        case  4: varirec_dvd_pwr = VARIREC_PLUS_4; break;
-                    }
+                        case -4:
+                            varirec_dvd_pwr = VARIREC_MINUS_4;
+                            break;
+                        case -3:
+                            varirec_dvd_pwr = VARIREC_MINUS_3;
+                            break;
+                        case -2:
+                            varirec_dvd_pwr = VARIREC_MINUS_2;
+                            break;
+                        case -1:
+                            varirec_dvd_pwr = VARIREC_MINUS_1;
+                            break;
+                        case  0:
+                            varirec_dvd_pwr = VARIREC_NULL;
+                            break;
+                        case  1:
+                            varirec_dvd_pwr = VARIREC_PLUS_1;
+                            break;
+                        case  2:
+                            varirec_dvd_pwr = VARIREC_PLUS_2;
+                            break;
+                        case  3:
+                            varirec_dvd_pwr = VARIREC_PLUS_3;
+                            break;
+                        case  4:
+                            varirec_dvd_pwr = VARIREC_PLUS_4;
+                            break;
+                        }
                 }
             } else {
                 printf("option %s needs parameter!\n", argv[i]);
@@ -656,7 +701,7 @@ int main (int argc, char* argv[])
                 i++;
                 strcpy(passwd,argv[i]);
                 flags |= FL_SECUREC;
-            //  printf("SecuRec pass: %s\n", passwd);
+                //  printf("SecuRec pass: %s\n", passwd);
             } else {
                 printf("option %s needs parameter!\n", argv[i]);
                 return 5;
@@ -803,7 +848,9 @@ int main (int argc, char* argv[])
             }
         }
         else if(!strcmp(argv[i],"--sm-load")) {
-            flags |= FL_SILENT; silent = 1; silent_tray = 1;
+            flags |= FL_SILENT;
+            silent = 1;
+            silent_tray = 1;
             if (argc>(i+1)) {
                 i++;
                 silent_load = (int)strtol(argv[i], NULL, 0);
@@ -814,7 +861,9 @@ int main (int argc, char* argv[])
             }
         }
         else if(!strcmp(argv[i],"--sm-eject")) {
-            flags |= FL_SILENT; silent = 1; silent_tray = 1;
+            flags |= FL_SILENT;
+            silent = 1;
+            silent_tray = 1;
             if (argc>(i+1)) {
                 i++;
                 silent_eject = (int)strtol(argv[i], NULL, 0);
@@ -825,7 +874,8 @@ int main (int argc, char* argv[])
             }
         }
         else if(!strcmp(argv[i],"--sm-access")) {
-            flags |= FL_SILENT; silent = 1;
+            flags |= FL_SILENT;
+            silent = 1;
             if (argc>(i+1)) {
                 i++;
                 if     (!strcmp(argv[i],"fast"))  silent_access = SILENT_ACCESS_FAST;
@@ -836,7 +886,9 @@ int main (int argc, char* argv[])
             }
         }
         else if(!strcmp(argv[i],"--sm-cd-rd")) {
-            flags |= FL_SILENT; silent = 1; silent_cd = 1;
+            flags |= FL_SILENT;
+            silent = 1;
+            silent_cd = 1;
             if (argc>(i+1)) {
                 i++;
                 if      (!strcmp(argv[i],"48")) silent_cd_rd = SILENT_CD_RD_48X;
@@ -853,7 +905,9 @@ int main (int argc, char* argv[])
             }
         }
         else if(!strcmp(argv[i],"--sm-cd-wr")) {
-            flags |= FL_SILENT; silent = 1; silent_cd = 1;
+            flags |= FL_SILENT;
+            silent = 1;
+            silent_cd = 1;
             if (argc>(i+1)) {
                 i++;
                 if      (!strcmp(argv[i],"48")) silent_cd_wr = SILENT_CD_WR_48X;
@@ -870,7 +924,9 @@ int main (int argc, char* argv[])
             }
         }
         else if(!strcmp(argv[i],"--sm-dvd-rd")) {
-            flags |= FL_SILENT; silent = 1; silent_dvd = 1;
+            flags |= FL_SILENT;
+            silent = 1;
+            silent_dvd = 1;
             if (argc>(i+1)) {
                 i++;
                 if      (!strcmp(argv[i],"16")) silent_dvd_rd = SILENT_DVD_RD_16X;
@@ -885,31 +941,37 @@ int main (int argc, char* argv[])
                 return 5;
             }
         }
-/*
-        else if(!strcmp(argv[i],"--sm-dvd-wr")) {
-            flags |= FL_SILENT; silent = 1; silent_dvd = 1;
-            if (argc>(i+1)) {
-                i++;
-                if      (!strcmp(argv[i],"18")) silent_dvd_wr = SILENT_DVD_WR_18X;
-                else if (!strcmp(argv[i],"16")) silent_dvd_wr = SILENT_DVD_WR_12X;
-                else if (!strcmp(argv[i],"12")) silent_dvd_wr = SILENT_DVD_WR_12X;
-                else if (!strcmp(argv[i], "8")) silent_dvd_wr =  SILENT_DVD_WR_8X;
-                else if (!strcmp(argv[i], "6")) silent_dvd_wr =  SILENT_DVD_WR_6X;
-                else if (!strcmp(argv[i], "4")) silent_dvd_wr =  SILENT_DVD_WR_4X;
-                else
-                    printf("invalid --sm-dvd-wr parameter: %s\n", argv[i]);
-            } else {
-                printf("option %s needs parameter!\n", argv[i]);
-                return 5;
-            }
-        }
-*/
+        /*
+                else if(!strcmp(argv[i],"--sm-dvd-wr")) {
+                    flags |= FL_SILENT; silent = 1; silent_dvd = 1;
+                    if (argc>(i+1)) {
+                        i++;
+                        if      (!strcmp(argv[i],"18")) silent_dvd_wr = SILENT_DVD_WR_18X;
+                        else if (!strcmp(argv[i],"16")) silent_dvd_wr = SILENT_DVD_WR_12X;
+                        else if (!strcmp(argv[i],"12")) silent_dvd_wr = SILENT_DVD_WR_12X;
+                        else if (!strcmp(argv[i], "8")) silent_dvd_wr =  SILENT_DVD_WR_8X;
+                        else if (!strcmp(argv[i], "6")) silent_dvd_wr =  SILENT_DVD_WR_6X;
+                        else if (!strcmp(argv[i], "4")) silent_dvd_wr =  SILENT_DVD_WR_4X;
+                        else
+                            printf("invalid --sm-dvd-wr parameter: %s\n", argv[i]);
+                    } else {
+                        printf("option %s needs parameter!\n", argv[i]);
+                        return 5;
+                    }
+                }
+        */
         else if(!strcmp(argv[i],"--sm-nosave")) silent_save = 0;
         else if(!strcmp(argv[i],"--destruct")) {
             if (argc>(i+1)) {
                 i++;
-                if (!strcmp(argv[i],"quick")) { flags |= FL_PXERASER; pxeraser = PLEXERASER_QUICK; }
-                if (!strcmp(argv[i],"full"))  { flags |= FL_PXERASER; pxeraser = PLEXERASER_FULL;  }
+                if (!strcmp(argv[i],"quick")) {
+                    flags |= FL_PXERASER;
+                    pxeraser = PLEXERASER_QUICK;
+                }
+                if (!strcmp(argv[i],"full"))  {
+                    flags |= FL_PXERASER;
+                    pxeraser = PLEXERASER_FULL;
+                }
             } else {
                 printf("option %s needs parameter!\n", argv[i]);
                 return 5;
@@ -930,12 +992,12 @@ int main (int argc, char* argv[])
             }
 
 
-//  printf("\t--pio-limit [on|off]         limit (or not) read speed by 24x for CD and 8x for DVD\n");  
+//  printf("\t--pio-limit [on|off]         limit (or not) read speed by 24x for CD and 8x for DVD\n");
 //  printf("\t--pio-quiet [quiet|perf|std] select QuietMode setting: Quiet, Performance or Standard (default: quiet)\n");
 //  printf("\t--pio-nosave                 don't save settings to drive (changes will be lost after reboot)\n");
 
         } else if(!strcmp(argv[i],"--pio-nosave")) {
-            silent_save = 0; 
+            silent_save = 0;
         } else if(!strcmp(argv[i],"--pio-limit")) {
             flags |= FL_PIOLIMIT;
             if (argc>(i+1)) {
@@ -1046,19 +1108,19 @@ int main (int argc, char* argv[])
     if (flags & FL_LOCK) {
 //      dev->silent++;
         switch (lock) {
-            case 0:
-                printf("Unlocking media...\n");
-                dev->parms.status &= (~STATUS_LOCK);
-                break;
-            case 1:
-                printf("Locking media...\n");
-                dev->parms.status |= STATUS_LOCK;
-                break;
-            case 2:
-                printf("Toggle media lock state...\n");
-                get_lock(dev);
-                dev->parms.status ^= STATUS_LOCK;
-                break;
+        case 0:
+            printf("Unlocking media...\n");
+            dev->parms.status &= (~STATUS_LOCK);
+            break;
+        case 1:
+            printf("Locking media...\n");
+            dev->parms.status |= STATUS_LOCK;
+            break;
+        case 2:
+            printf("Toggle media lock state...\n");
+            get_lock(dev);
+            dev->parms.status ^= STATUS_LOCK;
+            break;
         }
         set_lock(dev);
         printf("Media is%s locked\n", (dev->parms.status & STATUS_LOCK) ? "" : " NOT");
@@ -1080,16 +1142,16 @@ int main (int argc, char* argv[])
         dev->plextor.powerec_state = powerec;
         plextor_set_powerec(dev);
     }
-/*
-    if (flags & FL_YMH_AMQR) {
-        dev->yamaha.amqr = amqr;
-        yamaha_set_amqr(dev);
-    }
-    if (flags & FL_YMH_FORCESPEED) {
-        dev->yamaha.forcespeed = forcespeed;
-        yamaha_set_forcespeed(dev);
-    }
-*/
+    /*
+        if (flags & FL_YMH_AMQR) {
+            dev->yamaha.amqr = amqr;
+            yamaha_set_amqr(dev);
+        }
+        if (flags & FL_YMH_FORCESPEED) {
+            dev->yamaha.forcespeed = forcespeed;
+            yamaha_set_forcespeed(dev);
+        }
+    */
     if (flags & FL_GIGAREC) {
 //      printf("Set GigaREC...\n");
         dev->plextor.gigarec = gigarec;
@@ -1152,23 +1214,23 @@ int main (int argc, char* argv[])
 
         printf("Available write speeds:\n");
         printf("WR speed max: %4.1fX (%d kB/s)\n",
-                    ((float)dev->parms.max_write_speed_kb) / dev->parms.speed_mult,
-                    dev->parms.max_write_speed_kb);
+               ((float)dev->parms.max_write_speed_kb) / dev->parms.speed_mult,
+               dev->parms.max_write_speed_kb);
         for (int i=0; i<speed_tbl_size && dev->parms.wr_speed_tbl_kb[i] > 0; i++) {
             printf("  speed #%02d: %4.1fX (%d kB/s)\n", i,
-                    ((float)dev->parms.wr_speed_tbl_kb[i]) / ((float)dev->parms.speed_mult),
-                    dev->parms.wr_speed_tbl_kb[i]);
+                   ((float)dev->parms.wr_speed_tbl_kb[i]) / ((float)dev->parms.speed_mult),
+                   dev->parms.wr_speed_tbl_kb[i]);
         }
         if (as_mqck >= 0) {
             dev->parms.max_write_speed_kb = (int) (as_mqck_spd * dev->parms.speed_mult),
-            set_rw_speeds(dev);
+                 set_rw_speeds(dev);
             get_rw_speeds(dev);
             if ( !(dev->media.type & (DISC_DVD)) ) {
                 printf("MQCK: Media Quality Check supported on DVD media only!\n");
                 return 5;
             }
             printf("Starting media check at speed %.1f X...\n",
-                ((float)dev->parms.max_write_speed_kb) / dev->parms.speed_mult);
+                   ((float)dev->parms.max_write_speed_kb) / dev->parms.speed_mult);
             if (plextor_media_check(dev, as_mqck)) {
                 if ((dev->err & 0x0FFF00) == 0x023A00)
                     printf("MQCK: No media found\n");
@@ -1183,14 +1245,14 @@ int main (int argc, char* argv[])
                     printf("MQCK: Media is GOOD for writing at selected speed\n");
             } else {
                 switch (dev->rd_buf[0x10]) {
-                    case 0x01:
-                        printf("MQCK: Write error may occur\n");
-                        break;
-                    case 0x03:
-                        printf("MQCK: Drive may not write correctly at selected speed\n");
-                        break;
-                    default:
-                        printf("MQCK: Unknown MQCK error: 0x%02X\n", dev->rd_buf[0x10]);
+                case 0x01:
+                    printf("MQCK: Write error may occur\n");
+                    break;
+                case 0x03:
+                    printf("MQCK: Drive may not write correctly at selected speed\n");
+                    break;
+                default:
+                    printf("MQCK: Unknown MQCK error: 0x%02X\n", dev->rd_buf[0x10]);
                 }
             }
         }
@@ -1219,17 +1281,21 @@ int main (int argc, char* argv[])
     }
     if (flags_as & FLAS_CREATE) {
         printf("AS: Creating new strategy, mode: %s, action: %s...\n",
-            (ascre & ASDB_CRE_FULL) == ASDB_CRE_FULL? "FULL" : "QUICK",
-            (ascre & ASDB_ADD) == ASDB_ADD? "ADD" : "REPLACE");
+               (ascre & ASDB_CRE_FULL) == ASDB_CRE_FULL? "FULL" : "QUICK",
+               (ascre & ASDB_ADD) == ASDB_ADD? "ADD" : "REPLACE");
         plextor_create_strategy(dev, ascre);
     }
     if (flags_as & FLAS_RETR) {
-        unsigned char hdr[9]; memset(hdr, 0, 9);
+        unsigned char hdr[9];
+        memset(hdr, 0, 9);
         printf("AS RETR...\n");
         plextor_get_strategy(dev);
         printf("Saving AS DB...\n");
         asf = fopen(assfn,"wb");
-        if (!asf) { printf("can't create asdb file!\n"); return 6; }
+        if (!asf) {
+            printf("can't create asdb file!\n");
+            return 6;
+        }
         memcpy(hdr,"ASDB ",5);
         hdr[5] = dev->astrategy.dbcnt;
         fwrite((void*)hdr,1,8,asf);
@@ -1241,25 +1307,38 @@ int main (int argc, char* argv[])
         fclose(asf);
     }
     if (flags_as & FLAS_STOR) {
-        unsigned char hdr[9]; memset(hdr, 0, 9);
+        unsigned char hdr[9];
+        memset(hdr, 0, 9);
         printf("AS STOR...\n");
 
         printf("Loading AS DB...\n");
         asf = fopen(aslfn,"rb");
         if (!asf)
-            { printf("can't open asdb file!\n"); return 6; }
+        {
+            printf("can't open asdb file!\n");
+            return 6;
+        }
         if (fread((void*)hdr,1,8,asf)<8)
-            { printf("error reading asdb file!\n"); return 6; }
+        {
+            printf("error reading asdb file!\n");
+            return 6;
+        }
 
         if (!strncmp((char*)hdr,"ASDB ",5))
-        dev->astrategy.dbcnt = hdr[5];
+            dev->astrategy.dbcnt = hdr[5];
         i=0;
         while (!feof(asf) && i<dev->astrategy.dbcnt) {
             if (fread((void*)&dev->astrategy.entry[i],1,0x20,asf)<0x20)
-                { printf("error reading asdb file!\n"); return 6; }
+            {
+                printf("error reading asdb file!\n");
+                return 6;
+            }
             for (int j=0; j<7; j++)
                 if (fread((void*)&dev->astrategy.entry_data[i][j],1,0x20,asf)<0x20)
-                    { printf("error reading asdb file!\n"); return 6; }
+                {
+                    printf("error reading asdb file!\n");
+                    return 6;
+                }
 
             i++;
         }
@@ -1276,7 +1355,7 @@ int main (int argc, char* argv[])
         plextor_get_autostrategy_db_entry_count(dev);
         plextor_get_autostrategy_db(dev);
     }
-dev->silent++;
+    dev->silent++;
     if (flags & FL_TESTWRITE) {
         dev->plextor.testwrite_dvdplus = testwrite;
         plextor_set_testwrite_dvdplus(dev);
@@ -1287,7 +1366,11 @@ dev->silent++;
             plextor_set_silentmode_disable(dev, silent_save);
         else {
             if (!dev->plextor_silent.state)
-                { silent_cd = 1; silent_dvd = 1; silent_tray = 1; }
+            {
+                silent_cd = 1;
+                silent_dvd = 1;
+                silent_tray = 1;
+            }
             if (silent_cd) {
                 dev->plextor_silent.access  = silent_access;
                 dev->plextor_silent.rd      = silent_cd_rd;
