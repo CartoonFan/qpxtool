@@ -187,9 +187,9 @@ auto get_device_info(drive_info *dev) -> int {
   if ((flags & FL_SUPPORTED) != 0U) {
     //      printf("____________________________\n");
     cout << "\n** Supported features:\n";
-    cout << "AudioMaster Q.R.    : " << ((dev->ven_features & YMH_AMQR) != 0U)
+    cout << "AudioMaster Q.R.    : " << (((dev->ven_features & YMH_AMQR) != 0U)
         ? "YES"
-        : "-"
+        : "-")
               << "\n";
     printf("Yamaha ForceSpeed   : %s\n",
            ((dev->ven_features & YMH_FORCESPEED) != 0U) ? "YES" : "-");
