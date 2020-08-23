@@ -92,13 +92,17 @@ auto get_device_info(drive_info *dev) -> int {
     if (dev->life.ok) {
       cout << "Discs loaded: " << dev->life.dn << "\n";
       cout << "Drive operating time:\n";
-      cout << "  CD Rd  : " << dev->life.cr.h << ":" << dev->life.cr.m << ":" << dev->life.cr.s << "\n";
-      cout << "  CD Wr  : " << dev->life.cw.h << ":" << dev->life.cw.m << ":" << dev->life.cw.s << "\n";
+      cout << "  CD Rd  : " << dev->life.cr.h << ":" << dev->life.cr.m << ":"
+           << dev->life.cr.s << "\n";
+      cout << "  CD Wr  : " << dev->life.cw.h << ":" << dev->life.cw.m << ":"
+           << dev->life.cw.s << "\n";
       if ((dev->rd_capabilities & DEVICE_DVD) != 0U) {
-        cout << "  DVD Rd  : " << dev->life.dr.h << ":" << dev->life.dr.m << ":" << dev->life.dr.s << "\n";
+        cout << "  DVD Rd  : " << dev->life.dr.h << ":" << dev->life.dr.m << ":"
+             << dev->life.dr.s << "\n";
       }
       if ((dev->wr_capabilities & DEVICE_DVD) != 0U) {
-        cout << "  DVD Wr  : " << dev->life.dw.h << ":" << dev->life.dw.m << ":" << dev->life.dw.s << "\n";
+        cout << "  DVD Wr  : " << dev->life.dw.h << ":" << dev->life.dw.m << ":"
+             << dev->life.dw.s << "\n";
       }
     }
 
@@ -183,7 +187,10 @@ auto get_device_info(drive_info *dev) -> int {
   if ((flags & FL_SUPPORTED) != 0U) {
     //      printf("____________________________\n");
     cout << "\n** Supported features:\n";
-    cout << "AudioMaster Q.R.    : " << (dev->ven_features & YMH_AMQR) != 0U ? "YES" : "-" << "\n";
+    cout << "AudioMaster Q.R.    : " << (dev->ven_features & YMH_AMQR) != 0U
+        ? "YES"
+        : "-"
+              << "\n";
     printf("Yamaha ForceSpeed   : %s\n",
            (dev->ven_features & YMH_FORCESPEED) != 0U ? "YES" : "-");
     printf("Yamaha DiscT@2      : %s\n",
