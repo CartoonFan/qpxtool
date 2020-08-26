@@ -23,7 +23,7 @@ using namespace std;
 #include <qpx_mmc.h>
 #include <yamaha_features.h>
 
-#include <version.h>
+#define VERSION "1.4"
 
 const uint32_t FL_HELP = 0x00000001;
 const uint32_t FL_SCAN = 0x00000002;
@@ -76,34 +76,32 @@ const uint32_t FLAS_CLEAR = 0x00000080;
 uint32_t flags = 0;
 uint32_t flags_as = 0;
 
-auto get_device_info(drive_info *dev) -> int {
+int get_device_info(drive_info *dev) {
   dev->ven_features = 0;
   dev->chk_features = 0;
   detect_capabilities(dev);
-  //  detect_check_capabilities(dev);
+  //	detect_check_capabilities(dev);
   determine_disc_type(dev);
   if (isPlextor(dev) == 0 && isYamaha(dev) == 0 && isPioneer(dev) == 0) {
     cout << dev->device
          << ": drive not supported, only common controls will work!\n";
-    //      return 1;
+    //		return 1;
   }
   if (isPlextor(dev) != 0) {
     plextor_get_life(dev);
-    if (dev->life.ok) {
+    if ((dev->life.ok) != 0) {
       cout << "Discs loaded: " << dev->life.dn << "\n";
       cout << "Drive operating time:\n";
       cout << "  CD Rd  : " << dev->life.cr.h << ":" << dev->life.cr.m << ":"
            << dev->life.cr.s << "\n";
-      cout << "  CD Wr  : " << dev->life.cw.h << ":" << dev->life.cw.m << ":"
-           << dev->life.cw.s << "\n";
-      if ((dev->rd_capabilities & DEVICE_DVD) != 0U) {
-        cout << "  DVD Rd  : " << dev->life.dr.h << ":" << dev->life.dr.m << ":"
-             << dev->life.dr.s << "\n";
-      }
-      if ((dev->wr_capabilities & DEVICE_DVD) != 0U) {
-        cout << "  DVD Wr  : " << dev->life.dw.h << ":" << dev->life.dw.m << ":"
-             << dev->life.dw.s << "\n";
-      }
+      printf("  CD Wr  : %4d:%02d:%02d\n", dev->life.cw.h, dev->life.cw.m,
+             dev->life.cw.s);
+      if (dev->rd_capabilities & DEVICE_DVD)
+        printf("  DVD Rd : %4d:%02d:%02d\n", dev->life.dr.h, dev->life.dr.m,
+               dev->life.dr.s);
+      if (dev->wr_capabilities & DEVICE_DVD)
+        printf("  DVD Wr : %4d:%02d:%02d\n", dev->life.dw.h, dev->life.dw.m,
+               dev->life.dw.s);
     }
 
     //      if ( isPlextorLockPresent(dev) )
