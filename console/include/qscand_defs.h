@@ -13,18 +13,17 @@
 #ifndef QSCAND_DEFS_H
 #define QSCAND_DEFS_H
 
-#if defined (__unix) || defined (__unix__)
+#if defined(__unix) || defined(__unix__)
 #include <fcntl.h>
+#include <netinet/in.h>
 #include <sys/select.h>
 #include <sys/socket.h>
 #include <sys/wait.h>
 #include <syslog.h>
-#include <netinet/in.h>
 #define DAEMON_EN
-#elif defined (_WIN32)
+#elif defined(_WIN32)
 #include <winsock2.h>
 #endif
-
 
 #define CLIENTS_MAX 16
 
@@ -42,9 +41,8 @@
 #define PROMPT_LEN sizeof(PROMPT)
 
 extern pid_t pid;
-extern bool	 daemonized;
-extern bool	 debug;
-extern bool	 term;
+extern bool daemonized;
+extern bool debug;
+extern bool term;
 
 #endif // QSCAND_DEFS_H
-

@@ -41,10 +41,10 @@
 //#include "dvd_reader.h"
 
 //#ifdef __cplusplus
-//extern "C" {
+// extern "C" {
 //#endif
 
-#define DVD_VIDEO_LB_LEN      2048
+#define DVD_VIDEO_LB_LEN 2048
 #define MAX_UDF_FILE_NAME_LEN 2048
 
 /**
@@ -60,21 +60,19 @@
 #include <qpx_mmc.h>
 
 struct udf_t {
-    drive_info *dev;
-    void*      cache;
+  drive_info *dev;
+  void *cache;
 };
 
-unsigned int UDFFindFile( udf_t *udf, char *filename, unsigned int *size );
+unsigned int UDFFindFile(udf_t *udf, char *filename, unsigned int *size);
 
-void FreeUDFCache( udf_t *udf, void *cache);
+void FreeUDFCache(udf_t *udf, void *cache);
 
-int UDFGetVolumeIdentifier( udf_t *udf,
-                            char *volid, unsigned int volid_size);
-int UDFGetVolumeSetIdentifier( udf_t *udf,
-                               unsigned char *volsetid, unsigned int volsetid_size);
+int UDFGetVolumeIdentifier(udf_t *udf, char *volid, unsigned int volid_size);
+int UDFGetVolumeSetIdentifier(udf_t *udf, unsigned char *volsetid,
+                              unsigned int volsetid_size);
 
 //#ifdef __cplusplus
 //};
 //#endif
 #endif /* DVD_UDF_H_INCLUDED */
-

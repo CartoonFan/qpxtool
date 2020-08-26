@@ -17,15 +17,15 @@
 typedef char tattoo_row[3744];
 
 // AMQR
-extern int yamaha_check_amqr(drive_info* drive);
-extern int yamaha_set_amqr(drive_info* drive);
+extern int yamaha_check_amqr(drive_info *drive);
+extern int yamaha_set_amqr(drive_info *drive);
 
 // Force Speed
-extern int yamaha_check_forcespeed(drive_info* drive);
-extern int yamaha_set_forcespeed(drive_info* drive);
+extern int yamaha_check_forcespeed(drive_info *drive);
+extern int yamaha_set_forcespeed(drive_info *drive);
 
 // DiscT@2
-extern int yamaha_f1_get_tattoo(drive_info* drive);
-extern int yamaha_f1_do_tattoo(drive_info* drive, unsigned char *iimage, uint32_t tsize);
+extern int yamaha_f1_get_tattoo(drive_info *drive);
+extern int yamaha_f1_do_tattoo(drive_info *drive, unsigned char *iimage,
+                               uint32_t tsize);
 #endif
-
