@@ -16,8 +16,8 @@
 #include <sectmap.h>
 //#include <pthread.h>
 
-#include <reader_disc.h>
-#include <imgwriter.h>
+#include "reader_disc.h"
+#include "imgwriter.h"
 
 #include "reader.h"
 

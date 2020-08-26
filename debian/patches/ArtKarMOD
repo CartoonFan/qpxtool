@@ -50,15 +50,7 @@ Last-Update: 2019-04-15
  		if ( dev->media.type & (DISC_DVD) ) {
  //			read_disc_regions(drive);
  			if (!dev->media.dvdcss.protection) {
---- qpxtool-0.7.2-4.1.orig/console/qscan/version.h
-+++ qpxtool-0.7.2-4.1/console/qscan/version.h
-@@ -9,5 +9,5 @@
-  * See the file "COPYING" for the exact licensing terms.
-  */
- 
--#define VERSION "0.7.2"
-+#define VERSION "0.7.2 modded by ArtKar"
- 
+
 --- qpxtool-0.7.2-4.1.orig/gui/include/device.h
 +++ qpxtool-0.7.2-4.1/gui/include/device.h
 @@ -344,6 +344,8 @@ struct MediaInfo {
@@ -100,17 +92,7 @@ Last-Update: 2019-04-15
  	bool		show_allctl;
  	bool		report_autosave;
  	QString		report_path;
---- qpxtool-0.7.2-4.1.orig/gui/include/version.h
-+++ qpxtool-0.7.2-4.1/gui/include/version.h
-@@ -13,7 +13,7 @@
- #ifndef _QPX_VERSION_H
- #define _QPX_VERSION_H
- 
--#define VERSION "0.7.2"
-+#define VERSION "0.7.2 modded by ArtKar"
- 
- #endif
- 
+
 --- qpxtool-0.7.2-4.1.orig/gui/src/db_report_selection.cpp
 +++ qpxtool-0.7.2-4.1/gui/src/db_report_selection.cpp
 @@ -228,7 +228,7 @@ void DbReportSelection::search()
@@ -316,8 +298,8 @@ Last-Update: 2019-04-15
  	xml.writeAttribute("erasable",  dev->media.erasable);
  
  	xml.writeAttribute("dstate", dev->media.dstate);
---- qpxtool-0.7.2-4.1.orig/lib/qpxtransport/include/qpx_mmc.h
-+++ qpxtool-0.7.2-4.1/lib/qpxtransport/include/qpx_mmc.h
+--- qpxtool-0.7.2-4.1.orig/lib/include/qpx_mmc.h
++++ qpxtool-0.7.2-4.1/lib/include/qpx_mmc.h
 @@ -144,6 +144,7 @@ typedef	struct {
  	uint8_t		disc_size;	// indicates 120/80mm disc
  	uint8_t		polarity;   // Push-Pull polarity flags per layer for BD (indicates HtL or LtH)
@@ -378,8 +360,8 @@ Last-Update: 2019-04-15
  	}
  	return 0;
  }
---- qpxtool-0.7.2-4.1.orig/plugins/liteon/qscan_cmd.cpp
-+++ qpxtool-0.7.2-4.1/plugins/liteon/qscan_cmd.cpp
+--- qpxtool-0.7.2-4.1.orig/plugins/liteon/qscan_cmd_liteon.cpp
++++ qpxtool-0.7.2-4.1/plugins/liteon/qscan_cmd_liteon.cpp
 @@ -305,26 +305,32 @@ int scan_liteon::cmd_cd_errc_block(cd_er
  // ********************** DVD ERRC commands
  int scan_liteon::cmd_dvd_errc_block(dvd_errc *data)
@@ -426,8 +408,8 @@ Last-Update: 2019-04-15
  	data->pie = ntoh16(dev->rd_buf+4);
  	data->pif = ntoh16(dev->rd_buf+6);
  	data->poe = 0;
---- qpxtool-0.7.2-4.1.orig/plugins/liteon/qscan_plugin.h
-+++ qpxtool-0.7.2-4.1/plugins/liteon/qscan_plugin.h
+--- qpxtool-0.7.2-4.1.orig/plugins/liteon/qscan_plugin_liteon.h
++++ qpxtool-0.7.2-4.1/plugins/liteon/qscan_plugin_liteon.h
 @@ -112,14 +112,13 @@ static const drivedesclist drivelist =
  
  	{ "SONY    ",  DEV_LITEON, "DVD RW DW-Q58A",	LTN_SDVDR_G3, CHK_ERRC_CD | CHK_ERRC_DVD },

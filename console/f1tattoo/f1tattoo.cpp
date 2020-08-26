@@ -20,7 +20,7 @@
 #include <png.h>
 #endif
 
-#include "version.h"
+#define VERSION "0.7.1"
 
 const uint32_t FL_HELP = 0x00000001;
 const uint32_t FL_SCAN = 0x00000002;

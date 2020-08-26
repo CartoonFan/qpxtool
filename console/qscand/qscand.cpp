@@ -19,8 +19,7 @@
 
 #include <common_functions.h>
 #include <threads.h>
-#include <child.h>
-#include "qscand.h"
+#include "child.h"
 #ifndef _WIN32
 #include <signal.h>
 #endif

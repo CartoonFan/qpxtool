@@ -27,7 +27,7 @@
 #include <wincon.h>
 #endif
 
-#include "version.h"
+#define VERSION "0.7.2 modded by ArtKar"
 
 #define MSGPREF "qscan: "
 #define CAPDEV   "CD: "

@@ -12,16 +12,7 @@ diff -Naru ../qpxtool-0.7.2.orig/console/qscan/qscan.cpp ./console/qscan/qscan.c
  		if ( dev->media.type & (DISC_DVD) ) {
  //			read_disc_regions(drive);
  			if (!dev->media.dvdcss.protection) {
-diff -Naru ../qpxtool-0.7.2.orig/console/qscan/version.h ./console/qscan/version.h
---- ../qpxtool-0.7.2.orig/console/qscan/version.h	2012-12-13 11:46:19.000000000 +0100
-+++ ./console/qscan/version.h	2019-04-15 00:15:16.000000000 +0200
-@@ -9,5 +9,5 @@
-  * See the file "COPYING" for the exact licensing terms.
-  */
- 
--#define VERSION "0.7.2"
-+#define VERSION "0.7.2 modded by ArtKar"
- 
+
 diff -Naru ../qpxtool-0.7.2.orig/gui/include/device.h ./gui/include/device.h
 --- ../qpxtool-0.7.2.orig/gui/include/device.h	2012-11-21 10:56:58.000000000 +0100
 +++ ./gui/include/device.h	2019-04-15 00:24:10.000000000 +0200
@@ -291,9 +282,9 @@ diff -Naru ../qpxtool-0.7.2.orig/gui/src/resultsio.cpp ./gui/src/resultsio.cpp
  	xml.writeAttribute("erasable",  dev->media.erasable);
  
  	xml.writeAttribute("dstate", dev->media.dstate);
-diff -Naru ../qpxtool-0.7.2.orig/lib/qpxtransport/include/qpx_mmc.h ./lib/qpxtransport/include/qpx_mmc.h
---- ../qpxtool-0.7.2.orig/lib/qpxtransport/include/qpx_mmc.h	2012-12-12 13:59:19.000000000 +0100
-+++ ./lib/qpxtransport/include/qpx_mmc.h	2019-04-15 00:15:16.000000000 +0200
+diff -Naru ../qpxtool-0.7.2.orig/lib/include/qpx_mmc.h ./lib/include/qpx_mmc.h
+--- ../qpxtool-0.7.2.orig/lib/include/qpx_mmc.h	2012-12-12 13:59:19.000000000 +0100
++++ ./lib/include/qpx_mmc.h	2019-04-15 00:15:16.000000000 +0200
 @@ -144,6 +144,7 @@
  	uint8_t		disc_size;	// indicates 120/80mm disc
  	uint8_t		polarity;   // Push-Pull polarity flags per layer for BD (indicates HtL or LtH)
@@ -355,9 +346,9 @@ diff -Naru ../qpxtool-0.7.2.orig/lib/qpxtransport/qpx_mmc.cpp ./lib/qpxtransport
  	}
  	return 0;
  }
-diff -Naru ../qpxtool-0.7.2.orig/plugins/liteon/qscan_cmd.cpp ./plugins/liteon/qscan_cmd.cpp
---- ../qpxtool-0.7.2.orig/plugins/liteon/qscan_cmd.cpp	2012-12-11 08:56:40.000000000 +0100
-+++ ./plugins/liteon/qscan_cmd.cpp	2019-04-15 00:15:16.000000000 +0200
+diff -Naru ../qpxtool-0.7.2.orig/plugins/liteon/qscan_cmd_liteon.cpp ./plugins/liteon/qscan_cmd_liteon.cpp
+--- ../qpxtool-0.7.2.orig/plugins/liteon/qscan_cmd_liteon.cpp	2012-12-11 08:56:40.000000000 +0100
++++ ./plugins/liteon/qscan_cmd_liteon.cpp	2019-04-15 00:15:16.000000000 +0200
 @@ -305,26 +305,32 @@
  // ********************** DVD ERRC commands
  int scan_liteon::cmd_dvd_errc_block(dvd_errc *data)
@@ -404,9 +395,9 @@ diff -Naru ../qpxtool-0.7.2.orig/plugins/liteon/qscan_cmd.cpp ./plugins/liteon/q
  	data->pie = ntoh16(dev->rd_buf+4);
  	data->pif = ntoh16(dev->rd_buf+6);
  	data->poe = 0;
-diff -Naru ../qpxtool-0.7.2.orig/plugins/liteon/qscan_plugin.h ./plugins/liteon/qscan_plugin.h
---- ../qpxtool-0.7.2.orig/plugins/liteon/qscan_plugin.h	2012-12-11 08:56:40.000000000 +0100
-+++ ./plugins/liteon/qscan_plugin.h	2019-04-15 00:15:16.000000000 +0200
+diff -Naru ../qpxtool-0.7.2.orig/plugins/liteon/qscan_plugin_liteon.h ./plugins/liteon/qscan_plugin_liteon.h
+--- ../qpxtool-0.7.2.orig/plugins/liteon/qscan_plugin_liteon.h	2012-12-11 08:56:40.000000000 +0100
++++ ./plugins/liteon/qscan_plugin_liteon.h	2019-04-15 00:15:16.000000000 +0200
 @@ -112,14 +112,13 @@
  
  	{ "SONY    ",  DEV_LITEON, "DVD RW DW-Q58A",	LTN_SDVDR_G3, CHK_ERRC_CD | CHK_ERRC_DVD },

@@ -11,7 +11,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <kbhit.h>
+#include "kbhit.h"
 #include <unistd.h>
 //#include <sys/stat.h>
 #include <qpx_mmc.h>
@@ -19,7 +19,7 @@
 #include <sectmap.h>
 #include <reader.h>
 #include <imgwriter.h>
-#include "version.h"
+#define VERSION "1.0"
 
 int init_drives(drive_info** dev, char** dev_n) {
     printf("Initialising drives...\n");
