@@ -9,22 +9,22 @@
  * Modifications by:
  *   Billy Biggs <vektor@dumbterm.net>.
  *   Björn Englund <d4bjorn@dtek.chalmers.se>.
- * 
+ *
  * dvdudf: parse and read the UDF volume information of a DVD Video
  * Copyright (C) 1999 Christian Wolff for convergence integrated media
  * GmbH The author can be reached at scarabaeus@convergence.de, the
  * project's page is at http://linuxtv.org/dvd/
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or (at
  * your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
@@ -41,10 +41,10 @@
 //#include "dvd_reader.h"
 
 //#ifdef __cplusplus
-//extern "C" {
+// extern "C" {
 //#endif
 
-#define DVD_VIDEO_LB_LEN      2048
+#define DVD_VIDEO_LB_LEN 2048
 #define MAX_UDF_FILE_NAME_LEN 2048
 
 /**
@@ -60,21 +60,19 @@
 #include <qpx_mmc.h>
 
 struct udf_t {
-	drive_info *dev;
-	void*      cache;
+  drive_info *dev;
+  void *cache;
 };
 
-unsigned int UDFFindFile( udf_t *udf, char *filename, unsigned int *size );
-  
-void FreeUDFCache( udf_t *udf, void *cache);
+unsigned int UDFFindFile(udf_t *udf, char *filename, unsigned int *size);
 
-int UDFGetVolumeIdentifier( udf_t *udf,
-                           char *volid, unsigned int volid_size);
-int UDFGetVolumeSetIdentifier( udf_t *udf,
-                              unsigned char *volsetid, unsigned int volsetid_size);
+void FreeUDFCache(udf_t *udf, void *cache);
+
+int UDFGetVolumeIdentifier(udf_t *udf, char *volid, unsigned int volid_size);
+int UDFGetVolumeSetIdentifier(udf_t *udf, unsigned char *volsetid,
+                              unsigned int volsetid_size);
 
 //#ifdef __cplusplus
 //};
 //#endif
 #endif /* DVD_UDF_H_INCLUDED */
-

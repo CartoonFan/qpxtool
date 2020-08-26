@@ -14,27 +14,26 @@
 #define CHILDPROC_H
 
 #include "qscand_defs.h"
-#include <sys/types.h>
 #include <sys/time.h>
+#include <sys/types.h>
 
 typedef struct {
-	bool	used;
-	struct sockaddr_in cliaddr;
-	int    connfd;
+  bool used;
+  struct sockaddr_in cliaddr;
+  int connfd;
 } child_arg_t;
 
 typedef struct {
-	thread_t	tid;
-	child_arg_t	arg;
+  thread_t tid;
+  child_arg_t arg;
 } child_t;
 
-extern child_t childs[CLIENTS_MAX+1];
+extern child_t childs[CLIENTS_MAX + 1];
 extern void *child_thread(void *argp);
-extern int  child_find_unused();
+extern int child_find_unused();
 extern void child_list_clear();
 
 extern int clients;
 extern Mutex *cmutex;
 
 #endif // CHILDPROC_H
-
