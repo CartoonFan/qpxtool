@@ -18,12 +18,12 @@
 static const drivedesclist drivelist =
 //static drivedesclist drivelist =
 {
-	{ "ASUS    ", DEV_ASUS, "DRW-1612",     ASUS_1612, CHK_ERRC_CD | CHK_ERRC_DVD },
-	{ "ASUS    ", DEV_ASUS, "DRW-1814",     ASUS_1612, CHK_ERRC_CD | CHK_ERRC_DVD },
-	{ "ASUS    ", DEV_ASUS, "DRW-2014S1",   ASUS_2014, CHK_ERRC_CD | CHK_ERRC_DVD },
-	{ "ASUS    ", DEV_ASUS, "DRW-2014L1",   ASUS_2014, CHK_ERRC_CD | CHK_ERRC_DVD },
+    { "ASUS    ", DEV_ASUS, "DRW-1612",     ASUS_1612, CHK_ERRC_CD | CHK_ERRC_DVD },
+    { "ASUS    ", DEV_ASUS, "DRW-1814",     ASUS_1612, CHK_ERRC_CD | CHK_ERRC_DVD },
+    { "ASUS    ", DEV_ASUS, "DRW-2014S1",   ASUS_2014, CHK_ERRC_CD | CHK_ERRC_DVD },
+    { "ASUS    ", DEV_ASUS, "DRW-2014L1",   ASUS_2014, CHK_ERRC_CD | CHK_ERRC_DVD },
 
-	{ "", 0, "", 0}
+    { "", 0, "", 0}
 };
 
 static const char plugin_name[]="ASUS";
@@ -45,19 +45,23 @@ public:
     virtual int  scan_block(void* data,long* ilba);
     virtual int  end_test();
 
-    virtual const char* name() { return plugin_name; };
-    virtual const char* desc() { return plugin_desc; };
+    virtual const char* name() {
+        return plugin_name;
+    };
+    virtual const char* desc() {
+        return plugin_desc;
+    };
 private:
-	long lba;
+    long lba;
 
-	int cmd_errc_init();
-	int cmd_errc_getdata();
-	int cmd_errc_end();
+    int cmd_errc_init();
+    int cmd_errc_getdata();
+    int cmd_errc_end();
 // CD ERRC methods
-	int cmd_cd_errc_block(cd_errc *data);
+    int cmd_cd_errc_block(cd_errc *data);
 
 // DVD ERRC methods
-	int cmd_dvd_errc_block(dvd_errc *data);
+    int cmd_dvd_errc_block(dvd_errc *data);
 // end scan
 };
 

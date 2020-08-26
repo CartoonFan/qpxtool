@@ -17,9 +17,9 @@
 
 static const drivedesclist drivelist =
 {
-	{ "TSSTcorp",  DEV_TSST, "CDDVDRW SH-S202N",	TSST_H2, CHK_ERRC_CD | CHK_ERRC_DVD },
+    { "TSSTcorp",  DEV_TSST, "CDDVDRW SH-S202N",	TSST_H2, CHK_ERRC_CD | CHK_ERRC_DVD },
 
-	{ "", 0, "", 0}
+    { "", 0, "", 0}
 };
 
 static const char plugin_name[]="TSST";
@@ -39,20 +39,24 @@ public:
     virtual int  scan_block(void* data,long* ilba);
     virtual int  end_test();
 
-    virtual const char* name() { return plugin_name; };
-    virtual const char* desc() { return plugin_desc; };
+    virtual const char* name() {
+        return plugin_name;
+    };
+    virtual const char* desc() {
+        return plugin_desc;
+    };
 private:
-	long lba;
+    long lba;
 
 // CD ERRC methods
-	int cmd_cd_errc_init();
-	int cmd_cd_errc_block(cd_errc *data);
-	int cmd_cd_errc_end();
+    int cmd_cd_errc_init();
+    int cmd_cd_errc_block(cd_errc *data);
+    int cmd_cd_errc_end();
 
 // DVD ERRC methods
-	int cmd_dvd_errc_init();
-	int cmd_dvd_errc_block(dvd_errc *data);
-	int cmd_dvd_errc_end();
+    int cmd_dvd_errc_init();
+    int cmd_dvd_errc_block(dvd_errc *data);
+    int cmd_dvd_errc_end();
 
 };
 

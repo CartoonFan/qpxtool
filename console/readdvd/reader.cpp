@@ -43,15 +43,25 @@ cdvdreader::cdvdreader(
 cdvdreader::~cdvdreader() {
 }
 
-void cdvdreader::set_dev(drive_info* idev) { parm.dev=idev; }
+void cdvdreader::set_dev(drive_info* idev) {
+    parm.dev=idev;
+}
 
-void cdvdreader::set_map(smap* imap) { parm.map=imap; }
+void cdvdreader::set_map(smap* imap) {
+    parm.map=imap;
+}
 
-void cdvdreader::set_iso(imgwriter* iiso) { parm.iso=iiso; }
+void cdvdreader::set_iso(imgwriter* iiso) {
+    parm.iso=iiso;
+}
 
-void cdvdreader::set_pass(int ipass) { parm.pass=ipass; }
+void cdvdreader::set_pass(int ipass) {
+    parm.pass=ipass;
+}
 
-void cdvdreader::set_retry(int itries) { parm.tries=itries; }
+void cdvdreader::set_retry(int itries) {
+    parm.tries=itries;
+}
 
 int  cdvdreader::start() {
 //    printf("Creating thread for %s\n", parm.dev->device);
@@ -60,9 +70,13 @@ int  cdvdreader::start() {
 //    printf("pthread for %s created successfully:)\n", parm.dev->device);
 }
 
-void cdvdreader::stop() { parm.stop=1; }
+void cdvdreader::stop() {
+    parm.stop=1;
+}
 
-bool cdvdreader::stoped() { return parm.stop; }
+bool cdvdreader::stoped() {
+    return parm.stop;
+}
 
 void cdvdreader::wait() {
 //    int x;
@@ -72,7 +86,9 @@ void cdvdreader::wait() {
 //    printf("thread %d exit state: %d\n", parm.tidx, x);
 }
 
-int  cdvdreader::running() { return parm.running; }
+int  cdvdreader::running() {
+    return parm.running;
+}
 
 int  cdvdreader::print_stat() {
     printf("%s: %7d (%06x) sectors read\n", parm.dev->device, parm.cnt_ok, parm.cnt_ok);

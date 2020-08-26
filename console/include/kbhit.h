@@ -11,7 +11,7 @@ class keyboard
 {
 public:
 
-      keyboard();
+    keyboard();
     ~keyboard();
     int kb_hit();
     int kb_getch();

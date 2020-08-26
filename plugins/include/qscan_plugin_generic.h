@@ -18,7 +18,7 @@
 static const drivedesclist drivelist =
 //static drivedesclist drivelist =
 {
-	{ "", 0, "", 0}
+    { "", 0, "", 0}
 };
 
 static const char plugin_name[]="C2P";
@@ -39,14 +39,18 @@ public:
     virtual int  scan_block(void* data,long* ilba);
     virtual int  end_test();
 
-    virtual const char* name() { return plugin_name; };
-    virtual const char* desc() { return plugin_desc; };
+    virtual const char* name() {
+        return plugin_name;
+    };
+    virtual const char* desc() {
+        return plugin_desc;
+    };
 private:
-	long lba;
+    long lba;
 
-	int cmd_cd_errc_block(cd_errc *data);
+    int cmd_cd_errc_block(cd_errc *data);
 //	int c2calc(cd_errc *data);
-	int c2calc(unsigned char* buf, unsigned int lba, unsigned char sects);
+    int c2calc(unsigned char* buf, unsigned int lba, unsigned char sects);
 };
 
 #endif

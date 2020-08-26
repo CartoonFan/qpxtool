@@ -49,16 +49,16 @@ typedef int socklen_t;
 
 #endif
 
-typedef struct{
-	int	m;
-	int	s;
-	int	f;
+typedef struct {
+    int	m;
+    int	s;
+    int	f;
 } msf;
 
-typedef struct{
-	int	h;
-	int	m;
-	int	s;
+typedef struct {
+    int	h;
+    int	m;
+    int	s;
 } hms;
 
 extern int64_t  qpx_bswap64(char* c);
