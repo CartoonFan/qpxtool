@@ -96,8 +96,9 @@ BOOL WINAPI sigint_handler(DWORD) {
 void detect_vendor_features(drive_info *dev) {
   if (isPlextor(dev)) {
     plextor_get_life(dev);
-    //		if ((dev->dev_ID == PLEXTOR_755) || (dev->dev_ID == PLEXTOR_760) ||
-    //(dev->dev_ID == PLEXTOR_PREMIUM2)) 		if (isPlextorLockPresent(dev))
+    //		if ((dev->dev_ID == PLEXTOR_755) || (dev->dev_ID == PLEXTOR_760)
+    //|| (dev->dev_ID == PLEXTOR_PREMIUM2)) 		if
+    //(isPlextorLockPresent(dev))
     plextor_px755_do_auth(dev);
     if (!plextor_get_hidecdr_singlesession(dev))
       dev->ven_features |= PX_HCDRSS;
@@ -105,7 +106,7 @@ void detect_vendor_features(drive_info *dev) {
       dev->ven_features |= PX_SPDREAD;
     if (dev->wr_capabilities) {
       //			if (!yamaha_check_amqr(dev))
-      //dev->ven_features|=YMH_AMQR;
+      // dev->ven_features|=YMH_AMQR;
       if (!plextor_get_powerec(dev)) {
         dev->ven_features |= PX_POWEREC;
         //				plextor_get_speeds(dev);
@@ -286,7 +287,7 @@ int main(int argc, char **argv) {
       break;
     case 'r':
       //				printf(MSGPREF " -r option conflicts
-      //with -s!\n");
+      // with -s!\n");
       flags |= FL_SPEED;
       rspeed = atol(optarg);
       break;
@@ -853,7 +854,7 @@ int main(int argc, char **argv) {
   }
 
   //	if (test && (strcmp(test,"rt") && strcmp(test,"wt")) &&
-  //!scanner->is_plugin_attached()) {
+  //! scanner->is_plugin_attached()) {
   //	}
 
   if (speed > 0)

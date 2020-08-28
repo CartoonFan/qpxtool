@@ -110,7 +110,7 @@ int get_device_info(drive_info *dev) {
       dev->ven_features |= PX_SPDREAD;
     if (dev->wr_capabilities) {
       //			if (!yamaha_check_amqr(dev))
-      //dev->ven_features|=YMH_AMQR;
+      // dev->ven_features|=YMH_AMQR;
       if (!plextor_get_powerec(dev)) {
         dev->ven_features |= PX_POWEREC;
         //				plextor_get_speeds(dev);
@@ -120,7 +120,7 @@ int get_device_info(drive_info *dev) {
       if (!plextor_get_varirec(dev, VARIREC_CD))
         dev->ven_features |= PX_VARIREC_CD;
       //			if (!plextor_get_securec(dev))
-      //dev->ven_features|=PX_SECUREC;
+      // dev->ven_features|=PX_SECUREC;
       if (!plextor_get_silentmode(dev))
         dev->ven_features |= PX_SILENT;
       if (!plextor_get_securec_state(dev))
@@ -159,11 +159,11 @@ int get_device_info(drive_info *dev) {
 
   //	printf("Trying opcode E9 modes...\n");
   //	for (int i=0; i<256; i++) {if (!plextor_get_mode(dev,i)) printf(" MODE
-  //0x%02X\n",i);}
+  // 0x%02X\n",i);}
 
   //	printf("Trying opcode ED modes...\n");
   //	for (int i=0; i<256; i++) {if (!plextor_get_mode2(dev,i)) printf(" MODE
-  //0x%02X\n",i);}
+  // 0x%02X\n",i);}
 
   if (flags & FL_SUPPORTED) {
     //		printf("____________________________\n");
@@ -224,9 +224,10 @@ int get_device_info(drive_info *dev) {
   }
   //	if ((dev->ven_features & YMH_AMQR)       && ((flags & FL_CURRENT) ||
   //(flags & FL_YMH_AMQR))) 		printf("AudioMaster Q.R.    : %s\n",
-  //dev->yamaha.amqr ? "ON":"OFF"); 	if ((dev->ven_features & YMH_FORCESPEED) &&
-  //((flags & FL_CURRENT) || (flags & FL_YMH_FORCESPEED))) 		printf("Yamaha
-  //ForceSpeed   : %s\n", dev->yamaha.forcespeed ? "ON":"OFF");
+  // dev->yamaha.amqr ? "ON":"OFF"); 	if ((dev->ven_features & YMH_FORCESPEED)
+  // &&
+  //((flags & FL_CURRENT) || (flags & FL_YMH_FORCESPEED)))
+  //printf("Yamaha ForceSpeed   : %s\n", dev->yamaha.forcespeed ? "ON":"OFF");
   if ((dev->ven_features & YMH_TATTOO) && (flags & FL_CURRENT)) {
     if (dev->yamaha.tattoo_rows) {
       printf("Yamaha DiscT@2      : inner %d   outer %d   image 3744 x %d\n",
@@ -339,8 +340,8 @@ void usage(char *bin) {
       "\t--hcdr [on|off]              turn Hide-CDR on/off (default: off)\n");
   printf("\t--powerec [on|off]           turn PoweREC on/off (default: on)\n");
   //	printf("\t--amqr [on|off]              turn Yamaha AMQR on/off (default:
-  //off)\n"); 	printf("\t--forcespeed [on|off]        turn Yamaha ForceSpeed
-  //on/off (default: off)\n");
+  // off)\n"); 	printf("\t--forcespeed [on|off]        turn Yamaha ForceSpeed
+  // on/off (default: off)\n");
   printf("\t--gigarec <state>            set GigaREC rate or turn it off\n");
   printf("\t                             values: 0.6, 0.7, 0.8, 0.9, 1.1, 1.2, "
          "1.3, 1.4, off\n");
@@ -400,7 +401,8 @@ void usage(char *bin) {
       "\t--sm-dvd-rd #                set max DVD READ speed (default: 12X)\n");
   printf("\t                             values: 2, 5, 8, 12, 16\n");
   //	printf("\t--sm-dvd-wr #                set max DVD WRITE speed (default:
-  //8X)\n"); 	printf("\t                             values: 4, 6, 8, 12, 16\n");
+  // 8X)\n"); 	printf("\t                             values: 4, 6, 8, 12,
+  // 16\n");
   printf("\t--sm-load #                  set tray load speed. spd can be 0 to "
          "80 (default: 63)\n");
   printf("\t--sm-eject #                 set tray eject speed. spd can be 0 to "
@@ -953,7 +955,7 @@ int main(int argc, char *argv[]) {
         i++;
         silent_load = (int)strtol(argv[i], NULL, 0);
         //				printf("tray load speed: %d\n",
-        //silent_load);
+        // silent_load);
       } else {
         printf("option %s needs parameter!\n", argv[i]);
         return 5;
@@ -966,7 +968,7 @@ int main(int argc, char *argv[]) {
         i++;
         silent_eject = (int)strtol(argv[i], NULL, 0);
         //				printf("tray load speed: %d\n",
-        //silent_load);
+        // silent_load);
       } else {
         printf("option %s needs parameter!\n", argv[i]);
         return 5;
@@ -1109,11 +1111,11 @@ int main(int argc, char *argv[]) {
       }
 
       //	printf("\t--pio-limit [on|off]         limit (or not) read speed
-      //by 24x for CD and 8x for DVD\n"); 	printf("\t--pio-quiet [quiet|perf|std]
-      //select QuietMode setting: Quiet, Performance or Standard (default:
-      //quiet)\n");
+      // by 24x for CD and 8x for DVD\n"); 	printf("\t--pio-quiet
+      // [quiet|perf|std] select QuietMode setting: Quiet, Performance or
+      // Standard (default: quiet)\n");
       //	printf("\t--pio-nosave				   don't save
-      //settings to drive (changes will be lost after reboot)\n");
+      // settings to drive (changes will be lost after reboot)\n");
 
     } else if (!strcmp(argv[i], "--pio-nosave")) {
       silent_save = 0;
@@ -1323,7 +1325,7 @@ int main(int argc, char *argv[]) {
   if (flags & FL_VARIREC_CD) {
     //		printf("Set VariREC CD...\n");
     //		printf("PWR = %02X   STR = %02X\n",varirec_cd_pwr,
-    //varirec_cd_str);
+    // varirec_cd_str);
     dev->plextor.varirec_state_cd = !(flags & FL_VARIREC_CD_OFF);
     dev->plextor.varirec_pwr_cd = varirec_cd_pwr;
     dev->plextor.varirec_str_cd = varirec_cd_str;
@@ -1332,7 +1334,7 @@ int main(int argc, char *argv[]) {
   if (flags & FL_VARIREC_DVD) {
     //		printf("Set VariREC DVD...\n");
     //		printf("PWR = %02X   STR = %02X\n",varirec_dvd_pwr,
-    //varirec_dvd_str);
+    // varirec_dvd_str);
     dev->plextor.varirec_state_dvd = !(flags & FL_VARIREC_DVD_OFF);
     dev->plextor.varirec_pwr_dvd = varirec_dvd_pwr;
     dev->plextor.varirec_str_dvd = varirec_dvd_str;
@@ -1546,7 +1548,7 @@ int main(int argc, char *argv[]) {
         dev->plextor_silent.access = silent_access;
         dev->plextor_silent.rd = silent_dvd_rd;
         //				dev->plextor_silent.wr		=
-        //silent_dvd_wr;
+        // silent_dvd_wr;
         plextor_set_silentmode_disc(dev, SILENT_DVD, silent_save);
       }
       if (silent_tray) {
