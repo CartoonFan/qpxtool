@@ -310,7 +310,7 @@
         <location filename="../src/mainwindow.cpp" line="446"/>
         <source>No devices found!
 Can&apos;t run tests</source>
-        <translation>Keine Geräte gefunden! 
+        <translation>Keine Geräte gefunden!
 Test können nicht ausgeführt werden</translation>
     </message>
     <message>
@@ -333,7 +333,7 @@ Test können nicht ausgeführt werden</translation>
         <location filename="../src/mainwindow.cpp" line="466"/>
         <source>It seems device already performing test
 or info updating in progress</source>
-        <translation>Gerät ist bereits in Nutzung 
+        <translation>Gerät ist bereits in Nutzung
 oder eine Aktualisierung läuft</translation>
     </message>
     <message>
@@ -390,7 +390,7 @@ oder eine Aktualisierung läuft</translation>
         <location filename="../src/mainwindow.cpp" line="674"/>
         <source>Unable to start qscan!
 Local devices will not work</source>
-        <translation>Kann qscan nicht starten! 
+        <translation>Kann qscan nicht starten!
 Lokale Geräte sind nicht verfügbar</translation>
     </message>
     <message>
@@ -403,7 +403,7 @@ Lokale Geräte sind nicht verfügbar</translation>
         <source>Found locked Plextor device!
 Quality check and some other features will not work</source>
         <translation>Kommandoverschlüsseltes Plextor-Gerät!
-Qualitätsmessungen und einige anderen Funktionen stehen nicht zur Verfügung. 
+Qualitätsmessungen und einige anderen Funktionen stehen nicht zur Verfügung.
 Firmware und/oder qScan Berechtigungen prüfen</translation>
     </message>
     <message>
@@ -411,7 +411,7 @@ Firmware und/oder qScan Berechtigungen prüfen</translation>
         <source>No devices found!
 Nothing to configure
 </source>
-        <translation>Keine Geräte gefunden! 
+        <translation>Keine Geräte gefunden!
 Konfiguration nicht möglich</translation>
     </message>
     <message>
