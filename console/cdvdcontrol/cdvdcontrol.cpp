@@ -13,10 +13,8 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#include <cstdio>
-#include <cstdlib>
-#include <iostream>
-using namespace std;
+#include <stdio.h>
+#include <stdlib.h>
 
 #include <pioneer_spdctl.h>
 #include <plextor_features.h>
@@ -82,18 +80,18 @@ int get_device_info(drive_info *dev) {
   detect_capabilities(dev);
   //	detect_check_capabilities(dev);
   determine_disc_type(dev);
-  if (isPlextor(dev) == 0 && isYamaha(dev) == 0 && isPioneer(dev) == 0) {
-    cout << dev->device
-         << ": drive not supported, only common controls will work!\n";
+  if (!isPlextor(dev) && !isYamaha(dev) && !isPioneer(dev)) {
+    printf("%s: drive not supported, only common controls will work!\n",
+           dev->device);
     //		return 1;
   }
-  if (isPlextor(dev) != 0) {
+  if (isPlextor(dev)) {
     plextor_get_life(dev);
-    if ((dev->life.ok) != 0) {
-      cout << "Discs loaded: " << dev->life.dn << "\n";
-      cout << "Drive operating time:\n";
-      cout << "  CD Rd  : " << dev->life.cr.h << ":" << dev->life.cr.m << ":"
-           << dev->life.cr.s << "\n";
+    if (dev->life.ok) {
+      printf("Discs loaded: %6d\n", dev->life.dn);
+      printf("Drive operating time:\n");
+      printf("  CD Rd  : %4d:%02d:%02d\n", dev->life.cr.h, dev->life.cr.m,
+             dev->life.cr.s);
       printf("  CD Wr  : %4d:%02d:%02d\n", dev->life.cw.h, dev->life.cw.m,
              dev->life.cw.s);
       if (dev->rd_capabilities & DEVICE_DVD)
@@ -104,134 +102,119 @@ int get_device_info(drive_info *dev) {
                dev->life.dw.s);
     }
 
-    //      if ( isPlextorLockPresent(dev) )
+    //		if ( isPlextorLockPresent(dev) )
     plextor_px755_do_auth(dev);
-    if (plextor_get_hidecdr_singlesession(dev) != 0) {
+    if (!plextor_get_hidecdr_singlesession(dev))
       dev->ven_features |= PX_HCDRSS;
-    }
-    if (plextor_get_speedread(dev) != 0) {
+    if (!plextor_get_speedread(dev))
       dev->ven_features |= PX_SPDREAD;
-    }
     if (dev->wr_capabilities) {
-      //          if (!yamaha_check_amqr(dev)) dev->ven_features|=YMH_AMQR;
-      if (plextor_get_powerec(dev) == 0) {
+      //			if (!yamaha_check_amqr(dev))
+      // dev->ven_features|=YMH_AMQR;
+      if (!plextor_get_powerec(dev)) {
         dev->ven_features |= PX_POWEREC;
-        //              plextor_get_speeds(dev);
+        //				plextor_get_speeds(dev);
       }
-      if (plextor_get_gigarec(dev) == 0) {
+      if (!plextor_get_gigarec(dev))
         dev->ven_features |= PX_GIGAREC;
-      }
-      if (plextor_get_varirec(dev, VARIREC_CD) == 0) {
+      if (!plextor_get_varirec(dev, VARIREC_CD))
         dev->ven_features |= PX_VARIREC_CD;
-      }
-      //          if (!plextor_get_securec(dev)) dev->ven_features|=PX_SECUREC;
-      if (plextor_get_silentmode(dev) == 0) {
+      //			if (!plextor_get_securec(dev))
+      // dev->ven_features|=PX_SECUREC;
+      if (!plextor_get_silentmode(dev))
         dev->ven_features |= PX_SILENT;
-      }
-      if (plextor_get_securec_state(dev) == 0) {
+      if (!plextor_get_securec_state(dev))
         dev->ven_features |= PX_SECUREC;
-      }
     }
     if (dev->wr_capabilities & DEVICE_DVD) {
-      if (plextor_get_varirec(dev, VARIREC_DVD) == 0) {
+      if (!plextor_get_varirec(dev, VARIREC_DVD))
         dev->ven_features |= PX_VARIREC_DVD;
-      }
-      if (plextor_get_bitset(dev, PLEX_BITSET_R) == 0) {
+      if (!plextor_get_bitset(dev, PLEX_BITSET_R))
         dev->ven_features |= PX_BITSET_R;
-      }
-      if (plextor_get_bitset(dev, PLEX_BITSET_RDL) == 0) {
+      if (!plextor_get_bitset(dev, PLEX_BITSET_RDL))
         dev->ven_features |= PX_BITSET_RDL;
-      }
-      if (plextor_get_autostrategy(dev) == 0) {
+      if (!plextor_get_autostrategy(dev))
         dev->ven_features |= PX_ASTRATEGY;
-      }
-      if (plextor_get_testwrite_dvdplus(dev) == 0) {
+      if (!plextor_get_testwrite_dvdplus(dev))
         dev->ven_features |= PX_SIMUL_PLUS;
-      }
     }
 #warning "PlexEraser DETECTION. Just assume PX755/760 and Premium-II"
     // if ((dev->dev_ID == PLEXTOR_755) || (dev->dev_ID == PLEXTOR_760) ||
     // (dev->dev_ID == PLEXTOR_PREMIUM2))
-    if (isPlextorLockPresent(dev) != 0) {
+    if (isPlextorLockPresent(dev))
       dev->ven_features |= PX_ERASER;
-    }
-    if (yamaha_check_amqr(dev) == 0) {
+    if (!yamaha_check_amqr(dev))
       dev->ven_features |= YMH_AMQR;
-    }
-  } else if (isYamaha(dev) != 0) {
-    if (yamaha_check_amqr(dev) == 0) {
+  } else if (isYamaha(dev)) {
+    if (!yamaha_check_amqr(dev))
       dev->ven_features |= YMH_AMQR;
-    }
-    if (yamaha_check_forcespeed(dev) == 0) {
+    if (!yamaha_check_forcespeed(dev))
       dev->ven_features |= YMH_FORCESPEED;
-    }
-    if (yamaha_f1_get_tattoo(dev) == 0) {
+    if (!yamaha_f1_get_tattoo(dev))
       dev->ven_features |= YMH_TATTOO;
-    }
-  } else if (isPioneer(dev) != 0) {
-    if (pioneer_get_quiet(dev) == 0) {
+  } else if (isPioneer(dev)) {
+    if (!pioneer_get_quiet(dev))
       dev->ven_features |= PIO_QUIET;
-    }
   }
 
-  //  printf("Trying opcode E9 modes...\n");
-  //  for (int i=0; i<256; i++) {if (!plextor_get_mode(dev,i)) printf(" MODE
-  //  0x%02X\n",i);}
+  //	printf("Trying opcode E9 modes...\n");
+  //	for (int i=0; i<256; i++) {if (!plextor_get_mode(dev,i)) printf(" MODE
+  // 0x%02X\n",i);}
 
-  //  printf("Trying opcode ED modes...\n");
-  //  for (int i=0; i<256; i++) {if (!plextor_get_mode2(dev,i)) printf(" MODE
-  //  0x%02X\n",i);}
+  //	printf("Trying opcode ED modes...\n");
+  //	for (int i=0; i<256; i++) {if (!plextor_get_mode2(dev,i)) printf(" MODE
+  // 0x%02X\n",i);}
 
-  if ((flags & FL_SUPPORTED) != 0U) {
-    //      printf("____________________________\n");
-    cout << "\n** Supported features:\n";
-    cout << "AudioMaster Q.R.    : "
-         << (((dev->ven_features & YMH_AMQR) != 0U) ? "YES" : "-") << "\n";
+  if (flags & FL_SUPPORTED) {
+    //		printf("____________________________\n");
+    printf("\n** Supported features:\n");
+    printf("AudioMaster Q.R.    : %s\n",
+           dev->ven_features & YMH_AMQR ? "YES" : "-");
     printf("Yamaha ForceSpeed   : %s\n",
-           ((dev->ven_features & YMH_FORCESPEED) != 0U) ? "YES" : "-");
+           dev->ven_features & YMH_FORCESPEED ? "YES" : "-");
     printf("Yamaha DiscT@2      : %s\n",
-           (dev->ven_features & YMH_TATTOO) ? "YES" : "-");
+           dev->ven_features & YMH_TATTOO ? "YES" : "-");
     printf("Hide CD-R           : %s\n",
-           (dev->ven_features & PX_HCDRSS) ? "YES" : "-");
+           dev->ven_features & PX_HCDRSS ? "YES" : "-");
     printf("SingleSession       : %s\n",
-           (dev->ven_features & PX_HCDRSS) ? "YES" : "-");
+           dev->ven_features & PX_HCDRSS ? "YES" : "-");
     printf("SpeedRead           : %s\n",
-           (dev->ven_features & PX_SPDREAD) ? "YES" : "-");
+           dev->ven_features & PX_SPDREAD ? "YES" : "-");
     printf("PoweRec             : %s\n",
-           (dev->ven_features & PX_POWEREC) ? "YES" : "-");
+           dev->ven_features & PX_POWEREC ? "YES" : "-");
     printf("GigaRec             : %s\n",
-           (dev->ven_features & PX_GIGAREC) ? "YES" : "-");
+           dev->ven_features & PX_GIGAREC ? "YES" : "-");
     printf("VariRec CD          : %s\n",
-           (dev->ven_features & PX_VARIREC_CD) ? "YES" : "-");
+           dev->ven_features & PX_VARIREC_CD ? "YES" : "-");
     printf("VariRec DVD         : %s\n",
-           (dev->ven_features & PX_VARIREC_DVD) ? "YES" : "-");
+           dev->ven_features & PX_VARIREC_DVD ? "YES" : "-");
     printf("SecuRec             : %s\n",
-           (dev->ven_features & PX_SECUREC) ? "YES" : "-");
+           dev->ven_features & PX_SECUREC ? "YES" : "-");
     printf("Silent mode         : %s\n",
-           (dev->ven_features & PX_SILENT) ? "YES" : "-");
+           dev->ven_features & PX_SILENT ? "YES" : "-");
     printf("DVD+R bitsetting    : %s\n",
-           (dev->ven_features & PX_BITSET_R) ? "YES" : "-");
+           dev->ven_features & PX_BITSET_R ? "YES" : "-");
     printf("DVD+R DL bitsetting : %s\n",
-           (dev->ven_features & PX_BITSET_RDL) ? "YES" : "-");
+           dev->ven_features & PX_BITSET_RDL ? "YES" : "-");
     printf("DVD+R(W) testwrite  : %s\n",
-           (dev->ven_features & PX_SIMUL_PLUS) ? "YES" : "-");
+           dev->ven_features & PX_SIMUL_PLUS ? "YES" : "-");
     printf("AutoStrategy        : %s%s\n",
-           (dev->ven_features & PX_ASTRATEGY) ? "YES" : "-",
+           dev->ven_features & PX_ASTRATEGY ? "YES" : "-",
            (dev->ven_features & PX_ASTRATEGY) &&
                    (dev->dev_ID & (PLEXTOR_755 | PLEXTOR_760))
                ? " (EXTENDED)"
                : "");
     printf("PlexEraser          : %s\n",
-           (dev->ven_features & PX_ERASER) ? "YES" : "-");
+           dev->ven_features & PX_ERASER ? "YES" : "-");
     printf("Pioneer QuietMode   : %s\n",
-           (dev->ven_features & PIO_QUIET) ? "YES" : "-");
+           dev->ven_features & PIO_QUIET ? "YES" : "-");
   }
 
-  //  get_media_info(dev);
-  //  if (dev->rd_capabilities & DEVICE_DVD) {
+  //	get_media_info(dev);
+  //	if (dev->rd_capabilities & DEVICE_DVD) {
 
   if (flags & FL_CURRENT) {
-    //      printf("____________________________\n");
+    //		printf("____________________________\n");
     printf("\n** Current drive settings:\n");
   }
   if ((dev->capabilities & CAP_LOCK) && (flags & FL_CURRENT)) {
@@ -239,13 +222,12 @@ int get_device_info(drive_info *dev) {
     printf("Lock state          : %s\n",
            (dev->parms.status & STATUS_LOCK) ? "ON" : "OFF");
   }
-  //  if ((dev->ven_features & YMH_AMQR)       && ((flags & FL_CURRENT) ||
-  //  (flags & FL_YMH_AMQR)))
-  //      printf("AudioMaster Q.R.    : %s\n", dev->yamaha.amqr ? "ON":"OFF");
-  //  if ((dev->ven_features & YMH_FORCESPEED)       && ((flags & FL_CURRENT) ||
-  //  (flags & FL_YMH_FORCESPEED)))
-  //      printf("Yamaha ForceSpeed   : %s\n", dev->yamaha.forcespeed ?
-  //      "ON":"OFF");
+  //	if ((dev->ven_features & YMH_AMQR)       && ((flags & FL_CURRENT) ||
+  //(flags & FL_YMH_AMQR))) 		printf("AudioMaster Q.R.    : %s\n",
+  // dev->yamaha.amqr ? "ON":"OFF"); 	if ((dev->ven_features & YMH_FORCESPEED)
+  // &&
+  //((flags & FL_CURRENT) || (flags & FL_YMH_FORCESPEED)))
+  // printf("Yamaha ForceSpeed   : %s\n", dev->yamaha.forcespeed ? "ON":"OFF");
   if ((dev->ven_features & YMH_TATTOO) && (flags & FL_CURRENT)) {
     if (dev->yamaha.tattoo_rows) {
       printf("Yamaha DiscT@2      : inner %d   outer %d   image 3744 x %d\n",
@@ -277,7 +259,7 @@ int get_device_info(drive_info *dev) {
     if (dev->media.type & DISC_DVD)
       printf("      PoweRec Speed : %dX (DVD)\n",
              dev->plextor.powerec_spd / 1385);
-    //      show_powerec_speed();
+    //		show_powerec_speed();
   }
   if ((dev->ven_features & PX_GIGAREC) &&
       ((flags & FL_CURRENT) || (flags & FL_GIGAREC)))
@@ -357,9 +339,9 @@ void usage(char *bin) {
   printf(
       "\t--hcdr [on|off]              turn Hide-CDR on/off (default: off)\n");
   printf("\t--powerec [on|off]           turn PoweREC on/off (default: on)\n");
-  //  printf("\t--amqr [on|off]              turn Yamaha AMQR on/off (default:
-  //  off)\n"); printf("\t--forcespeed [on|off]        turn Yamaha ForceSpeed
-  //  on/off (default: off)\n");
+  //	printf("\t--amqr [on|off]              turn Yamaha AMQR on/off (default:
+  // off)\n"); 	printf("\t--forcespeed [on|off]        turn Yamaha ForceSpeed
+  // on/off (default: off)\n");
   printf("\t--gigarec <state>            set GigaREC rate or turn it off\n");
   printf("\t                             values: 0.6, 0.7, 0.8, 0.9, 1.1, 1.2, "
          "1.3, 1.4, off\n");
@@ -418,9 +400,9 @@ void usage(char *bin) {
   printf(
       "\t--sm-dvd-rd #                set max DVD READ speed (default: 12X)\n");
   printf("\t                             values: 2, 5, 8, 12, 16\n");
-  //  printf("\t--sm-dvd-wr #                set max DVD WRITE speed (default:
-  //  8X)\n"); printf("\t                             values: 4, 6, 8, 12,
-  //  16\n");
+  //	printf("\t--sm-dvd-wr #                set max DVD WRITE speed (default:
+  // 8X)\n"); 	printf("\t                             values: 4, 6, 8, 12,
+  // 16\n");
   printf("\t--sm-load #                  set tray load speed. spd can be 0 to "
          "80 (default: 63)\n");
   printf("\t--sm-eject #                 set tray eject speed. spd can be 0 to "
@@ -449,9 +431,9 @@ int main(int argc, char *argv[]) {
   drive_info *dev = NULL;
   char aslfn[2048];
   char assfn[2048];
-  //  char    asfn2[1032];
+  //	char	asfn2[1032];
   FILE *asf;
-  //  FILE*   asf2;
+  //	FILE*	asf2;
 
   int powerec = 1;
   int gigarec = GIGAREC_10;
@@ -479,7 +461,7 @@ int main(int argc, char *argv[]) {
   int silent_cd_rd = SILENT_CD_RD_32X;
   int silent_cd_wr = SILENT_CD_WR_32X;
   int silent_dvd_rd = SILENT_DVD_RD_12X;
-  //  int silent_dvd_wr = SILENT_DVD_WR_8X;
+  //	int	silent_dvd_wr = SILENT_DVD_WR_8X;
   int silent_cd = 0;
   int silent_dvd = 0;
   int silent_tray = 0;
@@ -498,9 +480,9 @@ int main(int argc, char *argv[]) {
   printf("**  CDVD Control v%s  (c) 2005-2009  Gennady \"ShultZ\" Kozlov\n",
          VERSION);
 
-  //  printf("Parsing commandline options (%d args)...\n",argc-1);
+  //	printf("Parsing commandline options (%d args)...\n",argc-1);
   for (i = 1; i < argc; i++) {
-    //      printf("arg[%02d]: %s\n",i,argv[i]);
+    //		printf("arg[%02d]: %s\n",i,argv[i]);
     if (!strcmp(argv[i], "-d")) {
       if (argc > (i + 1)) {
         i++;
@@ -811,7 +793,7 @@ int main(int argc, char *argv[]) {
         i++;
         strcpy(passwd, argv[i]);
         flags |= FL_SECUREC;
-        //  printf("SecuRec pass: %s\n", passwd);
+        //	printf("SecuRec pass: %s\n", passwd);
       } else {
         printf("option %s needs parameter!\n", argv[i]);
         return 5;
@@ -972,7 +954,8 @@ int main(int argc, char *argv[]) {
       if (argc > (i + 1)) {
         i++;
         silent_load = (int)strtol(argv[i], NULL, 0);
-        //              printf("tray load speed: %d\n", silent_load);
+        //				printf("tray load speed: %d\n",
+        // silent_load);
       } else {
         printf("option %s needs parameter!\n", argv[i]);
         return 5;
@@ -984,7 +967,8 @@ int main(int argc, char *argv[]) {
       if (argc > (i + 1)) {
         i++;
         silent_eject = (int)strtol(argv[i], NULL, 0);
-        //              printf("tray load speed: %d\n", silent_load);
+        //				printf("tray load speed: %d\n",
+        // silent_load);
       } else {
         printf("option %s needs parameter!\n", argv[i]);
         return 5;
@@ -1074,21 +1058,21 @@ int main(int argc, char *argv[]) {
       }
     }
     /*
-            else if(!strcmp(argv[i],"--sm-dvd-wr")) {
-                flags |= FL_SILENT; silent = 1; silent_dvd = 1;
-                if (argc>(i+1)) {
-                    i++;
-                    if      (!strcmp(argv[i],"18")) silent_dvd_wr =
-       SILENT_DVD_WR_18X; else if (!strcmp(argv[i],"16")) silent_dvd_wr =
-       SILENT_DVD_WR_12X; else if (!strcmp(argv[i],"12")) silent_dvd_wr =
-       SILENT_DVD_WR_12X; else if (!strcmp(argv[i], "8")) silent_dvd_wr =
-       SILENT_DVD_WR_8X; else if (!strcmp(argv[i], "6")) silent_dvd_wr =
-       SILENT_DVD_WR_6X; else if (!strcmp(argv[i], "4")) silent_dvd_wr =
-       SILENT_DVD_WR_4X; else printf("invalid --sm-dvd-wr parameter: %s\n",
-       argv[i]); } else { printf("option %s needs parameter!\n", argv[i]);
-                    return 5;
-                }
-            }
+                    else if(!strcmp(argv[i],"--sm-dvd-wr")) {
+                            flags |= FL_SILENT; silent = 1; silent_dvd = 1;
+                            if (argc>(i+1)) {
+                                    i++;
+                                    if      (!strcmp(argv[i],"18"))
+       silent_dvd_wr = SILENT_DVD_WR_18X; else if (!strcmp(argv[i],"16"))
+       silent_dvd_wr = SILENT_DVD_WR_12X; else if (!strcmp(argv[i],"12"))
+       silent_dvd_wr = SILENT_DVD_WR_12X; else if (!strcmp(argv[i], "8"))
+       silent_dvd_wr =  SILENT_DVD_WR_8X; else if (!strcmp(argv[i], "6"))
+       silent_dvd_wr =  SILENT_DVD_WR_6X; else if (!strcmp(argv[i], "4"))
+       silent_dvd_wr =  SILENT_DVD_WR_4X; else printf("invalid --sm-dvd-wr
+       parameter: %s\n", argv[i]); } else { printf("option %s needs
+       parameter!\n", argv[i]); return 5;
+                            }
+                    }
     */
     else if (!strcmp(argv[i], "--sm-nosave"))
       silent_save = 0;
@@ -1126,11 +1110,12 @@ int main(int argc, char *argv[]) {
           forcespeed = 1;
       }
 
-      //  printf("\t--pio-limit [on|off]         limit (or not) read speed by
-      //  24x for CD and 8x for DVD\n"); printf("\t--pio-quiet [quiet|perf|std]
-      //  select QuietMode setting: Quiet, Performance or Standard (default:
-      //  quiet)\n"); printf("\t--pio-nosave                 don't save settings
-      //  to drive (changes will be lost after reboot)\n");
+      //	printf("\t--pio-limit [on|off]         limit (or not) read speed
+      // by 24x for CD and 8x for DVD\n"); 	printf("\t--pio-quiet
+      // [quiet|perf|std] select QuietMode setting: Quiet, Performance or
+      // Standard (default: quiet)\n");
+      //	printf("\t--pio-nosave				   don't save
+      // settings to drive (changes will be lost after reboot)\n");
 
     } else if (!strcmp(argv[i], "--pio-nosave")) {
       silent_save = 0;
@@ -1188,7 +1173,7 @@ int main(int argc, char *argv[]) {
     printf("** ERR: no device selected\n");
     return 3;
   }
-  //  printf("____________________________\n");
+  //	printf("____________________________\n");
   printf("Device : %s\n", device);
   dev = new drive_info(device);
   if (dev->err) {
@@ -1198,7 +1183,7 @@ int main(int argc, char *argv[]) {
   }
 
   inquiry(dev);
-  //  convert_to_ID(dev);
+  //	convert_to_ID(dev);
   printf("Vendor : '%s'\n", dev->ven);
   printf("Model  : '%s'", dev->dev);
   if (isPlextor(dev)) {
@@ -1213,7 +1198,7 @@ int main(int argc, char *argv[]) {
     printf("Serial#: %s\n", dev->serial);
 
   if (flags) {
-    //  if (flags & FL_VERBOSE) {
+    //	if (flags & FL_VERBOSE) {
     printf("\nCDVD Control flags : ");
     if (flags & FL_VERBOSE)
       printf(" VERBOSE");
@@ -1283,9 +1268,9 @@ int main(int argc, char *argv[]) {
       printf(" AS_CLEAR");
     printf("\n\n");
   }
-  //  printf("____________________________\n");
+  //	printf("____________________________\n");
   if (flags & FL_LOCK) {
-    //      dev->silent++;
+    //		dev->silent++;
     switch (lock) {
     case 0:
       printf("Unlocking media...\n");
@@ -1304,11 +1289,11 @@ int main(int argc, char *argv[]) {
     set_lock(dev);
     printf("Media is%s locked\n",
            (dev->parms.status & STATUS_LOCK) ? "" : " NOT");
-    //      dev->silent--;
+    //		dev->silent--;
   }
 
   if (flags & FL_LOEJ) {
-    //      printf("loej_immed: %d\n",loej_immed);
+    //		printf("loej_immed: %d\n",loej_immed);
     if (eject == 2) {
       load_eject(dev, loej_immed);
     } else {
@@ -1318,37 +1303,38 @@ int main(int argc, char *argv[]) {
 
   // PLEXTOR features
   if (flags & FL_POWEREC) {
-    //      printf("Set PoweREC...\n");
+    //		printf("Set PoweREC...\n");
     dev->plextor.powerec_state = powerec;
     plextor_set_powerec(dev);
   }
   /*
       if (flags & FL_YMH_AMQR) {
-          dev->yamaha.amqr = amqr;
-          yamaha_set_amqr(dev);
+              dev->yamaha.amqr = amqr;
+              yamaha_set_amqr(dev);
       }
       if (flags & FL_YMH_FORCESPEED) {
-          dev->yamaha.forcespeed = forcespeed;
-          yamaha_set_forcespeed(dev);
+              dev->yamaha.forcespeed = forcespeed;
+              yamaha_set_forcespeed(dev);
       }
   */
   if (flags & FL_GIGAREC) {
-    //      printf("Set GigaREC...\n");
+    //		printf("Set GigaREC...\n");
     dev->plextor.gigarec = gigarec;
     plextor_set_gigarec(dev);
   }
   if (flags & FL_VARIREC_CD) {
-    //      printf("Set VariREC CD...\n");
-    //      printf("PWR = %02X   STR = %02X\n",varirec_cd_pwr, varirec_cd_str);
+    //		printf("Set VariREC CD...\n");
+    //		printf("PWR = %02X   STR = %02X\n",varirec_cd_pwr,
+    // varirec_cd_str);
     dev->plextor.varirec_state_cd = !(flags & FL_VARIREC_CD_OFF);
     dev->plextor.varirec_pwr_cd = varirec_cd_pwr;
     dev->plextor.varirec_str_cd = varirec_cd_str;
     plextor_set_varirec(dev, VARIREC_CD);
   }
   if (flags & FL_VARIREC_DVD) {
-    //      printf("Set VariREC DVD...\n");
-    //      printf("PWR = %02X   STR = %02X\n",varirec_dvd_pwr,
-    //      varirec_dvd_str);
+    //		printf("Set VariREC DVD...\n");
+    //		printf("PWR = %02X   STR = %02X\n",varirec_dvd_pwr,
+    // varirec_dvd_str);
     dev->plextor.varirec_state_dvd = !(flags & FL_VARIREC_DVD_OFF);
     dev->plextor.varirec_pwr_dvd = varirec_dvd_pwr;
     dev->plextor.varirec_str_dvd = varirec_dvd_str;
@@ -1561,7 +1547,8 @@ int main(int argc, char *argv[]) {
       if (silent_dvd) {
         dev->plextor_silent.access = silent_access;
         dev->plextor_silent.rd = silent_dvd_rd;
-        //              dev->plextor_silent.wr      = silent_dvd_wr;
+        //				dev->plextor_silent.wr		=
+        // silent_dvd_wr;
         plextor_set_silentmode_disc(dev, SILENT_DVD, silent_save);
       }
       if (silent_tray) {
