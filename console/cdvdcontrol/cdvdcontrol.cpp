@@ -227,7 +227,7 @@ int get_device_info(drive_info *dev) {
   // dev->yamaha.amqr ? "ON":"OFF"); 	if ((dev->ven_features & YMH_FORCESPEED)
   // &&
   //((flags & FL_CURRENT) || (flags & FL_YMH_FORCESPEED)))
-  //printf("Yamaha ForceSpeed   : %s\n", dev->yamaha.forcespeed ? "ON":"OFF");
+  // printf("Yamaha ForceSpeed   : %s\n", dev->yamaha.forcespeed ? "ON":"OFF");
   if ((dev->ven_features & YMH_TATTOO) && (flags & FL_CURRENT)) {
     if (dev->yamaha.tattoo_rows) {
       printf("Yamaha DiscT@2      : inner %d   outer %d   image 3744 x %d\n",
