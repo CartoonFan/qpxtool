@@ -4,23 +4,23 @@
 pxfw \- Firmware flashing tool for Plextor CD/DVD devices
 .SH "SYNOPSIS"
 \fBpxfw -l
-.br 
+.br
 \fBpxfw -d DEVICE [\-if\fR firmware.bin\fB] [\-u] [\-f] [\-v]\fR
-.br 
+.br
 \fBpxfw -d DEVICE [\-e] [\-r] [\-t] [\-v]\fR
-.br 
+.br
 .SH "DESCRIPTION"
 pxfw is the linux firmware flasher for Plextor CD and DVD drives.  Remove any disks before flashing.
 .SH "FEATURES"
-You can flash the firmware of these drives: 
-.br 
+You can flash the firmware of these drives:
+.br
 Plextor Premium, Premium-2, PX\-712, PX\-716, PX\-755 and PX\-760.
 .br
 .SH "DEVICE"
 can be an IDE, SCSI, SATA, USB or FireWire connected optical drive. Not all SATA controller support all Plextor features.
 
-\fBLinux:\fR 
-.br 
+\fBLinux:\fR
+.br
 .I /dev/hdX:
 IDE device
 .br
@@ -61,34 +61,34 @@ ATA device
 .br
 
 \fB\-if\fR  select inputfile. Specify the firmware binary file, which should
-.br 
+.br
      be written to DEVICE.
- 
-\fB\-u\fR   proceed update. When the firmware checksum test has succeeded, 
-.br 
+
+\fB\-u\fR   proceed update. When the firmware checksum test has succeeded,
+.br
      write firmware to DEVICE.
 
-\fB\-f\fR   force flashing. Even if DEVICE is not recognized, or firmware. 
-.br 
-     checksum has failed, firmware writing will be forced. 
-.br 
+\fB\-f\fR   force flashing. Even if DEVICE is not recognized, or firmware.
+.br
+     checksum has failed, firmware writing will be forced.
+.br
      Handle with care.
 
 \fB\-e\fR   read EEPROM from DEVICE.
 
 \fB\-r\fR   reboot the device.
- 
+
 \fB\-t\fR   test which opcodes are supported by the device.
- 
+
 \fB\-v\fR   debug.
 
 .SH "EXAMPLES"
 \fBpxfw -d /dev/hdc \-if 755_1.07.bin \-u\fR
-.br 
+.br
 writes firmware file 755_1.07.bin into Master Drive on Secondary IDE\-Port.
 
 \fBpxfw -d /dev/sr3 \-e -oe file.foo\fR
-.br 
+.br
 reades EEPROM from device /dev/sr3 and writes it to file.foo.
 \fR \fB
 \fR \fB

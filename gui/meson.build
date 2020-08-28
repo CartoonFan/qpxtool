@@ -76,7 +76,7 @@ moc_files = qt4.preprocess(moc_headers : qt4_moc_headers,
                            include_directories : [gui_inc, lib_inc],
                            dependencies : qt4_dep)
 qpxtool = executable('qpxtool',
-           sources : [qt4_sources,moc_files,qt4_moc_sources], 
+           sources : [qt4_sources,moc_files,qt4_moc_sources],
            include_directories: [gui_inc, lib_inc],
            link_with : [qpxtransport],
            dependencies : [qt4_dep,thread_dep])
