@@ -25,7 +25,7 @@ $(LIB): $(OBJS)
 clean:
 	rm -f $(LIB_SHORT) $(OBJS) ../lib/$(LIB_SHORT) *~ include/*~
 
-install: 
+install:
 	strip --strip-unneeded $(LIB_SHORT)
 
 	mkdir -p $(DESTDIR)$(PLUGINDIR)
@@ -35,4 +35,3 @@ uninstall:
 	rm -f $(DESTDIR)$(PLUGINDIR)/$(LIB_SHORT)
 
 .PHONY: all clean install uninstall
-

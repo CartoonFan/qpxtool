@@ -4,27 +4,27 @@
 .SH "NAME"
 f1tattoo \- disc T@2 feature for Yamaha F1 CD-RW devices
 .SH "SYNOPSIS"
-.br 
+.br
 \fBf1tattoo [-l] [-h] \fr
-.br 
+.br
 \fBf1tattoo -d DEVICE [-c] [-s] [--tattoo-test]\fR
-.br 
+.br
 \fBf1tattoo -d DEVICE --tattoo-raw <file.raw>\fR
-.br 
+.br
 \fBf1tattoo -d DEVICE --tattoo-png <file.png>\fR
-.br 
+.br
 .SH "DESCRIPTION"
 f1tattoo is the linux console tool to use the Yamaha disc T@2 feature. You won't get satisfying results on Phtalocyanin dye.
 .SH "FEATURES"
-You can disc T@2 with these drives: 
-.br 
-Yamaha F1 CD-RW, Yamaha F1DX  
+You can disc T@2 with these drives:
+.br
+Yamaha F1 CD-RW, Yamaha F1DX
 
 .SH "DEVICE"
 can be an IDE, SCSI, SATA, USB or FireWire connected optical drive. Not all SATA controller support all Plextor features.
 
-\fBLinux:\fR 
-.br 
+\fBLinux:\fR
+.br
 .I /dev/hdX:
 IDE device
 .br
@@ -61,45 +61,45 @@ ATA device
 
 .SH "OPTIONS"
 
-\fB\-l, --scanbus\fR   
+\fB\-l, --scanbus\fR
 .br
 		scan busses for all available CD and DVD devices.
 
-\fB\-h, --help\fR   
+\fB\-h, --help\fR
 .br
 		help. show available options.
- 
-\fB\-c, --current\fR   
+
+\fB\-c, --current\fR
 .br
 		show current drive settings of selected device
 
-\fB\-s, --supported\fR   
+\fB\-s, --supported\fR
 .br
-		show supported features of selected device                        
+		show supported features of selected device
 
-\fB\--tattoo-test\fR  
+\fB\--tattoo-test\fR
 .br
 		write DiscT@2 test image
 
-\fB\--tattoo-raw tattoo.raw\fR  
+\fB\--tattoo-raw tattoo.raw\fR
 .br
 		write DiscT@2 using raw data from tattoo.raw file
 
-\fB\--tattoo-png tattoo.png\fR  
+\fB\--tattoo-png tattoo.png\fR
 .br
 		write DiscT@2 using png image from tattoo.png file
 		check if f1tattoo compiled with png support using --help option
 
-\fB\-v, --verbose\fR   
+\fB\-v, --verbose\fR
 .br
 		give verbose output
 .SH "EXAMPLES"
 \fBf1tattoo -l\fR
-.br 
+.br
 		list all available CD- and DVD-devices\fR
 
 \fBf1tattoo -d /dev/hdc \--tattoo-raw filename.raw\fR
-.br 
+.br
 		writes DiscT@2 using filename.raw file on media in device /dev/hdc
 \fR \fB
 \fR \fB
