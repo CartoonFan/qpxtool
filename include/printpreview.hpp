@@ -31,32 +31,32 @@ class QComboBox;
 class QSplitter;
 
 class PrintPreview : public QDialog {
-  Q_OBJECT
-  friend class PreviewView;
+    Q_OBJECT
+    friend class PreviewView;
 
 public:
-  PrintPreview(QWidget *parent, QTextDocument *document = 0);
-  virtual ~PrintPreview();
-  void setDocument(QTextDocument *document);
+    PrintPreview(QWidget *parent, QTextDocument *document = 0);
+    virtual ~PrintPreview();
+    void setDocument(QTextDocument *document);
 
-  static void printDoc(QWidget *parent, QPrinter *printer, QTextDocument *doc);
+    static void printDoc(QWidget *parent, QPrinter *printer, QTextDocument *doc);
 
 private slots:
-  void print();
-  void pageSetup();
-  void scaleChanged(double);
-  void scaleChanged(QString);
+    void print();
+    void pageSetup();
+    void scaleChanged(double);
+    void scaleChanged(QString);
 
 private:
-  QLabel *l_scale;
-  QComboBox *box_scale;
-  QPushButton *pb_print, *pb_psetup, *pb_zoomin, *pb_zoom1, *pb_zoomout;
+    QLabel *l_scale;
+    QComboBox *box_scale;
+    QPushButton *pb_print, *pb_psetup, *pb_zoomin, *pb_zoom1, *pb_zoomout;
 
-  QTextDocument *doc;
-  QBoxLayout *layout_main, *layout_butt;
-  QSplitter *split;
-  PreviewView *view, *thumbs;
-  QPrinter printer;
+    QTextDocument *doc;
+    QBoxLayout *layout_main, *layout_butt;
+    QSplitter *split;
+    PreviewView *view, *thumbs;
+    QPrinter printer;
 };
 
 #endif // PRINTPREVIEW_H
