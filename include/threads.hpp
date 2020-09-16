@@ -19,13 +19,13 @@
 #include <stdio.h>
 class Mutex {
 public:
-  Mutex();
-  ~Mutex();
-  void lock();
-  void unlock();
+    Mutex();
+    ~Mutex();
+    void lock();
+    void unlock();
 
 private:
-  pthread_mutex_t m;
+    pthread_mutex_t m;
 };
 
 #define thread_t pthread_t
@@ -38,13 +38,13 @@ private:
 #include <windows.h>
 class Mutex {
 public:
-  Mutex();
-  ~Mutex();
-  void lock();
-  void unlock();
+    Mutex();
+    ~Mutex();
+    void lock();
+    void unlock();
 
 private:
-  CRITICAL_SECTION m;
+    CRITICAL_SECTION m;
 };
 
 #define thread_t HANDLE
