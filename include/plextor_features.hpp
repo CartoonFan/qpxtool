@@ -34,8 +34,8 @@ const unsigned char PLEX_BITSET_RDL = 0x0E;
 const unsigned char PLEX_MODE_SPDREAD = 0xBB;
 
 typedef struct {
-    const unsigned char val;
-    char name[4];
+  const unsigned char val;
+  char name[4];
 } REC;
 
 // GigaRec definitions
@@ -51,11 +51,10 @@ const unsigned char GIGAREC_14 = 0x03;
 const unsigned char GIGAREC_OFF = GIGAREC_10;
 
 const REC gigarec_tbl[] = {{GIGAREC_06, "0.6"}, {GIGAREC_07, "0.7"},
-    {GIGAREC_08, "0.8"}, {GIGAREC_09, "0.9"},
-    {GIGAREC_10, "OFF"}, {GIGAREC_11, "1.1"},
-    {GIGAREC_12, "1.2"}, {GIGAREC_13, "1.3"},
-    {GIGAREC_14, "1.4"}, {0xFF, "N/A"}
-};
+                           {GIGAREC_08, "0.8"}, {GIGAREC_09, "0.9"},
+                           {GIGAREC_10, "OFF"}, {GIGAREC_11, "1.1"},
+                           {GIGAREC_12, "1.2"}, {GIGAREC_13, "1.3"},
+                           {GIGAREC_14, "1.4"}, {0xFF, "N/A"}};
 
 // VariRec definitions
 const unsigned char VARIREC_CD = 0x00;
@@ -75,11 +74,10 @@ const unsigned char VARIREC_MINUS_3 = 0x83;
 const unsigned char VARIREC_MINUS_4 = 0x84;
 
 const REC varirec_pwr_tbl[] = {{VARIREC_MINUS_4, "-4"}, {VARIREC_MINUS_3, "-3"},
-    {VARIREC_MINUS_2, "-2"}, {VARIREC_MINUS_1, "-1"},
-    {VARIREC_NULL, " 0"},    {VARIREC_PLUS_1, "+1"},
-    {VARIREC_PLUS_2, "+2"},  {VARIREC_PLUS_3, "+3"},
-    {VARIREC_PLUS_4, "+4"},  {0xFF, "N/A"}
-};
+                               {VARIREC_MINUS_2, "-2"}, {VARIREC_MINUS_1, "-1"},
+                               {VARIREC_NULL, " 0"},    {VARIREC_PLUS_1, "+1"},
+                               {VARIREC_PLUS_2, "+2"},  {VARIREC_PLUS_3, "+3"},
+                               {VARIREC_PLUS_4, "+4"},  {0xFF, "N/A"}};
 
 typedef char str16[16];
 
@@ -87,14 +85,12 @@ const unsigned char varirec_max_str_cd = 7;
 const str16 varirec_str_cd_tbl[] = {"Default",         "Azo",
                                     "Cyanine",         "PhtaloCyanine A",
                                     "PhtaloCyanine B", "PhtaloCyanine C",
-                                    "PhtaloCyanine D"
-                                   };
+                                    "PhtaloCyanine D"};
 
 const unsigned char varirec_max_str_dvd = 9;
 const str16 varirec_str_dvd_tbl[] = {"Default",   "Strategy0", "Strategy1",
                                      "Strategy2", "Strategy3", "Strategy4",
-                                     "Strategy5", "Strategy6", "Strategy7"
-                                    };
+                                     "Strategy5", "Strategy6", "Strategy7"};
 
 // Silent Mode definitions
 const unsigned char SILENT_CD_WR_48X = 0x08;
@@ -105,13 +101,12 @@ const unsigned char SILENT_CD_WR_8X = 0x01;
 const unsigned char SILENT_CD_WR_4X = 0x00;
 
 const REC silent_cd_wr_tbl[] = {{SILENT_CD_WR_48X, "48X"},
-    {SILENT_CD_WR_32X, "32X"},
-    {SILENT_CD_WR_24X, "24X"},
-    {SILENT_CD_WR_16X, "16X"},
-    {SILENT_CD_WR_8X, "8X"},
-    {SILENT_CD_WR_4X, "4X"},
-    {0xFF, "max"}
-};
+                                {SILENT_CD_WR_32X, "32X"},
+                                {SILENT_CD_WR_24X, "24X"},
+                                {SILENT_CD_WR_16X, "16X"},
+                                {SILENT_CD_WR_8X, "8X"},
+                                {SILENT_CD_WR_4X, "4X"},
+                                {0xFF, "max"}};
 
 const unsigned char SILENT_CD_RD_48X = 0x05;
 const unsigned char SILENT_CD_RD_40X = 0x04;
@@ -121,13 +116,12 @@ const unsigned char SILENT_CD_RD_8X = 0x01;
 const unsigned char SILENT_CD_RD_4X = 0x00;
 
 const REC silent_cd_rd_tbl[] = {{SILENT_CD_RD_48X, "48X"},
-    {SILENT_CD_RD_40X, "40X"},
-    {SILENT_CD_RD_32X, "32X"},
-    {SILENT_CD_RD_24X, "24X"},
-    {SILENT_CD_RD_8X, "8X"},
-    {SILENT_CD_RD_4X, "4X"},
-    {0xFF, "max"}
-};
+                                {SILENT_CD_RD_40X, "40X"},
+                                {SILENT_CD_RD_32X, "32X"},
+                                {SILENT_CD_RD_24X, "24X"},
+                                {SILENT_CD_RD_8X, "8X"},
+                                {SILENT_CD_RD_4X, "4X"},
+                                {0xFF, "max"}};
 
 /*
 const unsigned char SILENT_DVD_WR_18X = 0x08;
@@ -157,8 +151,7 @@ const unsigned char SILENT_DVD_RD_2X = 0x00;
 const REC silent_dvd_rd_tbl[] = {
     {SILENT_DVD_RD_16X, "16X"}, {SILENT_DVD_RD_12X, "12X"},
     {SILENT_DVD_RD_8X, "8X"},   {SILENT_DVD_RD_5X, "5X"},
-    {SILENT_DVD_RD_2X, "2X"},   {0xFF, "max"}
-};
+    {SILENT_DVD_RD_2X, "2X"},   {0xFF, "max"}};
 
 const unsigned char SILENT_CD = 0x01;
 const unsigned char SILENT_DVD = 0x05;
@@ -254,7 +247,7 @@ extern int plextor_clear_autostrategy_db(drive_info *drive);
 
 // use action = ASDB_ENABLE/DISABLE/DELETE
 extern int plextor_modify_autostrategy_db(drive_info *drive, int index,
-        int action);
+                                          int action);
 extern int plextor_create_strategy(drive_info *drive, int mode);
 extern int plextor_media_check(drive_info *drive, int mode);
 

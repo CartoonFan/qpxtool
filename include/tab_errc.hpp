@@ -23,53 +23,53 @@ class ErrcDetailedDialog;
 #include "graphtab.hpp"
 
 class tabERRC : public GraphTab {
-    Q_OBJECT
+  Q_OBJECT
 public:
-    tabERRC(QPxSettings *iset, devlist *idev, QString iname, QWidget *p = 0,
-            Qt::WindowFlags fl = 0);
-    ~tabERRC();
+  tabERRC(QPxSettings *iset, devlist *idev, QString iname, QWidget *p = 0,
+          Qt::WindowFlags fl = 0);
+  ~tabERRC();
 
 public slots:
-    //	void clear();
-    void selectDevice();
-    void updateAll();
-    void updateLast();
-    //	void setDevice(device *idev);
-    //	void update() { graph->update(); };
+  //	void clear();
+  void selectDevice();
+  void updateAll();
+  void updateLast();
+  //	void setDevice(device *idev);
+  //	void update() { graph->update(); };
 
-    void XerrcClosed();
+  void XerrcClosed();
 
 private slots:
-    void updateSummary(device *);
-    void toggleXErrc();
+  void updateSummary(device *);
+  void toggleXErrc();
 
 protected:
-    virtual void updateLegend();
-    virtual void updateGraph();
+  virtual void updateLegend();
+  virtual void updateGraph();
 
 private:
-    QBoxLayout *layout_info;
+  QBoxLayout *layout_info;
 
 #ifdef __LEGEND_SHOW_SPEED
-    ColorLabel *pl_spd;
+  ColorLabel *pl_spd;
 #endif
-    ColorLabel *pl_e0;
-    QLabel *l_e0t;
-    QLabel *l_e0m;
-    QLabel *l_e0a;
+  ColorLabel *pl_e0;
+  QLabel *l_e0t;
+  QLabel *l_e0m;
+  QLabel *l_e0a;
 
-    ColorLabel *pl_e1;
-    QLabel *l_e1t;
-    QLabel *l_e1m;
-    QLabel *l_e1a;
+  ColorLabel *pl_e1;
+  QLabel *l_e1t;
+  QLabel *l_e1m;
+  QLabel *l_e1a;
 
-    ColorLabel *pl_e2;
-    QLabel *l_e2t;
-    QLabel *l_e2m;
-    QLabel *l_e2a;
+  ColorLabel *pl_e2;
+  QLabel *l_e2t;
+  QLabel *l_e2m;
+  QLabel *l_e2a;
 
-    QPushButton *pb_xerrc;
-    ErrcDetailedDialog *xerrc;
+  QPushButton *pb_xerrc;
+  ErrcDetailedDialog *xerrc;
 };
 
 #endif
