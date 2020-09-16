@@ -24,50 +24,50 @@
 #include "../config.hpp"
 
 int main(int ac, char **av) {
-  int r;
-  QApplication *QPxTool;
-  QPxToolMW *mainwin;
-  QTranslator *translator;
-  QSplashScreen *splash;
-  QString locale = QLocale::system().name();
-  QPixmap *pix;
-  QPxTool = new QApplication(ac, av);
+    int r;
+    QApplication *QPxTool;
+    QPxToolMW *mainwin;
+    QTranslator *translator;
+    QSplashScreen *splash;
+    QString locale = QLocale::system().name();
+    QPixmap *pix;
+    QPxTool = new QApplication(ac, av);
 #ifndef QT_NO_DEBUG
-  qDebug("Creating splash screen...");
+    qDebug("Creating splash screen...");
 #endif
-  pix = new QPixmap(":images/splash.png");
-  splash = new QSplashScreen(*pix);
-  splash->show();
+    pix = new QPixmap(":images/splash.png");
+    splash = new QSplashScreen(*pix);
+    splash->show();
 
-  translator = new QTranslator;
+    translator = new QTranslator;
 
 #ifndef QT_NO_DEBUG
-  qDebug("* Loading translator...");
+    qDebug("* Loading translator...");
 #endif
 #ifdef _WIN32
-  if (!translator->load("qpxtool." + locale, "locale")) {
+    if (!translator->load("qpxtool." + locale, "locale")) {
 #else
-  if (!translator->load("qpxtool." + locale,
-                        INSTALL_PREFIX "/share/qpxtool/locale")) {
+    if (!translator->load("qpxtool." + locale,
+                          INSTALL_PREFIX "/share/qpxtool/locale")) {
 #endif
-    qDebug() << "** Can't load translation for current locale: " << locale;
-  } else {
-    QPxTool->installTranslator(translator);
-  }
+        qDebug() << "** Can't load translation for current locale: " << locale;
+    } else {
+        QPxTool->installTranslator(translator);
+    }
 
-  QPxTool->setWindowIcon(QIcon(":images/q.png"));
+    QPxTool->setWindowIcon(QIcon(":images/q.png"));
 
-  mainwin = new QPxToolMW(ac, av);
+    mainwin = new QPxToolMW(ac, av);
 
-  splash->finish(mainwin);
-  mainwin->show();
-  r = QPxTool->exec();
+    splash->finish(mainwin);
+    mainwin->show();
+    r = QPxTool->exec();
 
-  delete mainwin;
-  delete translator;
-  delete splash;
-  delete pix;
-  delete QPxTool;
+    delete mainwin;
+    delete translator;
+    delete splash;
+    delete pix;
+    delete QPxTool;
 
-  return r;
+    return r;
 }
