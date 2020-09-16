@@ -15,50 +15,50 @@
 
 SplitButton::SplitButton(Qt::Orientation o, QWidget *p, Qt::WindowFlags f)
     : QWidget(p, f) {
-  orient = o;
-  mouseFocus = 0;
-  if (orient == Qt::Vertical) {
-    setMinimumWidth(6);
-    setMaximumWidth(6);
-  } else {
-    setMinimumHeight(6);
-    setMaximumHeight(6);
-  }
+    orient = o;
+    mouseFocus = 0;
+    if (orient == Qt::Vertical) {
+        setMinimumWidth(6);
+        setMaximumWidth(6);
+    } else {
+        setMinimumHeight(6);
+        setMaximumHeight(6);
+    }
 }
 
 SplitButton::~SplitButton() {}
 
 void SplitButton::paintEvent(QPaintEvent *) {
-  //	wDebug("SplitButton::paintEvent()");
-  QPainter p(this);
-  p.setRenderHint(QPainter::Antialiasing, true);
+    //	wDebug("SplitButton::paintEvent()");
+    QPainter p(this);
+    p.setRenderHint(QPainter::Antialiasing, true);
 
-  if (mouseFocus) {
-    p.fillRect(0, 0, width(), height(),
-               QBrush(palette().color(QPalette::Light)));
-  } else {
-    p.fillRect(0, 0, width(), height(),
-               QBrush(palette().color(QPalette::Button)));
-  }
-  p.setPen(QPen(palette().color(QPalette::Dark), 1));
-  p.drawRect(0, 0, width(), height());
+    if (mouseFocus) {
+        p.fillRect(0, 0, width(), height(),
+                   QBrush(palette().color(QPalette::Light)));
+    } else {
+        p.fillRect(0, 0, width(), height(),
+                   QBrush(palette().color(QPalette::Button)));
+    }
+    p.setPen(QPen(palette().color(QPalette::Dark), 1));
+    p.drawRect(0, 0, width(), height());
 }
 
 void SplitButton::mousePressEvent(QMouseEvent *) {
-  //	wDebug("SplitButton::mousePressEvent()");
-  emit clicked();
+    //	wDebug("SplitButton::mousePressEvent()");
+    emit clicked();
 }
 
 void SplitButton::mouseReleaseEvent(QMouseEvent *) {}
 
 void SplitButton::enterEvent(QEvent *) {
-  //	wDebug("SplitButton::enterEvent()");
-  mouseFocus = 1;
-  update();
+    //	wDebug("SplitButton::enterEvent()");
+    mouseFocus = 1;
+    update();
 }
 
 void SplitButton::leaveEvent(QEvent *) {
-  //	wDebug("SplitButton::leaveEvent()");
-  mouseFocus = 0;
-  update();
+    //	wDebug("SplitButton::leaveEvent()");
+    mouseFocus = 0;
+    update();
 }
