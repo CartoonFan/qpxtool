@@ -390,7 +390,7 @@ void plextor_get_silentmode_saved(drive_info *drive) {
   //	drive->plextor_silent.pwr_dvd = 16;
 
   //								=
-  //drive->rd_buf[0x106];
+  // drive->rd_buf[0x106];
   ////
   //???
 
@@ -1289,8 +1289,8 @@ int plextor_media_check(drive_info *drive, int mode) {
   int i = 0;
   int p = 0;
   //	if (!drive->silent) printf("MQCK CDB: %02X %02X %02X %02X %02X %02X %02X
-  //%02X %02X %02X %02X %02X\n", 		(PLEXTOR_AS_RD) & 0xFF, 1, mode &
-  //0xFF, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+  //%02X %02X %02X %02X %02X\n", 		(PLEXTOR_AS_RD) & 0xFF, 1, mode
+  //& 0xFF, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
   if (!(drive->media.type & (DISC_DVD))) {
     printf("Media Quality Check supported on DVD media only!\n");

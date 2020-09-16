@@ -1918,7 +1918,8 @@ void device::qscan_process_test() {
           }
           pprocess = 100.0 * (float)di.lba / media.ctots;
           emit process_progress();
-          //						qDebug( sl[1] + " " + sl[3] + " "
+          //						qDebug( sl[1] + " " + sl[3] + "
+          //"
           //+ sl[5]
           //);
         }
