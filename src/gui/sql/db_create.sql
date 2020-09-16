@@ -65,4 +65,3 @@ CREATE TABLE reports (
     FULL ON UPDATE RESTRICT ON DELETE RESTRICT,
     CONSTRAINT reports_label_uniq UNIQUE (label, copy_idx)
 );
-

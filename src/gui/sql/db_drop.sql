@@ -16,4 +16,3 @@ DROP TABLE dev_models;
 DROP TABLE dev_vendors;
 
 DROP TABLE media_types;
-
