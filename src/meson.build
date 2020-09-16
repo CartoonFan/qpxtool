@@ -8,7 +8,7 @@ qpxtransport = library('qpxtransport',
                             version : '0.7.0',
                             dependencies : thread_dep,
                             install : true)
-                            
+
 qpxpioneer_sources = ['pioneer_spdctl.cpp']
 qpxpioneer = library('qpxpioneer',
                             qpxpioneer_sources,
@@ -50,7 +50,7 @@ cdvdcontrol = executable('cdvdcontrol', 'cdvdcontrol.cpp',
                          link_args : '-lstdc++',
                          include_directories : inc,
                          link_with : cdvdcontrol_linked_libraries)
-                         
+
 f1tattoo_linked_libraries = [qpxtransport,qpxyamaha]
 
 f1tattoo = executable('f1tattoo', 'f1tattoo.cpp',
