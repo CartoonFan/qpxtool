@@ -121,7 +121,7 @@ void TextSlider::moveToEnabled() {
 
 void TextSlider::setTickPosition(QSlider::TickPosition position) {
   //	if (position == QSlider::TicksLeft || position == QSlider::TicksRight)
-  //op.tickPosition = position;
+  // op.tickPosition = position;
   if (op.tickPosition == position)
     return;
   op.tickPosition = position;
@@ -264,8 +264,8 @@ void TextSlider::mouseReleaseEvent(QMouseEvent *e) {
     update();
   }
   if (oldpos != op.sliderPosition) {
-    //		qDebug() << "mouseReleaseEvent()  oldpos: " << oldpos << "  pos: " <<
-    //op.sliderPosition;
+    //		qDebug() << "mouseReleaseEvent()  oldpos: " << oldpos << "  pos: "
+    //<< op.sliderPosition;
     emit valueChanged(op.sliderPosition);
   }
 }

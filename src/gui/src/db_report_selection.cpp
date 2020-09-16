@@ -56,9 +56,9 @@ QVariant ListModel::data(const QModelIndex &p, int role) const {
     return QVariant(tdata[r]);
   case Qt::DecorationRole:
     return QVariant(idata[r]);
-    //		case Qt::FontRole:
-    //		case Qt::TextAlignMentRole:
-    //		case Qt::CheckStateRole:
+  //		case Qt::FontRole:
+  //		case Qt::TextAlignMentRole:
+  //		case Qt::CheckStateRole:
   default:
     break;
   }
@@ -334,7 +334,7 @@ bool DbReportSelection::eventFilter(QObject *o, QEvent *e) {
 QImage DbReportSelection::getMediaLogo(quint64 id) {
   QImage logo;
   switch (id) {
-    // CD media
+  // CD media
   case DISC_CDROM:
     logo = QImage(":images/media/cd.png");
     break;
@@ -344,14 +344,14 @@ QImage DbReportSelection::getMediaLogo(quint64 id) {
   case DISC_CDRW:
     logo = QImage(":images/media/cd_rw.png");
     break;
-    // DVD media
+  // DVD media
   case DISC_DVDROM:
     logo = QImage(":images/media/dvd-rom.png");
     break;
   case DISC_DVDRAM:
     logo = QImage(":images/media/dvd-ram.png");
     break;
-    // DVD- media
+  // DVD- media
   case DISC_DVDmR:
     logo = QImage(":images/media/dvd-r.png");
     break;
@@ -368,7 +368,7 @@ QImage DbReportSelection::getMediaLogo(quint64 id) {
     logo = QImage(":images/media/dvd-rw_dl.png");
     break;
 
-    // DVD+ media
+  // DVD+ media
   case DISC_DVDpR:
     logo = QImage(":images/media/dvd+r.png");
     break;
@@ -382,14 +382,14 @@ QImage DbReportSelection::getMediaLogo(quint64 id) {
     logo = QImage(":images/media/dvd+rw_dl.png");
     break;
 
-    // DD-CD media
+  // DD-CD media
   case DISC_DDCD_ROM:
   case DISC_DDCD_R:
   case DISC_DDCD_RW:
     logo = QImage(":images/media/ddcd.png");
     break;
 
-    // Blu-Ray media
+  // Blu-Ray media
   case DISC_BD_ROM:
   case DISC_BD_R_SEQ:
   case DISC_BD_R_RND:
@@ -397,7 +397,7 @@ QImage DbReportSelection::getMediaLogo(quint64 id) {
     logo = QImage(":images/media/bd.png");
     break;
 
-    // HD DVD media
+  // HD DVD media
   case DISC_HDDVD_ROM:
     logo = QImage(":images/media/hddvd-rom.png");
     break;

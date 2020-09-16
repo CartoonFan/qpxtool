@@ -527,7 +527,8 @@ void device::qscan_callback_info() {
 
   if (type == DevtypeLocal) {
     //		QObject::disconnect(proc, SIGNAL(finished(int,
-    //QProcess::ExitStatus)), 				this, SLOT(qscan_callback_info()));
+    // QProcess::ExitStatus)), 				this,
+    // SLOT(qscan_callback_info()));
     xcode = proc->exitCode();
 #ifndef QT_NO_DEBUG
     qDebug() << "qscan (local) finished: " << xcode;
@@ -813,8 +814,8 @@ bool device::setComplexFeature(int f, DevFeatures *data) {
         cdvdopts << "--sm-cd-wr" << QString::number(data->sm_cd_wr);
         if (cap_rd & DEVICE_DVD) {
           cdvdopts << "--sm-dvd-rd" << QString::number(data->sm_dvd_rd);
-          //						cdvdopts << "--sm-dvd-wr" <<
-          //QString::number(data->sm_dvd_wr);
+          //						cdvdopts << "--sm-dvd-wr"
+          //<< QString::number(data->sm_dvd_wr);
         }
         cdvdopts << "--sm-access" << (data->sm_access ? "fast" : "slow");
         cdvdopts << "--sm-load" << QString::number(data->sm_trayl);
@@ -1244,7 +1245,7 @@ void device::qscan_process_line(QString &qout) {
         }
       }
       //			qDebug() << "Available ERRC data: " <<
-      //media.tdata_errc;
+      // media.tdata_errc;
     } else if (sl[0].contains("JB speeds", Qt::CaseInsensitive)) {
       media.tspeeds_jb = sl[1].split(" ", QString::SkipEmptyParts);
     }
@@ -1553,7 +1554,8 @@ void device::cdvdcontrol_process_line(QString &qout) {
     } else if (sl[0].contains("PSM DVD Read speed", Qt::CaseInsensitive)) {
       features.psm_dvd_rd = sl[1].remove("X").toInt();
       //		} else if (sl[0].contains("SM DVD Write speed",
-      //Qt::CaseInsensitive)) { 			features.sm_dvd_wr = sl[1].toInt();
+      // Qt::CaseInsensitive)) { 			features.sm_dvd_wr =
+      // sl[1].toInt();
     } else if (sl[0].contains("PSM Access time", Qt::CaseInsensitive)) {
       features.psm_access = !!sl[1].contains("FAST");
     } else if (sl[0].contains("PSM Load speed", Qt::CaseInsensitive)) {
@@ -1748,7 +1750,8 @@ void device::qscan_callback_test() {
 
   if (type == DevtypeLocal) {
     //		QObject::disconnect(proc, SIGNAL(finished(int,
-    //QProcess::ExitStatus)), 				this, SLOT(qscan_callback_info()));
+    // QProcess::ExitStatus)), 				this,
+    // SLOT(qscan_callback_info()));
     xcode = proc->exitCode();
 #ifndef QT_NO_DEBUG
     qDebug() << "qscan (local) finished" << xcode;
@@ -1852,7 +1855,8 @@ void device::qscan_process_test() {
         //					qDebug("RT");
         DI_Transfer di;
         sl = qout.split(" ", QString::SkipEmptyParts);
-        //		for (int i=0; i<sl.size(); i++) qDebug(QString::number(i)
+        //		for (int i=0; i<sl.size(); i++)
+        //qDebug(QString::number(i)
         //+ "  '" + sl[i] + "'");
         if (sl.size() >= 6) {
           di.lba = sl[1].toLongLong();
@@ -1889,7 +1893,8 @@ void device::qscan_process_test() {
       if (qout.startsWith("Track ") && qout.contains("MB written")) {
         DI_Transfer di;
         sl = qout.split(" ", QString::SkipEmptyParts);
-        //		for (int i=0; i<sl.size(); i++) qDebug(QString::number(i)
+        //		for (int i=0; i<sl.size(); i++)
+        //qDebug(QString::number(i)
         //+ "  '" + sl[i] + "'");
         if (sl.size() >= 10) {
           di.lba = sl[2].toLongLong() << 9;
@@ -1912,7 +1917,8 @@ void device::qscan_process_test() {
           }
           pprocess = 100.0 * (float)di.lba / media.ctots;
           emit process_progress();
-          //						qDebug( sl[1] + " " + sl[3] + " " + sl[5]
+          //						qDebug( sl[1] + " " + sl[3] + " " +
+          //sl[5]
           //);
         }
         //		qDebug(QString("lba: %1, spdx: %2, spdk:
@@ -2001,7 +2007,7 @@ void device::qscan_process_test() {
         DI_JB di;
         sl = qout.split(QRegExp("[:\\ |]"), QString::SkipEmptyParts);
         //					for (int i=0; i<sl.size(); i++)
-        //qDebug(QString::number(i) + "'" + sl[i] + "'");
+        // qDebug(QString::number(i) + "'" + sl[i] + "'");
 
         if (sl.size() >= 8) {
           di.lba = sl[1].toInt();
@@ -2040,7 +2046,7 @@ void device::qscan_process_test() {
         DI_FT di;
         sl = qout.split(QRegExp("[:\\ |]"), QString::SkipEmptyParts);
         //					for (int i=0; i<sl.size(); i++)
-        //qDebug(QString::number(i) + "'" + sl[i] + "'");
+        // qDebug(QString::number(i) + "'" + sl[i] + "'");
 
         if (sl.size() >= 8) {
           di.lba = sl[1].toInt();

@@ -182,8 +182,8 @@ private:
   TestDialog *testDialog;
 
   devlist devices; // devices
-                   //	QSqlDatabase	db;		 // reports database connection
-                   // settings
+  //	QSqlDatabase	db;		 // reports database connection
+  // settings
   QPxSettings set;
   bool splash;
 };

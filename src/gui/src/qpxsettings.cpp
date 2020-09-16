@@ -46,7 +46,7 @@ QPxSettings::QPxSettings() {
     col_errc.raw[i] = new QColor();
 #ifndef QT_NO_DEBUG
 //		qDebug(QString("new QColor %1").arg((unsigned
-//int)col_errc.raw[i],8,16));
+// int)col_errc.raw[i],8,16));
 #endif
   }
 }
@@ -59,7 +59,7 @@ QPxSettings::QPxSettings(const QPxSettings &o) {
     col_errc.raw[i] = new QColor(*(o.col_errc.raw[i]));
 #ifndef QT_NO_DEBUG
 //		qDebug(QString("new QColor %1").arg((unsigned
-//int)col_errc.raw[i],8,16));
+// int)col_errc.raw[i],8,16));
 #endif
   }
   *this = o;
@@ -117,7 +117,7 @@ QPxSettings::~QPxSettings() {
   for (int i = 0; i < 8; i++) {
 #ifndef QT_NO_DEBUG
 //		qDebug(QString("del QColor %1").arg((unsigned
-//int)col_errc.raw[i],8,16));
+// int)col_errc.raw[i],8,16));
 #endif
     delete col_errc.raw[i];
   }
@@ -155,7 +155,8 @@ void QPxSettings::load() {
   settings->beginGroup("/geometry");
   geometry_mw = settings->value("mainwindow", QRect(0, 0, 0, 0)).toRect();
   geometry_pref = settings->value("preferences", QRect(0, 0, 0, 0)).toRect();
-  //		geometry_testsel = settings->value("testselector",  QRect(0,0,0,0)
+  //		geometry_testsel = settings->value("testselector",
+  //QRect(0,0,0,0)
   //).toRect();
   settings->endGroup();
 

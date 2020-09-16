@@ -816,7 +816,8 @@ static const desc64 rw_capabilities[] = {
 
     //	{ DEVICE_DVD_R_DL_SEQ	  (1ULL <<  7) // ++
     //	{ DEVICE_DVD_R_DL_LJ	  (1ULL <<  8) // ++
-    //	{ DEVICE_DVD_R_DL		  (DEVICE_DVD_R_DL_SEQ | DEVICE_DVD_R_DL_LJ)
+    //	{ DEVICE_DVD_R_DL		  (DEVICE_DVD_R_DL_SEQ |
+    //DEVICE_DVD_R_DL_LJ)
     ////
     //++
     {DEVICE_DVD_R_DL, "DVD-R/DL"},

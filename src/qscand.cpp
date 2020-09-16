@@ -310,7 +310,7 @@ int main(int argc, char **argv) {
     if (childs[cli_idx].arg.connfd > 0) {
       //		write(connfd, IDENT, IDENT_LEN);
       //		fcntl(connfd, F_SETFL, fcntl(connfd, F_GETFL) |
-      //O_NONBLOCK);
+      // O_NONBLOCK);
       cmutex->lock();
       if (clients >= CLIENTS_MAX) {
         write(childs[cli_idx].arg.connfd, "QSCAND: clients limit reached!\n",
@@ -351,7 +351,7 @@ int main(int argc, char **argv) {
     if (!childs[i].arg.used)
       continue;
     //		printf("waiting for thread %d. used: %d\n", i,
-    //childs[i].arg.used);
+    // childs[i].arg.used);
     if (thread_join(childs[i].tid, NULL)) {
 #ifdef DAEMON_EN
       if (daemonized)

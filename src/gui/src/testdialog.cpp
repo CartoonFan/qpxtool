@@ -215,7 +215,7 @@ void TestDialog::winit() {
   connect(ck_FT, SIGNAL(clicked(bool)), spd_FT, SLOT(setEnabled(bool)));
   //	connect( ck_TA,   SIGNAL(clicked(bool)), spd_TA,SLOT(setEnabled(bool)));
   //	connect( ck_plugin, SIGNAL(clicked(bool)),
-  //cb_plugin,SLOT(setEnabled(bool)));
+  // cb_plugin,SLOT(setEnabled(bool)));
   connect(cb_plugin, SIGNAL(activated(int)), this, SLOT(pluginChanged(int)));
 
   connect(butt_run, SIGNAL(clicked()), this, SLOT(start()));
@@ -402,7 +402,7 @@ void TestDialog::saveData() {
       (int)spd_FT->currentText().remove(QRegExp("[Xx]")).toFloat();
   dev->plugin = (cb_plugin->currentIndex() ? cb_plugin->currentText() : "");
 //	dev->tspeeds.ta   = (int)
-//spd_TA->currentText().remove(QRegExp("[Xx]")).toFloat();
+// spd_TA->currentText().remove(QRegExp("[Xx]")).toFloat();
 #ifndef QT_NO_DEBUG
   qDebug() << "spd RT  : " << dev->tspeeds.rt;
   qDebug() << "spd WT  : " << dev->tspeeds.wt;

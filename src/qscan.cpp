@@ -96,8 +96,9 @@ BOOL WINAPI sigint_handler(DWORD) {
 void detect_vendor_features(drive_info *dev) {
   if (isPlextor(dev)) {
     plextor_get_life(dev);
-    //		if ((dev->dev_ID == PLEXTOR_755) || (dev->dev_ID == PLEXTOR_760) ||
-    //(dev->dev_ID == PLEXTOR_PREMIUM2)) 		if (isPlextorLockPresent(dev))
+    //		if ((dev->dev_ID == PLEXTOR_755) || (dev->dev_ID == PLEXTOR_760)
+    //|| (dev->dev_ID == PLEXTOR_PREMIUM2)) 		if
+    //(isPlextorLockPresent(dev))
     plextor_px755_do_auth(dev);
     if (plextor_get_hidecdr_singlesession(dev) == 0) {
       dev->ven_features |= PX_HCDRSS;
@@ -299,7 +300,7 @@ int main(int argc, char **argv) {
       break;
     case 'r':
       //				printf(MSGPREF " -r option conflicts
-      //with -s!\n");
+      // with -s!\n");
       flags |= FL_SPEED;
       rspeed = atol(optarg);
       break;
@@ -496,10 +497,10 @@ int main(int argc, char **argv) {
 #endif
     printf(CAPVND "Hide CD-R         : %s\n",
            (dev->ven_features & PX_HCDRSS) ? (dev->plextor.hcdr ? "ON" : "OFF")
-                                         : "-");
+                                           : "-");
     printf(CAPVND "SingleSession     : %s\n",
            (dev->ven_features & PX_HCDRSS) ? (dev->plextor.sss ? "ON" : "OFF")
-                                         : "-");
+                                           : "-");
     printf(CAPVND "SpeedRead         : %s\n",
            (dev->ven_features & PX_SPDREAD)
                ? (dev->plextor.spdread ? "ON" : "OFF")
@@ -868,7 +869,7 @@ int main(int argc, char **argv) {
   }
 
   //	if (test && (strcmp(test,"rt") && strcmp(test,"wt")) &&
-  //!scanner->is_plugin_attached()) {
+  //! scanner->is_plugin_attached()) {
   //	}
 
   if (speed > 0)

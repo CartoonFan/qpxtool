@@ -1182,7 +1182,7 @@ void QPxToolMW::prepare_report(device *dev, QTextDocument *doc) {
 
   //	img = QImage(":images/logo.png");
   //	doc->addResource(QTextDocument::ImageResource, QUrl("images/logo.png"),
-  //img);
+  // img);
 
   qApp->processEvents();
   if (dev->testData.rt.size() > 0) {

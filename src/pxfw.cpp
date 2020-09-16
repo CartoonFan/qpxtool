@@ -335,7 +335,7 @@ int main(int argc, char *argv[]) {
       else if (!strcmp(argv[i], "-u"))
         flags |= FL_UPDATE;
       //			else if(!strcmp(argv[i],"-b")) flags |=
-      //FL_BACKUP;
+      // FL_BACKUP;
       else if (!strcmp(argv[i], "-v"))
         flags |= FL_DEBUG;
       else if (!strcmp(argv[i], "-t"))

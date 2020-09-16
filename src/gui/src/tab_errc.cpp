@@ -132,7 +132,7 @@ void tabERRC::selectDevice() {
   //	updateSummary(dev);
 
   //	QObject::connect( devices->current(), SIGNAL(block_ERRC()), this,
-  //SLOT(update()) );
+  // SLOT(update()) );
   QObject::connect(dev, SIGNAL(doneMInfo(int)), this, SLOT(updateAll()));
   QObject::connect(dev, SIGNAL(block_ERRC()), this, SLOT(updateLast()));
 }

@@ -152,13 +152,13 @@ void ResultsReader::run() {
           attr = xml.attributes();
           if (xml.name() == "identify") {
             //							dev->type =
-            //attr.value("type").toInt();
+            // attr.value("type").toInt();
             dev->path = attr.value("path").toString();
             dev->host = attr.value("host").toString();
             dev->port = attr.value("port").toString().toInt();
             dev->path = attr.value("path").toString();
             //							dev->id   =
-            //attr.value("id").toString();
+            // attr.value("id").toString();
             dev->ven = attr.value("ven").toString();
             dev->dev = attr.value("dev").toString();
             dev->sn = attr.value("sn").toString();
@@ -420,7 +420,7 @@ void ResultsWriter::run() {
   xml.writeAttribute("sstate", dev->media.sstate);
   xml.writeEndElement(); // misc
   xml.writeEndElement(); // media
-                         // test speeds
+  // test speeds
 
   xml.writeStartElement("tests");
 

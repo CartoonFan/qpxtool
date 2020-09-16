@@ -46,8 +46,8 @@ int qpxwriter::mmc_write(int32_t lba, int sects) {
   dev->cmd[7] = (sects >> 8);
   dev->cmd[8] = sects & 0xFF;
   if ((dev->err = dev->cmd.transport(WRITE, dev->rd_buf, sects * 2048))) {
-    //		printf("\nqpxwriter: Write error at sector %ld (wsize=%d)\n", lba,
-    //sects);
+    //		printf("\nqpxwriter: Write error at sector %ld (wsize=%d)\n",
+    //lba, sects);
     if (dev->err != 0x20408)
       sperror("MMC_WRITE", dev->err);
     return (dev->err);
@@ -63,8 +63,8 @@ int qpxwriter::write_data(int32_t lba, int sects) {
               do {
                       if (f) usleep(20000); else f=1;
                       get_wbuffer_capacity(dev,&ubuft,&ubuff);
-              //	if (ubuft) printf("%8d buf: %d %%\n", lba, 100*(ubuft-ubuff) /
-     ubuft);
+              //	if (ubuft) printf("%8d buf: %d %%\n", lba, 100*(ubuft-ubuff)
+     / ubuft);
               //} while ( dev->err == 0x20408 || (ubuff < sects*2048));
               } while ( !stop_req && !dev->err && (ubuff < sects*2048));
       }

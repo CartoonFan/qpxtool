@@ -212,7 +212,7 @@ void devctlGigarec::set(bool en) {
   }
   if (!dev->setComplexFeature(FEATURE_GIGAREC, &dev->features)) {
     //		l_cap->setText(tr("Original capacity: ") +
-    //QString::number(dev->media.ctots >> 9) + " MB");
+    // QString::number(dev->media.ctots >> 9) + " MB");
     l_ncap->setText(
         tr("GigaRec capacity: ") +
         QString::number((int)(dev->media.ctots * dev->features.grec) >> 9) +
@@ -481,7 +481,7 @@ devctlSilent::devctlSilent(device *idev, QWidget *p) : QWidget(p) {
     box_rdvd->addItem(QString::number(sm_rdvd[i]) + "X");
   box_wdvd = new QComboBox(cw);
   //	for (int i=0; sm_wdvd[i]>0; i++)
-  //box_wdvd->addItem(QString::number(sm_wdvd[i]) + "X");
+  // box_wdvd->addItem(QString::number(sm_wdvd[i]) + "X");
 
   if (!(dev->cap_rd & DEVICE_DVD)) {
     spdd->setEnabled(false);
@@ -593,7 +593,8 @@ devctlSilent::devctlSilent(device *idev, QWidget *p) : QWidget(p) {
   if (idx >= 0)
     box_rdvd->setCurrentIndex(idx);
   //	idx = box_wdvd->findText(QString::number(dvd ? dev->features.sm_wr :
-  //dev->features.sm_dvd_wr)+"X"); 	if (idx>=0) box_wdvd->setCurrentIndex(idx);
+  // dev->features.sm_dvd_wr)+"X"); 	if (idx>=0)
+  // box_wdvd->setCurrentIndex(idx);
 
   if (dev->features.sm_access)
     a_fast->setChecked(true);
@@ -628,7 +629,7 @@ void devctlSilent::set() {
     dev->features.sm_cd_wr = box_wcd->currentText().remove("X").toInt();
     dev->features.sm_dvd_rd = box_rdvd->currentText().remove("X").toInt();
     //		dev->features.sm_dvd_wr =
-    //box_wdvd->currentText().remove("X").toInt();
+    // box_wdvd->currentText().remove("X").toInt();
     dev->features.sm_access = a_fast->isChecked();
     dev->features.sm_trayl = s_load->value();
     dev->features.sm_traye = s_eject->value();

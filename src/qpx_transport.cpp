@@ -644,7 +644,7 @@ int Scsi_Command::transport(Direction dir, void *buf, size_t sz) {
 
   /* cmd length fix */
   //	printf("CMD: (%2d)  %02x\n", ccb.csio.cdb_len,
-  //ccb.csio.cdb_io.cdb_bytes[0]);
+  // ccb.csio.cdb_io.cdb_bytes[0]);
   ccb.csio.cdb_len =
       (ccb.csio.cdb_len < COMMAND_SIZE(ccb.csio.cdb_io.cdb_bytes[0]))
           ? COMMAND_SIZE(ccb.csio.cdb_io.cdb_bytes[0])

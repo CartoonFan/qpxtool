@@ -302,7 +302,7 @@ void TilesCache::addTile(QPixmap *pix, int page, int x, int y) {
   Tile *tile = new Tile(pix, page, x, y);
 #ifndef QT_NO_DEBUG
 //	qDebug() << "TilesCache::addTile(): " << tile->page << " x:" <<
-//tile->xidx << " y:" << tile->yidx;
+// tile->xidx << " y:" << tile->yidx;
 #endif
   tiles.prepend(tile);
   if (tiles.size() > maxTiles) {
@@ -889,7 +889,7 @@ void AbstractPreview::paintEvent(QPaintEvent *) {
       for (int i = 0; i < d->marginRects.size(); i++) {
         if (!i && d->viewMode == AbstractPreview::Mode_Normal) {
           //	qDebug() << "page #" << page << mrect << d->marginRects[i] <<
-          //d->marginRects[i].intersected(mrect);
+          // d->marginRects[i].intersected(mrect);
         }
         p->fillRect(d->marginRects[i].intersected(mrect), QBrush(Qt::white));
       }

@@ -167,7 +167,7 @@ int yamaha_f1_get_tattoo(drive_info *drive) {
 
 int yamaha_write(drive_info *drive, char mode, char bufid, int offs, int plen) {
   //	printf("Mode: %d, BufID: %d, offs: %d, plen: %d, blen: %d\n", mode,
-  //bufid, offs, plen, blen); 	drive->cmd[0] = SPC_WRITE_BUFFER;
+  // bufid, offs, plen, blen); 	drive->cmd[0] = SPC_WRITE_BUFFER;
   drive->cmd[0] = 0x3B;
   drive->cmd[1] = mode & 7;
   drive->cmd[2] = bufid;

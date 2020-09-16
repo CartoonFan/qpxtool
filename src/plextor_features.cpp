@@ -336,8 +336,8 @@ void plextor_print_silentmode_state(drive_info *drive) {
   std::cout << "\tSM Write speed : ";
   if (drive->media.type & DISC_DVD) {
     //		while ((silent_dvd_wr_tbl[idx].val!=0xFF) &
-    //(silent_dvd_wr_tbl[idx].val!=(val & 0xFF))) idx++; 		printf("%s :
-    //%d\n",silent_dvd_wr_tbl[idx].name, val);
+    //(silent_dvd_wr_tbl[idx].val!=(val & 0xFF))) idx++; 		printf("%s
+    //: %d\n",silent_dvd_wr_tbl[idx].name, val);
     std::cout << "MAX\n";
   } else {
     while ((silent_cd_wr_tbl[idx].val != 0xFF) &
@@ -389,7 +389,8 @@ void plextor_get_silentmode_saved(drive_info *drive) {
   drive->plextor_silent.pwr_cd = drive->rd_buf[0x104];
   //	drive->plextor_silent.pwr_dvd = 16;
 
-  //								= drive->rd_buf[0x106]; //
+  //								= drive->rd_buf[0x106];
+  ////
   //???
 
   /*
@@ -646,7 +647,7 @@ int plextor_set_securec(drive_info *drive, char len, char *passwd) {
   if ((passwd) && (len)) {
     printf("Turning SecuRec ON\n");
     //		printf("Setting SecuRec passwd to '%s' (len = %d)\n", passwd,
-    //len);
+    // len);
     drive->cmd[2] = 0x01;
     drive->cmd[3] = 0x01;
     drive->cmd[4] = 0x02;
@@ -961,8 +962,9 @@ int plextor_get_autostrategy_db(drive_info *drive) //, void* database)
     for (i = 0; i < 12; i++)
       if (drive->astrategy.entry[j].MID[i] < 0x20)
         drive->astrategy.entry[j].MID[i] = 0x20;
-    //		for (i=0; i<12;i++) if (drive->astrategy.entry[j].MID[i] < 0x20 &&
-    //drive->astrategy.entry[j].MID[i]) drive->astrategy.entry[j].MID[i] = 0x20;
+    //		for (i=0; i<12;i++) if (drive->astrategy.entry[j].MID[i] < 0x20
+    //&& drive->astrategy.entry[j].MID[i]) drive->astrategy.entry[j].MID[i] =
+    // 0x20;
     drive->astrategy.entry[j].crap2 = 0;
 
     printf("S#%02d |%c| DVD%cR [%02X] | %3dX | %12s | %d\n",
@@ -1226,8 +1228,8 @@ int plextor_create_strategy(drive_info *drive, int mode) {
   int i = 0;
   int p = 0;
   //	if (!drive->silent) printf("AS create: %02X %02X %02X %02X %02X %02X
-  //%02X %02X %02X %02X %02X %02X\n",		(CMD_PLEX_AS_RD) & 0xFF, 4, mode &
-  //0xFF, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+  //%02X %02X %02X %02X %02X %02X\n",		(CMD_PLEX_AS_RD) & 0xFF, 4, mode
+  //& 0xFF, 0, 0, 0, 0, 0, 0, 0, 0, 0);
   drive->cmd[0] = PLEXTOR_AS_RD;
   drive->cmd[1] = 0x04;
   drive->cmd[2] = mode;
@@ -1277,7 +1279,7 @@ int plextor_create_strategy(drive_info *drive, int mode) {
   }
 
   //	if (!drive->silent) printf(" AS CRE DONE: "); for (i=0; i<0x12; i++)
-  //printf("%02X ", drive->rd_buf[i]) & 0x0FF; printf("\n");
+  // printf("%02X ", drive->rd_buf[i]) & 0x0FF; printf("\n");
 
   return 0;
 }
@@ -1286,8 +1288,8 @@ int plextor_media_check(drive_info *drive, int mode) {
   int i = 0;
   int p = 0;
   //	if (!drive->silent) printf("MQCK CDB: %02X %02X %02X %02X %02X %02X %02X
-  //%02X %02X %02X %02X %02X\n", 		(PLEXTOR_AS_RD) & 0xFF, 1, mode & 0xFF, 0, 0,
-  //0, 0, 0, 0, 0, 0, 0);
+  //%02X %02X %02X %02X %02X\n", 		(PLEXTOR_AS_RD) & 0xFF, 1, mode & 0xFF,
+  //0, 0, 0, 0, 0, 0, 0, 0, 0);
 
   if (!(drive->media.type & (DISC_DVD))) {
     printf("Media Quality Check supported on DVD media only!\n");

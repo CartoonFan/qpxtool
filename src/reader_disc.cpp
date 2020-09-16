@@ -474,7 +474,7 @@ void *read_disc(void *arg) {
                 (t_e.tv_usec - t_s.tv_usec) / 1000000.0),
            lba, dev->media.capacity, lba, dev->media.capacity,
            //				map->get_done() * 100 /
-           //dev->media.capacity,
+           // dev->media.capacity,
            scnt);
     if ((dev->err & 0x0FFF00) == 0x23A00) {
       printf("%s: media removed!\n", dev->device);

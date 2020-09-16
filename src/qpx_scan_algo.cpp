@@ -46,7 +46,7 @@ void qscanner::calc_cur_speed(long sects) {
   spdKB = (int)((sects << 1) / btime);
   spdX = spdKB / (float)spd1X;
   //	printf("\nTest time: %6.2fs\navg speed: %5.3f X  %5d kB/s\n", btime,
-  //spdX, spdKB);
+  // spdX, spdKB);
 }
 
 int qscanner::readline(int fd, char *buf, int maxlen) {
@@ -78,7 +78,7 @@ int qscanner::readline(int fd, char *buf, int maxlen) {
     errno = 0;
 #endif
     //		printf("readline select(): %d, errno = [%d] %s\n", sret, errno,
-    //strerror(errno));
+    // strerror(errno));
     if (sret < 0) {
       printf("select():  %s\n", strerror(errno));
       if (errno == EINTR)

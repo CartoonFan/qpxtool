@@ -398,8 +398,8 @@ void QPxGraph::drawTransfer(QPainter *p, const QSize &s, device *dev,
   if (!dev->testData.rt.size() && !dev->testData.wt.size())
     return;
   //	qDebug(QString("hscale: %1, capX: %2").arg(hscale).arg(hscale *
-  //dev->media.cread)); 	qDebug(QString("hscale: %1, b: %2").arg(hscale).arg(b));
-  //	qDebug(QString("hscale: %1").arg(hscale));
+  // dev->media.cread)); 	qDebug(QString("hscale: %1, b:
+  // %2").arg(hscale).arg(b)); 	qDebug(QString("hscale: %1").arg(hscale));
   //	p->scale(1, hscale);
 
   p->setRenderHint(QPainter::Antialiasing, true);
@@ -1084,7 +1084,7 @@ void QPxGraph::drawGrid(QPainter *p, const QSize &s, device *dev, int ttype) {
 
   // right speed labels for all graphs, except TA
   //	qDebug() << "Draw speed labels... showspeed:" << showspeed << "
-  //margin_right: " << margin_right;
+  // margin_right: " << margin_right;
   if (showspeed && margin_right) {
 
     for (int i = (isCD ? 4 : 2); i < spdMax; i += (isCD ? 4 : 2)) {

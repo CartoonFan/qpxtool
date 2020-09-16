@@ -1300,7 +1300,7 @@ int probe_drive(const char *path, int idx) {
     break;
   case ERR_NO_SCSI:
     //	if (!drive->silent) printf("%s: not a valid SCSI
-    //device\n",drive->device);
+    // device\n",drive->device);
     break;
   case ERR_NO_MMC:
     //	printf("%s: %s %s %s",drive->device,drive->ven,drive->dev,drive->fw);
@@ -1856,7 +1856,7 @@ int get_mode_pages_list(drive_info *drive) {
   len = ntoh16u(drive->rd_buf);
   //	printf("data len: %4X (%4d), Header:\n", len, len);
   //	for (i=0; i<8; i++) printf(" 0x%02X",drive->rd_buf[i] & 0xFF);
-  //printf("\n");
+  // printf("\n");
   for (i = 8; (i < len) && (i < 0x4000); i += ml) {
     mn = drive->rd_buf[i] & 0x3F;
     ml = drive->rd_buf[i + 1] & 0xFF;
@@ -2664,7 +2664,7 @@ int read_capacities(drive_info *drive) {
     return 0;
   //	read_disc_info(drive, 24);
   //	drive->media.last_lead_out = (drive->rd_buf[20]&0xFF) << 24 |
-  //drive->rd_buf[21]*75*60 + drive->rd_buf[22]*75 + drive->rd_buf[23];
+  // drive->rd_buf[21]*75*60 + drive->rd_buf[22]*75 + drive->rd_buf[23];
   if (read_capacity(drive))
     printf("Error reading used capacity\n");
   if (read_capacity_free(drive))
@@ -3358,7 +3358,7 @@ int get_performance(drive_info *drive, bool rw, uint8_t type) {
       w = ntoh32(drive->rd_buf + offs);
 
       //			printf("LBA %d: \tW %dkB/s   R %dkB/s\n", lba,
-      //w, r);
+      // w, r);
 
       drive->parms.wr_speed_tbl_kb[j] = ntoh32(drive->rd_buf + offs);
       drive->parms.max_write_speed_kb =
@@ -3406,7 +3406,7 @@ int detect_speeds(drive_info *drive) {
           drive->parms.max_read_speed_kb = drive->perf.spd_e;
         //						(int)(drive->perf.spd_e*((float)2294912/(float)drive->perf.lba_e));
         //				drive->parms.max_read_speed_kb =
-        //drive->perf.spd_e;
+        // drive->perf.spd_e;
         drive->parms.max_read_speed_dvd =
             (drive->parms.max_read_speed_kb / 1350);
         if (!drive->silent)
@@ -3433,7 +3433,7 @@ int detect_speeds(drive_info *drive) {
       //			drive->parms.read_speed_kb = spd_kb;
       //			set_rw_speeds(drive);
       //			drive->parms.speed_mult=
-      //drive->parms.max_read_speed_kb/drive->parms.max_read_speed_dvd;
+      // drive->parms.max_read_speed_kb/drive->parms.max_read_speed_dvd;
       if (!drive->silent) {
         printf("1X multiplier: %.1f kB/s\n", drive->parms.speed_mult);
         printf("Max spd: %d X, %d kB/s\n", drive->parms.max_read_speed_dvd,
@@ -3445,8 +3445,8 @@ int detect_speeds(drive_info *drive) {
       for (spd = 1; ((idx < speed_tbl_size) &&
                      (spd < (drive->parms.max_read_speed_dvd + 2)));
            spd++) {
-        //			for (spd=1; ((idx<speed_tbl_size) && (spd < 17));
-        //spd++) {
+        //			for (spd=1; ((idx<speed_tbl_size) && (spd <
+        //17)); spd++) {
         drive->parms.read_speed_kb = (int)(spd * (drive->parms.speed_mult + 1));
         if (!drive->silent)
           printf("Trying:  %dX (%d kB/s)\n", spd, drive->parms.read_speed_kb);
@@ -3456,7 +3456,7 @@ int detect_speeds(drive_info *drive) {
             (int)(drive->parms.read_speed_kb / drive->parms.speed_mult);
         if (prev_spd != drive->parms.read_speed_dvd) {
           //					spd =
-          //drive->parms.read_speed_dvd;
+          // drive->parms.read_speed_dvd;
           spd = max(spd, drive->parms.read_speed_dvd);
           drive->parms.speed_tbl[idx] = drive->parms.read_speed_dvd;
           drive->parms.speed_tbl_kb[idx] = drive->parms.read_speed_kb;
@@ -3466,7 +3466,7 @@ int detect_speeds(drive_info *drive) {
           prev_spd = drive->parms.read_speed_dvd;
           idx++;
           //					if (drive->capabilities &
-          //CAP_REAL_TIME_STREAMING) get_performance(drive);
+          // CAP_REAL_TIME_STREAMING) get_performance(drive);
         }
       }
 #ifdef speedidx
@@ -3491,8 +3491,8 @@ int detect_speeds(drive_info *drive) {
       for (spd = 1; ((idx < speed_tbl_size) &&
                      (spd < (drive->parms.max_read_speed_cd + 2)));
            spd++) {
-        //			for (spd=1; ((idx<speed_tbl_size) && (spd < 72));
-        //spd++) {
+        //			for (spd=1; ((idx<speed_tbl_size) && (spd <
+        //72)); spd++) {
         drive->parms.read_speed_kb = (int)(spd * (drive->parms.speed_mult + 1));
         if (!drive->silent)
           printf("Trying:  %dX (%5d kB/s)\n", spd, drive->parms.read_speed_kb);
@@ -3502,7 +3502,7 @@ int detect_speeds(drive_info *drive) {
             (int)(drive->parms.read_speed_kb / drive->parms.speed_mult);
         if (prev_spd != drive->parms.read_speed_cd) {
           //					spd =
-          //drive->parms.read_speed_cd;
+          // drive->parms.read_speed_cd;
           spd = max(spd, drive->parms.read_speed_cd);
           drive->parms.speed_tbl[idx] = drive->parms.read_speed_cd;
           drive->parms.speed_tbl_kb[idx] = drive->parms.read_speed_kb;
@@ -3512,7 +3512,7 @@ int detect_speeds(drive_info *drive) {
           prev_spd = drive->parms.read_speed_cd;
           idx++;
           //					if (drive->capabilities &
-          //CAP_REAL_TIME_STREAMING) get_performance(drive);
+          // CAP_REAL_TIME_STREAMING) get_performance(drive);
         }
       }
 #ifdef speedidx
@@ -3582,7 +3582,7 @@ int get_write_speed_tbl(drive_info *drive) {
       drive->parms.max_write_speed_kb =
           max(drive->parms.max_write_speed_kb, drive->parms.wr_speed_tbl_kb[i]);
       //			printf("  Speed #%02d: %d
-      //kB/s\n",i,drive->parms.wr_speed_tbl_kb[i]);
+      // kB/s\n",i,drive->parms.wr_speed_tbl_kb[i]);
     }
   }
   return 0;
@@ -3601,8 +3601,8 @@ int get_rw_speeds(drive_info *drive) {
   }
 
   // if ((drive->capabilities & CAP_REAL_TIME_STREAMING) && !(drive->media.type
-  // & DISC_DVDRAM)) { if (!drive->get_performance_fail && (drive->capabilities &
-  // CAP_REAL_TIME_STREAMING)) {
+  // & DISC_DVDRAM)) { if (!drive->get_performance_fail && (drive->capabilities
+  // & CAP_REAL_TIME_STREAMING)) {
   if (!drive->get_performance_fail
       //			&& !(drive->media.type & DISC_CD)
       && (drive->capabilities & CAP_REAL_TIME_STREAMING)) {
@@ -3683,7 +3683,7 @@ int set_cd_speed(drive_info *drive) {
   drive->cmd[11] = 0;
   if ((drive->err = drive->cmd.transport(NONE, NULL, 0))) {
     //		if (drive->err != 0x23A02)
-    //drive->capabilities&=(NCAP_SET_CD_SPEED);
+    // drive->capabilities&=(NCAP_SET_CD_SPEED);
     if (!drive->silent) {
       sperror("SET_CD_SPEED", drive->err);
       return (drive->err);
@@ -3806,7 +3806,7 @@ int get_lock(drive_info *drive) {
     drive->parms.status &= (~STATUS_LOCK);
   //#ifndef __PXCONTROL
   //	if (!drive->silent) printf("--- Disc %slocked\n",(drive->parms.status &
-  //STATUS_LOCK) ? "" : "UN") #endif
+  // STATUS_LOCK) ? "" : "UN") #endif
   return 0;
 }
 
@@ -3928,7 +3928,7 @@ int read_one_ecc_block(drive_info *drive, unsigned char *data, int32_t lba) {
     return (drive->err);
   }
   //	if ((drive->err=drive->cmd.transport(READ,(void*)((unsigned
-  //char*)drive->rd_buf+(0x0001<<14)),0x34))) 		{sperror
+  // char*)drive->rd_buf+(0x0001<<14)),0x34))) 		{sperror
   //("READ_ONE_ECC_BLOCK",drive->err); return (drive->err);}
   return 0;
 }
@@ -3959,7 +3959,7 @@ int get_buffer_capacity(drive_info *drive) {
     offs++;
   drive->buffer_size = ntoh16u(drive->rd_buf + offs + 0x0C);
   //	printf("Buffer capacity: 0x%04X (%d)KB\n", drive->buffer_size,
-  //drive->buffer_size);
+  // drive->buffer_size);
   return 0;
 }
 
