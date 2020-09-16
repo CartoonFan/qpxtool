@@ -1,41 +1,21 @@
-project('qpxtool', 'cpp', version: '0.7.2', license: 'GPL')
+project('qpxtool', 'cpp', version: '0.7.2', license: 'GPL',
+        default_options: ['optimization=g',
+                          'warning_level=3',
+                          'cpp_std=c++17',
+                          'b_coverage=true'])
 
-console_inc = include_directories('console/include')
-gui_inc = include_directories(['gui/include','gui'])
-lib_inc = include_directories('lib/include')
-plugin_inc = include_directories('plugins/include')
+
+inc = include_directories('include')
+
 
 png_dep = dependency('libpng')
 thread_dep = dependency('threads')
 
+run_target('sonarqube_report',
+           command: 'scripts/sonarqube_report.sh')
 
 
-subdir('lib/qpxtransport')
-subdir('lib/qpxpioneer')
-subdir('lib/qpxplextor')
-subdir('lib/qpxscan')
-subdir('lib/qpxyamaha')
-subdir('console/include')
-subdir('console/cdvdcontrol')
-subdir('console/f1tattoo')
-subdir('console/pxfw')
-subdir('console/qscan')
-subdir('console/qscand')
-subdir('console/readdvd')
-subdir('gui')
-subdir('gui/locale')
-subdir('plugins')
-subdir('plugins/asus')
-subdir('plugins/benq')
-subdir('plugins/benq_dvdrom')
-subdir('plugins/generic')
-subdir('plugins/liteon')
-subdir('plugins/nec')
-subdir('plugins/pioneer')
-subdir('plugins/plextor')
-subdir('plugins/tsst')
-
+subdir('src')
+subdir('src/gui')
 subdir('man')
-subdir('gui/include')
-subdir('lib/include')
-subdir('plugins/include')
+subdir('include')
