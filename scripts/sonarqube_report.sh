@@ -27,6 +27,6 @@ sed -i -- 's/\.\.\///g' "${MESON_BUILD_ROOT}/clang-tidy-report"
 sed -i -- 's/\/home\/jeremiah\/workshop\/qpxtool\///g' "${MESON_BUILD_ROOT}/clang-tidy-report"
 sed -i -- 's/build\///g' "${MESON_BUILD_ROOT}/clang-tidy-report"
 sed -i -- 's/\.\.\///g' "${MESON_BUILD_ROOT}/gcc-build.log"
-sed -i -- 's/\.\.\/\.\.\/\.\.\///g' "${MESON_SOURCE_ROOT}"/clang-build/meson-logs/scanbuild/**/*.plist(D.)
+sed -i -- 's/\.\.\/\.\.\/\.\.\///g' "${MESON_SOURCE_ROOT}/clang-build/meson-logs/scanbuild/**/*.plist(D.)"
 
 NODE_PATH=/usr/lib/node_modules sonar-scanner -Dsonar.projectBaseDir="${MESON_SOURCE_ROOT}"
