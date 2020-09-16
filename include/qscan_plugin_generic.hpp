@@ -17,7 +17,7 @@
 
 static const drivedesclist drivelist =
     // static drivedesclist drivelist =
-    {{"", 0, "", 0}};
+{{"", 0, "", 0}};
 
 static const char plugin_name[] = "C2P";
 static const char plugin_desc[] =
@@ -27,26 +27,30 @@ class drive_info;
 
 class scan_generic : public scan_plugin {
 public:
-  //    scan_generic(drive_info* idev=NULL);
-  scan_generic(drive_info *idev);
-  virtual ~scan_generic();
-  //    virtual int  check_drive();
-  virtual int probe_drive();
-  virtual int errc_data();
-  virtual int check_test(unsigned int test);
-  virtual int start_test(unsigned int test, long slba, int &speed);
-  virtual int scan_block(void *data, long *ilba);
-  virtual int end_test();
+    //    scan_generic(drive_info* idev=NULL);
+    scan_generic(drive_info *idev);
+    virtual ~scan_generic();
+    //    virtual int  check_drive();
+    virtual int probe_drive();
+    virtual int errc_data();
+    virtual int check_test(unsigned int test);
+    virtual int start_test(unsigned int test, long slba, int &speed);
+    virtual int scan_block(void *data, long *ilba);
+    virtual int end_test();
 
-  virtual const char *name() { return plugin_name; };
-  virtual const char *desc() { return plugin_desc; };
+    virtual const char *name() {
+        return plugin_name;
+    };
+    virtual const char *desc() {
+        return plugin_desc;
+    };
 
 private:
-  long lba;
+    long lba;
 
-  int cmd_cd_errc_block(cd_errc *data);
-  //	int c2calc(cd_errc *data);
-  int c2calc(unsigned char *buf, unsigned int lba, unsigned char sects);
+    int cmd_cd_errc_block(cd_errc *data);
+    //	int c2calc(cd_errc *data);
+    int c2calc(unsigned char *buf, unsigned int lba, unsigned char sects);
 };
 
 #endif
