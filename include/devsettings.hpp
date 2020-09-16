@@ -33,25 +33,25 @@ class QPxSettings;
 class device;
 
 class devSettings : public QDialog {
-    Q_OBJECT
+  Q_OBJECT
 public:
-    devSettings(QPxSettings *iset, device *idev, QWidget *p = 0,
-                Qt::WindowFlags fl = 0);
-    ~devSettings();
+  devSettings(QPxSettings *iset, device *idev, QWidget *p = 0,
+              Qt::WindowFlags fl = 0);
+  ~devSettings();
 
 public slots:
 
 private slots:
-    void setPage(int);
+  void setPage(int);
 
 private:
-    QBoxLayout *layout;
-    QBoxLayout *layoutc;
-    ImagesList *ilist;
-    QWidget *cpage;
+  QBoxLayout *layout;
+  QBoxLayout *layoutc;
+  ImagesList *ilist;
+  QWidget *cpage;
 
-    QPxSettings *set;
-    device *dev;
+  QPxSettings *set;
+  device *dev;
 };
 
 #endif

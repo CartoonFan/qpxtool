@@ -60,8 +60,8 @@
 #include "qpx_mmc.hpp"
 
 struct udf_t {
-    drive_info *dev;
-    void *cache;
+  drive_info *dev;
+  void *cache;
 };
 
 unsigned int UDFFindFile(udf_t *udf, char *filename, unsigned int *size);
