@@ -13,31 +13,29 @@
 #include <QWidget>
 
 class MediaCapWidget : public QWidget {
-    Q_OBJECT
+  Q_OBJECT
 public:
-    //	MediaCapWidget(QWidget *p, Qt::WindowFlags f) : QWidget(p,f) {};
-    MediaCapWidget(QString itext, bool tri, quint64 df, QWidget *p,
-                   Qt::WindowFlags f = 0);
-    ~MediaCapWidget();
-    void setText(QString itext);
-    inline quint64 flag() {
-        return cf;
-    };
-    void setR(quint64 r);
-    void setW(quint64 r);
-    void setCap(quint64 s);
-    void clear();
-    //	inline void setTristate(bool s) { tristate=s; rd=0; wr=0; };
+  //	MediaCapWidget(QWidget *p, Qt::WindowFlags f) : QWidget(p,f) {};
+  MediaCapWidget(QString itext, bool tri, quint64 df, QWidget *p,
+                 Qt::WindowFlags f = 0);
+  ~MediaCapWidget();
+  void setText(QString itext);
+  inline quint64 flag() { return cf; };
+  void setR(quint64 r);
+  void setW(quint64 r);
+  void setCap(quint64 s);
+  void clear();
+  //	inline void setTristate(bool s) { tristate=s; rd=0; wr=0; };
 
-    virtual QSize sizeHint() const;
+  virtual QSize sizeHint() const;
 
 protected:
-    void paintEvent(QPaintEvent *);
+  void paintEvent(QPaintEvent *);
 
 private:
-    void setRW();
-    quint64 cf;
-    QImage icon;
-    QString text;
-    bool rd, wr, tristate;
+  void setRW();
+  quint64 cf;
+  QImage icon;
+  QString text;
+  bool rd, wr, tristate;
 };
