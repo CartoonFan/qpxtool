@@ -3,7 +3,7 @@ QMAKE4= qmake-qt4
 export QTDIR QMAKE4
 
 all: Makefile.qmake
-	$(MAKE) -f Makefile.qmake 
+	$(MAKE) -f Makefile.qmake
 	strip --strip-unneeded qpxtool
 	lrelease -verbose qpxtool.pro
 

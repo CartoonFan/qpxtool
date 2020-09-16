@@ -16,4 +16,3 @@
 #define VERSION "0.7.2 modded by ArtKar"
 
 #endif
-

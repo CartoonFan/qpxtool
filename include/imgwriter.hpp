@@ -10,8 +10,8 @@
 
 #define _FILE_OFFSET_BITS 64
 
-#include <cstdio>
 #include "threads.hpp"
+#include <cstdio>
 
 class smap;
 

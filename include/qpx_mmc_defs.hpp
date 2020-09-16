@@ -17,8 +17,8 @@
 //#endif
 #include <inttypes.h>
 
-#include "qpx_opcodes.hpp"
 #include "common_functions.hpp"
+#include "qpx_opcodes.hpp"
 
 typedef char str_vendor[9];
 typedef char str_dev[16];
@@ -766,7 +766,7 @@ static const desc64 capabilities[] = {
 //#define DEVICE_DVD_R_DL_SEQ	  (1ULL <<  7) // ++
 //#define DEVICE_DVD_R_DL_LJ	  (1ULL <<  8) // ++
 //#define DEVICE_DVD_R_DL		  (DEVICE_DVD_R_DL_SEQ |
-//DEVICE_DVD_R_DL_LJ) // ++
+// DEVICE_DVD_R_DL_LJ) // ++
 #define DEVICE_DVD_R_DL (1ULL << 7) // ++
 
 #define DEVICE_DVD_RW_DL (1ULL << 9)       // ++
@@ -816,7 +816,8 @@ static const desc64 rw_capabilities[] = {
 
     //	{ DEVICE_DVD_R_DL_SEQ	  (1ULL <<  7) // ++
     //	{ DEVICE_DVD_R_DL_LJ	  (1ULL <<  8) // ++
-    //	{ DEVICE_DVD_R_DL		  (DEVICE_DVD_R_DL_SEQ | DEVICE_DVD_R_DL_LJ) //
+    //	{ DEVICE_DVD_R_DL		  (DEVICE_DVD_R_DL_SEQ | DEVICE_DVD_R_DL_LJ)
+    ////
     //++
     {DEVICE_DVD_R_DL, "DVD-R/DL"},
     {DEVICE_DVD_RW_DL, "DVD-RW/DL"},

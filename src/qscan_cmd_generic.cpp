@@ -43,8 +43,8 @@ int scan_generic::c2calc(unsigned char *buf, unsigned int lba,
     for (i = 0; i < sect_err; i++) {
       for (ii = 0; ii < 8; ii++)
         if ((buf[offs + i] >> ii) & 0x01) {
-          //					if (!se) printf("C2 in sector %7d, first error
-          //in byte %4d ", lba+s, i*8+ii);
+          //					if (!se) printf("C2 in sector %7d, first
+          //error in byte %4d ", lba+s, i*8+ii);
           se++;
         }
     }

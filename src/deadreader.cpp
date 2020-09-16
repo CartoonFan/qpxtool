@@ -31,7 +31,8 @@ int init_drives(drive_info **dev, char **dev_n) {
     if (!inquiry(dev[n])) {
       dev[n]->silent++;
       detect_capabilities(dev[n]);
-      std::cout << n << ": [" << dev[n]->device << "] " << dev[n]->ven << dev[n]->dev << dev[n]->fw << "\n";
+      std::cout << n << ": [" << dev[n]->device << "] " << dev[n]->ven
+                << dev[n]->dev << dev[n]->fw << "\n";
       n++;
     } else {
       std::cout << "Can't open device '" << dev_n[i] << "!\n";
@@ -143,9 +144,10 @@ int main(int argc, char **argv) {
   int i;
   int verbose = 0;
 
-  std::cout << "**  DVD reader v" << VERSION << " (c) 2006-2009  Gennady \"ShultZ\" Kozlov  **\n";
+  std::cout << "**  DVD reader v" << VERSION
+            << " (c) 2006-2009  Gennady \"ShultZ\" Kozlov  **\n";
   std::cout << "**  multiple-device DVD reader with CSS support, optimized for "
-         "corrupted media\n";
+               "corrupted media\n";
 
   if (argc < 2) {
     //	usage(argv[0]);
@@ -234,7 +236,8 @@ int main(int argc, char **argv) {
       std::cout << dev[i]->device << ": media type: " << MEDIA[mi].name << "\n";
     }
     if (!(dev[i]->media.type & DISC_DVD)) {
-      std::cout << dev[i]->device << ": no DVD found! removing device from list...\n";
+      std::cout << dev[i]->device
+                << ": no DVD found! removing device from list...\n";
       dev[i] = NULL;
       // exit (3);
     } else {
@@ -248,7 +251,9 @@ int main(int argc, char **argv) {
   }
   capacity = dev[0]->media.capacity;
   if (devcnt > 1) {
-    std::cout << "Using " << dev[0]->device << " as primary device\nChecking capacities (expecting " << capacity << " sectors)...";
+    std::cout << "Using " << dev[0]->device
+              << " as primary device\nChecking capacities (expecting "
+              << capacity << " sectors)...";
     for (i = 1; i < devcnt; i++) {
       std::cout << dev[i]->device << ": " << dev[i]->media.capacity << "  ";
       if (dev[i]->media.capacity == dev[0]->media.capacity) {
@@ -294,7 +299,8 @@ int main(int argc, char **argv) {
   if (!done || reader[0]->stoped())
     goto dreader_done;
 
-  std::cout << "There are some corrupted sectors!\nStarting first RECOVERY pass...\n";
+  std::cout
+      << "There are some corrupted sectors!\nStarting first RECOVERY pass...\n";
   read_multi(reader, devcnt, map, PASS_RECOVER0, 1);
 
   map->lock();
@@ -303,7 +309,8 @@ int main(int argc, char **argv) {
   if (!done || reader[0]->stoped())
     goto dreader_done;
 
-  std::cout << "There are hard corrupted sectors!\nStarting long RECOVERY pass...\n";
+  std::cout
+      << "There are hard corrupted sectors!\nStarting long RECOVERY pass...\n";
   read_multi(reader, devcnt, map, PASS_RECOVER1, 4);
 
 dreader_done:
@@ -316,7 +323,7 @@ dreader_done:
   std::cout << "Image summary:\n";
   std::cout << " Sectors tot      : " << map->get_tot() << "\n";
   std::cout << " Sectors wait     : " << map->get_wait() << "\n";
-  std::cout << " Sectors read     : " << map->get_read()<< "\n";
+  std::cout << " Sectors read     : " << map->get_read() << "\n";
   std::cout << " Sectors done     : " << map->get_done() << "\n";
   std::cout << " Sectors corrupted: " << map->get_fail() << "\n";
   //    printf("Closing image file...\n");

@@ -19,37 +19,36 @@ class QBoxLayout;
 
 #include "graphtab.hpp"
 
-class tabFETE : public GraphTab
-{
-	Q_OBJECT
+class tabFETE : public GraphTab {
+  Q_OBJECT
 public:
-	tabFETE(QPxSettings *iset, devlist *idev, QString iname, QWidget *p=0, Qt::WindowFlags fl = 0);
-	~tabFETE();
+  tabFETE(QPxSettings *iset, devlist *idev, QString iname, QWidget *p = 0,
+          Qt::WindowFlags fl = 0);
+  ~tabFETE();
 
 public slots:
-//	void clear();
-	void selectDevice();
-	void updateLast();
-	void updateAll();
-	void updateSummary();
-//	void setDevice(device *idev);
-//	void update() { graph->update(); };
+  //	void clear();
+  void selectDevice();
+  void updateLast();
+  void updateAll();
+  void updateSummary();
+  //	void setDevice(device *idev);
+  //	void update() { graph->update(); };
 
 protected:
-	virtual void updateLegend();
-	virtual void updateGraph();
+  virtual void updateLegend();
+  virtual void updateGraph();
 
 private:
-	QBoxLayout	*layout_info;
+  QBoxLayout *layout_info;
 
 #ifdef __LEGEND_SHOW_SPEED
-	ColorLabel	*pl_spd;
+  ColorLabel *pl_spd;
 #endif
-	ColorLabel	*pl_fmax;
-	QLabel		*l_fmax;
-	ColorLabel	*pl_tmax;
-	QLabel		*l_tmax;
+  ColorLabel *pl_fmax;
+  QLabel *l_fmax;
+  ColorLabel *pl_tmax;
+  QLabel *l_tmax;
 };
 
 #endif
-

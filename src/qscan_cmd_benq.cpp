@@ -435,7 +435,7 @@ int scan_benq::cmd_cd_errc_block(cd_errc *data) {
   plba = lba;
   lba = (m * 60 + s) * 75 + f;
   //	printf("MSF: %02d:%02d.00 ; LBA: %d; C1:%4d;
-  //C2:%4d\n",m,s,*lba,*BLER,*E22);
+  // C2:%4d\n",m,s,*lba,*BLER,*E22);
   if ((lba - plba) > 150)
     lba = plba + 75;
   if (lba < plba) {

@@ -1,4 +1,4 @@
-project('qpxtool', 'cpp', version: '0.7.2', license: 'GPL', 
+project('qpxtool', 'cpp', version: '0.7.2', license: 'GPL',
         default_options: ['optimization=g',
                           'warning_level=3',
                           'cpp_std=c++17',
@@ -19,4 +19,3 @@ subdir('src')
 subdir('src/gui')
 subdir('man')
 subdir('include')
-

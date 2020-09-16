@@ -13,17 +13,16 @@
 #ifndef _defs_h
 #define _defs_h
 
-
-#if defined (_WIN32)
+#if defined(_WIN32)
 
 #include <stdlib.h>
 
 #if defined(__MINGW32__)
 #define msleep(t) _sleep(t)
-#define sleep(t)  _sleep((t) << 10)
+#define sleep(t) _sleep((t) << 10)
 #else
 #define msleep(t) Sleep(t)
-#define sleep(t)  Sleep((t) << 10)
+#define sleep(t) Sleep((t) << 10)
 #endif
 
 #else
@@ -36,6 +35,4 @@ extern int max(int a, int b);
 
 #endif
 
-
 #endif
-

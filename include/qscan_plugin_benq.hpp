@@ -30,7 +30,7 @@ static const drivedesclist drivelist =
 
      //	// Plextor PX-740 only works if crossflashed to BENQ DW1640
      //	{ "PLEXTOR ", DEV_BENQ_WR, "DVDR   PX-740", BENQ_DW1640, CHK_ERRC_CD |
-     //CHK_ERRC_DVD },
+     // CHK_ERRC_DVD },
 
      {"", 0, "", 0}};
 

@@ -10,129 +10,120 @@
  *
  */
 
-#include <QVBoxLayout>
 #include <QLabel>
+#include <QVBoxLayout>
 
 #include "colorlabel.hpp"
-#include "qpxgraph.hpp"
 #include "device.hpp"
+#include "qpxgraph.hpp"
 #include "tab_fete.hpp"
 #include <QDebug>
 
-tabFETE::tabFETE(QPxSettings *iset, devlist *idev, QString iname, QWidget *p, Qt::WindowFlags fl)
-	: GraphTab(iset, idev, iname, TEST_FT, p, fl)
-{
+tabFETE::tabFETE(QPxSettings *iset, devlist *idev, QString iname, QWidget *p,
+                 Qt::WindowFlags fl)
+    : GraphTab(iset, idev, iname, TEST_FT, p, fl) {
 #ifndef QT_NO_DEBUG
-	qDebug("STA: tabFETE()");
+  qDebug("STA: tabFETE()");
 #endif
-	layout_info = new QVBoxLayout(infow);
-	layout_info->setMargin(0);
-	layout_info->setSpacing(3);
+  layout_info = new QVBoxLayout(infow);
+  layout_info->setMargin(0);
+  layout_info->setSpacing(3);
 
 #ifdef __LEGEND_SHOW_SPEED
-	pl_spd = new ColorLabel(QColor(Qt::black),"Speed", 0, infow);
-	pl_spd->setMinimumSize(100,20);
-	layout_info->addWidget(pl_spd);
+  pl_spd = new ColorLabel(QColor(Qt::black), "Speed", 0, infow);
+  pl_spd->setMinimumSize(100, 20);
+  layout_info->addWidget(pl_spd);
 #endif
-	pl_fmax = new ColorLabel(settings->col_fe, tr("FE max"), 0, infow);
-//	pl_fmax->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-//	pl_fmax->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
-	pl_fmax->setMinimumSize(80,20);
-	layout_info->addWidget(pl_fmax);
-	l_fmax = new QLabel(infow);
-	l_fmax->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-	l_fmax->setMinimumSize(80,22);
-	layout_info->addWidget(l_fmax);
+  pl_fmax = new ColorLabel(settings->col_fe, tr("FE max"), 0, infow);
+  //	pl_fmax->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+  //	pl_fmax->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
+  pl_fmax->setMinimumSize(80, 20);
+  layout_info->addWidget(pl_fmax);
+  l_fmax = new QLabel(infow);
+  l_fmax->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+  l_fmax->setMinimumSize(80, 22);
+  layout_info->addWidget(l_fmax);
 
+  pl_tmax = new ColorLabel(settings->col_te, tr("TE max"), 0, infow);
+  //	pl_tmax->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+  //	pl_tmax->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
+  pl_tmax->setMinimumSize(80, 20);
+  layout_info->addWidget(pl_tmax);
+  l_tmax = new QLabel(infow);
+  l_tmax->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+  l_tmax->setMinimumSize(80, 22);
+  layout_info->addWidget(l_tmax);
 
-	pl_tmax = new ColorLabel(settings->col_te,tr("TE max"), 0, infow);
-//	pl_tmax->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-//	pl_tmax->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
-	pl_tmax->setMinimumSize(80,20);
-	layout_info->addWidget(pl_tmax);
-	l_tmax = new QLabel(infow);
-	l_tmax->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-	l_tmax->setMinimumSize(80,22);
-	layout_info->addWidget(l_tmax);
+  layout_info->addStretch(10);
 
-
-	layout_info->addStretch(10);
-
-	clear();
+  clear();
 #ifndef QT_NO_DEBUG
-	qDebug("END: tabFETE()");
+  qDebug("END: tabFETE()");
 #endif
 }
 
-tabFETE::~tabFETE()
-{
+tabFETE::~tabFETE() {
 #ifndef QT_NO_DEBUG
-	qDebug("STA: ~tabFETE()");
-	qDebug("END: ~tabFETE()");
+  qDebug("STA: ~tabFETE()");
+  qDebug("END: ~tabFETE()");
 #endif
 }
 /*
 void tabFETE::clear()
 {
-	qDebug("tabFETE::clear()");
+        qDebug("tabFETE::clear()");
 
 }
 */
-void tabFETE::selectDevice()
-{
+void tabFETE::selectDevice() {
 #ifndef QT_NO_DEBUG
-	qDebug("tabFETE::selectDevice()");
+  qDebug("tabFETE::selectDevice()");
 #endif
-	device *dev = devices->current();
-	GraphTab::updateLast((int)dev->testData.ft_time, NULL, 1);
-	updateSummary();
+  device *dev = devices->current();
+  GraphTab::updateLast((int)dev->testData.ft_time, NULL, 1);
+  updateSummary();
 
-	QObject::connect( dev, SIGNAL(doneMInfo(int)), this, SLOT(updateAll()) );
-	QObject::connect( dev, SIGNAL(block_FT()), this, SLOT(updateLast()) );
+  QObject::connect(dev, SIGNAL(doneMInfo(int)), this, SLOT(updateAll()));
+  QObject::connect(dev, SIGNAL(block_FT()), this, SLOT(updateLast()));
 }
 
-void tabFETE::updateLast()
-{
-	bool show;
-	device *dev = devices->current();
-	GraphTab::updateLast((int)dev->testData.ft_time, &show);
-	if (!show) return;
-	updateSummary();
+void tabFETE::updateLast() {
+  bool show;
+  device *dev = devices->current();
+  GraphTab::updateLast((int)dev->testData.ft_time, &show);
+  if (!show)
+    return;
+  updateSummary();
 }
 
-void tabFETE::updateAll()
-{
-	GraphTab::updateLast((int)devices->current()->testData.ft_time, NULL, 1);
-	updateSummary();
+void tabFETE::updateAll() {
+  GraphTab::updateLast((int)devices->current()->testData.ft_time, NULL, 1);
+  updateSummary();
 }
 
-void tabFETE::updateLegend()
-{
-	pl_fmax->setColor(settings->col_fe);
-	pl_tmax->setColor(settings->col_te);
+void tabFETE::updateLegend() {
+  pl_fmax->setColor(settings->col_fe);
+  pl_tmax->setColor(settings->col_te);
 }
 
-void tabFETE::updateGraph()
-{
-	graph->update();
-}
+void tabFETE::updateGraph() { graph->update(); }
 
-void tabFETE::updateSummary()
-{
-	device *dev = devices->current();
-	if (!dev->testData.jb.size()) {
-		l_fmax->clear(); l_tmax->clear();
+void tabFETE::updateSummary() {
+  device *dev = devices->current();
+  if (!dev->testData.jb.size()) {
+    l_fmax->clear();
+    l_tmax->clear();
 #ifdef FT_AVG
-		l_favg->clear(); l_tavg->clear();
+    l_favg->clear();
+    l_tavg->clear();
 #endif
-		return;
-	}
-// setting values...
-	l_fmax->setText(QString::number(dev->testData.ftMAX.fe,'f',2));
-	l_tmax->setText(QString::number(dev->testData.ftMAX.te,'f',2));
+    return;
+  }
+  // setting values...
+  l_fmax->setText(QString::number(dev->testData.ftMAX.fe, 'f', 2));
+  l_tmax->setText(QString::number(dev->testData.ftMAX.te, 'f', 2));
 #ifdef FT_AVG
-	l_favg->setText(QString::number(dev->testData.ftMAX.favg,'f',2));
-	l_tavg->setText(QString::number(dev->testData.ftMAX.tavg,'f',2));
+  l_favg->setText(QString::number(dev->testData.ftMAX.favg, 'f', 2));
+  l_tavg->setText(QString::number(dev->testData.ftMAX.tavg, 'f', 2));
 #endif
 }
-

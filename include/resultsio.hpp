@@ -19,43 +19,42 @@
 
 #define RECALC_ON_LOAD 1
 
-class ResultsIO : public QThread
-{
+class ResultsIO : public QThread {
 public:
-	ResultsIO(device *dev) 	:QThread((QObject*)dev) { this->dev = dev; this->res = false; io = NULL; }
-	~ResultsIO() {};
+  ResultsIO(device *dev) : QThread((QObject *)dev) {
+    this->dev = dev;
+    this->res = false;
+    io = NULL;
+  }
+  ~ResultsIO(){};
 
-	inline void setIO(QIODevice *io) { this->io = io; };
-	inline bool result() { return res; };
+  inline void setIO(QIODevice *io) { this->io = io; };
+  inline bool result() { return res; };
 
 protected:
-	QIODevice *io;
-	device    *dev;
-	bool	  res;
+  QIODevice *io;
+  device *dev;
+  bool res;
 };
 
-
-class ResultsReader : public ResultsIO
-{
-	Q_OBJECT
+class ResultsReader : public ResultsIO {
+  Q_OBJECT
 public:
-	ResultsReader(device *dev) : ResultsIO(dev) {};
-	~ResultsReader() {};
+  ResultsReader(device *dev) : ResultsIO(dev){};
+  ~ResultsReader(){};
 
 protected:
-	virtual void run();
+  virtual void run();
 };
 
-class ResultsWriter : public ResultsIO
-{
-	Q_OBJECT
+class ResultsWriter : public ResultsIO {
+  Q_OBJECT
 public:
-	ResultsWriter(device *dev) : ResultsIO(dev) {};
-	~ResultsWriter() {};
+  ResultsWriter(device *dev) : ResultsIO(dev){};
+  ~ResultsWriter(){};
 
 protected:
-	virtual void run();
+  virtual void run();
 };
 
 #endif // _RESULTSIO_H
-

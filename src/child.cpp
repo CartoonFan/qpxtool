@@ -10,44 +10,40 @@
  *
  */
 
-
-
+#include "child.hpp"
+#include "common_functions.hpp"
+#include "threads.hpp"
 #include <cerrno>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
 #include <iostream>
 #include <unistd.h>
-#include "threads.hpp"
-#include "common_functions.hpp"
-#include "child.hpp"
 
-int    clients;
-Mutex* cmutex;
+int clients;
+Mutex *cmutex;
 
-child_t childs[CLIENTS_MAX+1];
+child_t childs[CLIENTS_MAX + 1];
 
-int child_find_unused()
-{
-//  printf("Child find unused...");
-    int idx = -1;
-    int i=0;
-    cmutex->lock();
-    while (idx<0 && i<(CLIENTS_MAX+1)) {
-        if (!childs[i].arg.used) {
-            childs[i].arg.used=1;
-            idx=i;
-        }
-        i++;
+int child_find_unused() {
+  //  printf("Child find unused...");
+  int idx = -1;
+  int i = 0;
+  cmutex->lock();
+  while (idx < 0 && i < (CLIENTS_MAX + 1)) {
+    if (!childs[i].arg.used) {
+      childs[i].arg.used = 1;
+      idx = i;
     }
-    cmutex->unlock();
-    return idx;
+    i++;
+  }
+  cmutex->unlock();
+  return idx;
 }
 
-void child_list_clear()
-{
-    for (int i=0; i<(CLIENTS_MAX+1); i++)
-        childs[i].arg.used=0;
+void child_list_clear() {
+  for (int i = 0; i < (CLIENTS_MAX + 1); i++)
+    childs[i].arg.used = 0;
 }
 
 const char helpstr[] = "QSCAND: valid commands:\n\
@@ -73,398 +69,405 @@ set <PAR>=<VAL> set parameter. PAR can be:\n\
 
 const int helpstr_sz = sizeof(helpstr);
 
-enum qscan_mode {
-    none    = 0,
-    scanbus = 1,
-    scan,
-    dinfo,
-    minfo,
-    help
-};
+enum qscan_mode { none = 0, scanbus = 1, scan, dinfo, minfo, help };
 
 char tchar = -1;
 
-enum fdtype_t {
-    FD_PIPE   = 1,
-    FD_SOCKET = 2
-};
+enum fdtype_t { FD_PIPE = 1, FD_SOCKET = 2 };
 
-//int readline(int fd, char *buf, int maxlen, fdtype_t fdtype = FD_PIPE)
-int readline(int fd, char *buf, int maxlen, fdtype_t fdtype)
-{
-    int cnt=0;
-    char *cbuf=buf;
-    int r;
-    int sret;
-    fd_set rd_set;
-    timeval tv;
+// int readline(int fd, char *buf, int maxlen, fdtype_t fdtype = FD_PIPE)
+int readline(int fd, char *buf, int maxlen, fdtype_t fdtype) {
+  int cnt = 0;
+  char *cbuf = buf;
+  int r;
+  int sret;
+  fd_set rd_set;
+  timeval tv;
 
-    FD_ZERO(&rd_set);
+  FD_ZERO(&rd_set);
 
-//  printf("tchar=%02X\n", tchar);
-    if (tchar>=0) {
-        cbuf[0] = tchar;
-        cnt++;
-        cbuf++;
-        tchar = -1;
+  //  printf("tchar=%02X\n", tchar);
+  if (tchar >= 0) {
+    cbuf[0] = tchar;
+    cnt++;
+    cbuf++;
+    tchar = -1;
+  }
+  while (!term && (cnt < (maxlen - 1))) {
+    FD_SET(fd, &rd_set);
+    tv.tv_sec = 1;
+    tv.tv_usec = 0;
+#ifdef _WIN32
+    if (fdtype == FD_SOCKET) {
+#endif
+      sret = select(fd + 1, &rd_set, NULL, NULL, &tv);
+#ifdef _WIN32
+      errno = GetLastError();
+    } else {
+      sret = 1;
+      errno = 0;
     }
-    while ( !term && (cnt<(maxlen-1))) {
-        FD_SET(fd, &rd_set);
-        tv.tv_sec  = 1;
-        tv.tv_usec = 0;
-#ifdef _WIN32
-        if (fdtype == FD_SOCKET) {
 #endif
-            sret = select(fd+1, &rd_set, NULL, NULL, &tv);
-#ifdef _WIN32
-            errno = GetLastError();
-        } else {
-            sret  = 1;
-            errno = 0;
-        }
-#endif
-//      printf("select(%d): %s\n", fd, strerror(errno));
-        if (sret < 0) {
+    //      printf("select(%d): %s\n", fd, strerror(errno));
+    if (sret < 0) {
 #ifndef _WIN32
-            if (debug) {
-                if (debug && !daemonized)
-                    std::cout << "readline() " << fd << " select: " << strerror(errno) << "\n";
-            }
-#endif
-            if (errno == EINTR) continue;
-            return -1;
-        }
-        else if (sret > 0 && FD_ISSET(fd, &rd_set)) {
-#ifdef _WIN32
-            if (fdtype == FD_SOCKET)
-                r = recv(fd, cbuf, 1, 0);
-            else
-#endif
-                r = read(fd, cbuf, 1);
-            if (r<0) {
-                if (debug && !daemonized)
-                    std::cout << "read = " << r << ", " << errno << ", " << strerror(errno) << "\n";
-                switch (errno) {
-                    case EAGAIN:
-                    //  printf("EAGAIN\n");
-                        continue;
-                    case EINTR: 
-                    //  printf("EINTR\n");
-                        continue;
-                    default:
-                        return -1;
-                }
-            }
-            if (!r) return -1;
-    // look for CR/LF/CR+LF
-            if (fdtype == FD_SOCKET) {
-                if (buf[cnt] == 0x0A || buf[cnt] == 0x0D) goto readline_end;
-            } else if (cnt && (buf[cnt-1] == 0x0A || buf[cnt-1] == 0x0D)) {
-                if (buf[cnt] != 0x0A && buf[cnt] != 0x0D) tchar = buf[cnt];
-                buf[cnt-1]='\n';
-                buf[cnt]=0;
-                return cnt;
-            }
-            cnt++;
-            cbuf++;
-        }
-    }
-    if (term) return -1;
-readline_end:
-    buf[cnt]='\n';
-    buf[cnt+1]=0;
-    return cnt+1;
-}
-
-void child_proc(child_arg_t *arg)
-{
-    ssize_t n;
-    char    speeds[16];
-    char    linei [MAXLINE+1];
-    char    lineo [MAXLINE+IDENT_LEN+1];
-    pipe_t  pipefd;
-    pid_t   cpid;
-    qscan_mode mode = none;
-    char    device[128] = "\0";
-    char    test[8]     = "\0";
-    int     speed       = -1;
-    bool    WT_simul     = 1;
-#ifdef _WIN32
-    send(arg->connfd, IDENTV, IDENTV_LEN, 0);
-#else
-    write(arg->connfd, IDENTV, IDENTV_LEN);
-#endif
-    for (;;) {
-        mode = none;
-        if (term) return;
-#ifdef _WIN32
-        send(arg->connfd, PROMPT, PROMPT_LEN, 0);
-#else
-        write(arg->connfd, PROMPT, PROMPT_LEN);
-#endif
-        if ((n = readline(arg->connfd, linei, MAXLINE, FD_SOCKET)) < 0)
-        {
-        //if ((n = fgets(line, MAXLINE, arg->connfd)) == EOF) {
-            //printf("Client disconnected\n");
-            return;
-        }
-        if (n<=1) continue;
-        linei[n]=0;
-#ifdef _WIN32
-        send(arg->connfd, "\n", 1, 0);
-#else
-        write(arg->connfd, "\n", 1);
-#endif
+      if (debug) {
         if (debug && !daemonized)
-            std::cout << inet_ntoa(arg->cliaddr.sin_addr) << ":" << ntohs(arg->cliaddr.sin_port) << ": command: " << linei;
-        if (!strcmp(linei, "help\n")) {
-#ifdef _WIN32
-            send(arg->connfd, helpstr, helpstr_sz, 0);
-#else
-            write(arg->connfd, helpstr, helpstr_sz);
+          std::cout << "readline() " << fd << " select: " << strerror(errno)
+                    << "\n";
+      }
 #endif
-            continue;
-        } else if (!strcmp(linei, "close\n")) {
-//          shutdown(arg->connfd, SHUT_RDWR);
-            return;
-//      } else if (!strcmp(linei, "qhelp\n")) {
-//          mode = help;
-        } else if (!strcmp(linei, "list\n") || !strcmp(linei, "scanbus\n")) {
-            mode = scanbus;
-        } else if (!strcmp(linei, "dinfo\n")) {
-            mode = dinfo;
-        } else if (!strcmp(linei, "minfo\n")) {
-            mode = minfo;
-        } else if (!strcmp(linei, "run\n")) {
-            mode = scan;
-        } else if (!strcmp(linei, "get\n")) {
-            std::cout << lineo << "current parameters:\ndevice: '" << device << "'\ntest  : '" << test << "'\nspeed : " << speed << "\nsimul : " << ((WT_simul) ? "on" : "off") << "\n";
+      if (errno == EINTR)
+        continue;
+      return -1;
+    } else if (sret > 0 && FD_ISSET(fd, &rd_set)) {
 #ifdef _WIN32
-            send(arg->connfd, lineo, strlen(lineo), 0);
-#else
-            write(arg->connfd, lineo, strlen(lineo));
+      if (fdtype == FD_SOCKET)
+        r = recv(fd, cbuf, 1, 0);
+      else
 #endif
-            continue;
-        } else if (!strncmp(linei, "set", 3)) {
-            char *linet = linei+4;
-            size_t  len;
-            if ((strlen(linei) <=4) || linei[3]!=' ') {
-                std::cout << lineo << "QSCAND: set: needs parameter!\n";
-#ifdef _WIN32
-                send(arg->connfd, lineo, strlen(lineo), 0);
-#else
-                write(arg->connfd, lineo, strlen(lineo));
-#endif
-                continue;
-            }
-            if (!strncmp(linet, "dev=", 4)) {
-                linet+=4;
-                len = strlen(linet);
-                if (len<sizeof(device)) {
-                    strncpy(device, linet, len-1);
-                } else {
-                    std::cout << lineo << "QSCAND: too long device name!\n";
-#ifdef _WIN32
-                    send(arg->connfd, lineo, strlen(lineo), 0);
-#else
-                    write(arg->connfd, lineo, strlen(lineo));
-#endif
-                }
-            } else if (!strncmp(linet, "test=", 5)) {
-                linet+=5;
-                len = strlen(linet);
-                if (len<sizeof(test)) {
-                    strncpy(test, linet, len-1);
-                } else {
-                    std::cout << lineo << "QSCAND: too long test name!\n";
-#ifdef _WIN32
-                    send(arg->connfd, lineo, strlen(lineo), 0);
-#else
-                    write(arg->connfd, lineo, strlen(lineo));
-#endif
-                }
-            } else if (!strncmp(linet, "speed=", 6)) {
-                linet+=6;
-                speed = atol(linet);
-            } else if (!strncmp(linet, "simul=", 6)) {
-                linet+=6;
-                WT_simul = atol(linet) ? 1 : 0;
-            } else {
-                std::cout << lineo << "QSCAND: set: invalid parameter!\n";
-#ifdef _WIN32
-                send(arg->connfd, lineo, strlen(lineo), 0);
-#else
-                write(arg->connfd, lineo, strlen(lineo));
-#endif
-            }
-            continue;
-        } else {
-        //  sprintf(lineo, "str len: %d, cmd len: %d. '%d'\n", n, strlen(linei), linei);
-            //sprintf(lineo, "str len: %d, cmd len: %d, last %02x %02x\n", n, strlen(linei), linei[n-2], linei[n-1]);
-        //  write(arg->connfd, lineo, strlen(lineo));
-            std::cout << lineo << "QSCAND: invalid command. try \"help\"\n";
-#ifdef _WIN32
-            send(arg->connfd, lineo, strlen(lineo), 0);
-#else
-            write(arg->connfd, lineo, strlen(lineo));
-#endif
+        r = read(fd, cbuf, 1);
+      if (r < 0) {
+        if (debug && !daemonized)
+          std::cout << "read = " << r << ", " << errno << ", "
+                    << strerror(errno) << "\n";
+        switch (errno) {
+        case EAGAIN:
+          //  printf("EAGAIN\n");
+          continue;
+        case EINTR:
+          //  printf("EINTR\n");
+          continue;
+        default:
+          return -1;
         }
-        
-        if (mode != none) {
-            int    argc = 0;
-            char **argv = (char**) malloc(sizeof(char*));
-            argv[0] = NULL;
-            if ( ((mode == scan) || (mode == dinfo) || (mode == minfo))  && !strlen(device)) {
-#ifdef DAEMON_EN
-                if (daemonized)
-                // TODO: Redirect cout statements to file to emulate syslog behavior
-                    std::cout << LOG_WARNING << "QSCAND: No device specified!\n";
-                else
-#endif
-                    std::cout << "QSCAND: No device specified!\n";
-                _exit(0);
-            }
-            if ( (mode == scan) && !strlen(test)) {
-#ifdef DAEMON_EN
-                if (daemonized)
-                // TODO: Redirect cout statements to file to emulate syslog behavior
-                    std::cout << LOG_WARNING << "QSCAND: No test specified!\n";
-                else
-#endif
-                    std::cout << "QSCAND: No test specified!\n";
-                _exit(0);
-            }
-            argv = add_arg(argv, &argc, "qscan");
-            switch (mode) {
-                case scanbus:
-                    argv = add_arg(argv, &argc, "-l");
-                    break;
-                case scan:
-                    argv = add_arg(argv, &argc, "-d");
-                    argv = add_arg(argv, &argc, device);
-
-                    argv = add_arg(argv, &argc, "-t");
-                    argv = add_arg(argv, &argc, test);
-
-                    std::cout << speed;
-                    argv = add_arg(argv, &argc, "-s");
-                    argv = add_arg(argv, &argc, speeds);
-
-                    if (!strcmp(test, "wt") && !WT_simul)
-                        argv = add_arg(argv, &argc, "-W");
-                    break;
-                case dinfo:
-                    argv = add_arg(argv, &argc, "-d");
-                    argv = add_arg(argv, &argc, device);
-                    argv = add_arg(argv, &argc, "-Ip");
-                    break;
-                case minfo:
-                    argv = add_arg(argv, &argc, "-d");
-                    argv = add_arg(argv, &argc, device);
-                    argv = add_arg(argv, &argc, "-m");
-                    break;
-                case help:
-                    argv = add_arg(argv, &argc, "-h");
-                    break;
-                default:
-                    if (debug && !daemonized)
-                        std::cout << "unknown mode: " << mode << "\n";
-                    return;
-            }
-
-            if ((cpid = createChildProcess(argv, &pipefd, NULL)) == -1) {
-#ifdef DAEMON_EN
-                if (daemonized)
-                // TODO: Redirect cout statements to file to emulate syslog behavior
-                    std::cout << LOG_ERR << "Can't start child!\n";
-                else
-#endif
-                    std::cout << "QSCAND: Can't start child!\n";
-                return;
-            } else {
-                // parent. copy messages from pipe to socket 
-                close(pipefd[1]); // unused write end
-
-                std::cout << "QSCAND: child created, reading from pipe...\n";
-#ifdef _WIN32
-                send(arg->connfd, lineo, strlen(lineo), 0);
-#else
-                write(arg->connfd, lineo, strlen(lineo));
-#endif
-                int wn, woffs;
-                while((n = readline((int)pipefd[0], lineo, MAXLINE, FD_PIPE))>=0) {
-            //  while((n = read(pipefd[0], lineo, MAXLINE)) > 0) {
-        //          sprintf(linei,"\nread #%d: %d bytes\n\0",idx, n);
-        //          write(arg->connfd, linei, strlen(linei));
-        //          idx++;
-//                  printf(lineo);
-                    woffs=0;
-                    while (woffs<n) {
-#ifdef _WIN32
-                        wn = send(arg->connfd, lineo+woffs, n-woffs, 0);
-#else
-                        wn = write(arg->connfd, lineo+woffs, n-woffs);
-#endif
-                        if (wn<0) {
-                            switch (errno) {
-                                case EAGAIN:
-                                    break;
-                                default:
-                                    woffs=n;
-                            }
-                        } else {
-                            woffs+=wn;
-                        }
-                    }
-                }
-#ifdef DAEMON_EN
-                if (daemonized)
-                // TODO: Redirect cout statements to file to emulate syslog behavior
-                    std::cout << LOG_WARNING << "Pipe end!\n";
-                else
-#endif
-                    std::cout << "QSCAND: Pipe end!\n";
-                close(pipefd[0]);
-            }
-        } // if (mode != none)
+      }
+      if (!r)
+        return -1;
+      // look for CR/LF/CR+LF
+      if (fdtype == FD_SOCKET) {
+        if (buf[cnt] == 0x0A || buf[cnt] == 0x0D)
+          goto readline_end;
+      } else if (cnt && (buf[cnt - 1] == 0x0A || buf[cnt - 1] == 0x0D)) {
+        if (buf[cnt] != 0x0A && buf[cnt] != 0x0D)
+          tchar = buf[cnt];
+        buf[cnt - 1] = '\n';
+        buf[cnt] = 0;
+        return cnt;
+      }
+      cnt++;
+      cbuf++;
     }
+  }
+  if (term)
+    return -1;
+readline_end:
+  buf[cnt] = '\n';
+  buf[cnt + 1] = 0;
+  return cnt + 1;
 }
 
-void *child_thread(void *argp)
-{
-    child_arg_t *arg = (child_arg_t*)argp;
+void child_proc(child_arg_t *arg) {
+  ssize_t n;
+  char speeds[16];
+  char linei[MAXLINE + 1];
+  char lineo[MAXLINE + IDENT_LEN + 1];
+  pipe_t pipefd;
+  pid_t cpid;
+  qscan_mode mode = none;
+  char device[128] = "\0";
+  char test[8] = "\0";
+  int speed = -1;
+  bool WT_simul = 1;
+#ifdef _WIN32
+  send(arg->connfd, IDENTV, IDENTV_LEN, 0);
+#else
+  write(arg->connfd, IDENTV, IDENTV_LEN);
+#endif
+  for (;;) {
+    mode = none;
+    if (term)
+      return;
+#ifdef _WIN32
+    send(arg->connfd, PROMPT, PROMPT_LEN, 0);
+#else
+    write(arg->connfd, PROMPT, PROMPT_LEN);
+#endif
+    if ((n = readline(arg->connfd, linei, MAXLINE, FD_SOCKET)) < 0) {
+      // if ((n = fgets(line, MAXLINE, arg->connfd)) == EOF) {
+      // printf("Client disconnected\n");
+      return;
+    }
+    if (n <= 1)
+      continue;
+    linei[n] = 0;
+#ifdef _WIN32
+    send(arg->connfd, "\n", 1, 0);
+#else
+    write(arg->connfd, "\n", 1);
+#endif
+    if (debug && !daemonized)
+      std::cout << inet_ntoa(arg->cliaddr.sin_addr) << ":"
+                << ntohs(arg->cliaddr.sin_port) << ": command: " << linei;
+    if (!strcmp(linei, "help\n")) {
+#ifdef _WIN32
+      send(arg->connfd, helpstr, helpstr_sz, 0);
+#else
+      write(arg->connfd, helpstr, helpstr_sz);
+#endif
+      continue;
+    } else if (!strcmp(linei, "close\n")) {
+      //          shutdown(arg->connfd, SHUT_RDWR);
+      return;
+      //      } else if (!strcmp(linei, "qhelp\n")) {
+      //          mode = help;
+    } else if (!strcmp(linei, "list\n") || !strcmp(linei, "scanbus\n")) {
+      mode = scanbus;
+    } else if (!strcmp(linei, "dinfo\n")) {
+      mode = dinfo;
+    } else if (!strcmp(linei, "minfo\n")) {
+      mode = minfo;
+    } else if (!strcmp(linei, "run\n")) {
+      mode = scan;
+    } else if (!strcmp(linei, "get\n")) {
+      std::cout << lineo << "current parameters:\ndevice: '" << device
+                << "'\ntest  : '" << test << "'\nspeed : " << speed
+                << "\nsimul : " << ((WT_simul) ? "on" : "off") << "\n";
+#ifdef _WIN32
+      send(arg->connfd, lineo, strlen(lineo), 0);
+#else
+      write(arg->connfd, lineo, strlen(lineo));
+#endif
+      continue;
+    } else if (!strncmp(linei, "set", 3)) {
+      char *linet = linei + 4;
+      size_t len;
+      if ((strlen(linei) <= 4) || linei[3] != ' ') {
+        std::cout << lineo << "QSCAND: set: needs parameter!\n";
+#ifdef _WIN32
+        send(arg->connfd, lineo, strlen(lineo), 0);
+#else
+        write(arg->connfd, lineo, strlen(lineo));
+#endif
+        continue;
+      }
+      if (!strncmp(linet, "dev=", 4)) {
+        linet += 4;
+        len = strlen(linet);
+        if (len < sizeof(device)) {
+          strncpy(device, linet, len - 1);
+        } else {
+          std::cout << lineo << "QSCAND: too long device name!\n";
+#ifdef _WIN32
+          send(arg->connfd, lineo, strlen(lineo), 0);
+#else
+          write(arg->connfd, lineo, strlen(lineo));
+#endif
+        }
+      } else if (!strncmp(linet, "test=", 5)) {
+        linet += 5;
+        len = strlen(linet);
+        if (len < sizeof(test)) {
+          strncpy(test, linet, len - 1);
+        } else {
+          std::cout << lineo << "QSCAND: too long test name!\n";
+#ifdef _WIN32
+          send(arg->connfd, lineo, strlen(lineo), 0);
+#else
+          write(arg->connfd, lineo, strlen(lineo));
+#endif
+        }
+      } else if (!strncmp(linet, "speed=", 6)) {
+        linet += 6;
+        speed = atol(linet);
+      } else if (!strncmp(linet, "simul=", 6)) {
+        linet += 6;
+        WT_simul = atol(linet) ? 1 : 0;
+      } else {
+        std::cout << lineo << "QSCAND: set: invalid parameter!\n";
+#ifdef _WIN32
+        send(arg->connfd, lineo, strlen(lineo), 0);
+#else
+        write(arg->connfd, lineo, strlen(lineo));
+#endif
+      }
+      continue;
+    } else {
+      //  sprintf(lineo, "str len: %d, cmd len: %d. '%d'\n", n, strlen(linei),
+      //  linei);
+      // sprintf(lineo, "str len: %d, cmd len: %d, last %02x %02x\n", n,
+      // strlen(linei), linei[n-2], linei[n-1]);
+      //  write(arg->connfd, lineo, strlen(lineo));
+      std::cout << lineo << "QSCAND: invalid command. try \"help\"\n";
+#ifdef _WIN32
+      send(arg->connfd, lineo, strlen(lineo), 0);
+#else
+      write(arg->connfd, lineo, strlen(lineo));
+#endif
+    }
+
+    if (mode != none) {
+      int argc = 0;
+      char **argv = (char **)malloc(sizeof(char *));
+      argv[0] = NULL;
+      if (((mode == scan) || (mode == dinfo) || (mode == minfo)) &&
+          !strlen(device)) {
+#ifdef DAEMON_EN
+        if (daemonized)
+          // TODO: Redirect cout statements to file to emulate syslog behavior
+          std::cout << LOG_WARNING << "QSCAND: No device specified!\n";
+        else
+#endif
+          std::cout << "QSCAND: No device specified!\n";
+        _exit(0);
+      }
+      if ((mode == scan) && !strlen(test)) {
+#ifdef DAEMON_EN
+        if (daemonized)
+          // TODO: Redirect cout statements to file to emulate syslog behavior
+          std::cout << LOG_WARNING << "QSCAND: No test specified!\n";
+        else
+#endif
+          std::cout << "QSCAND: No test specified!\n";
+        _exit(0);
+      }
+      argv = add_arg(argv, &argc, "qscan");
+      switch (mode) {
+      case scanbus:
+        argv = add_arg(argv, &argc, "-l");
+        break;
+      case scan:
+        argv = add_arg(argv, &argc, "-d");
+        argv = add_arg(argv, &argc, device);
+
+        argv = add_arg(argv, &argc, "-t");
+        argv = add_arg(argv, &argc, test);
+
+        std::cout << speed;
+        argv = add_arg(argv, &argc, "-s");
+        argv = add_arg(argv, &argc, speeds);
+
+        if (!strcmp(test, "wt") && !WT_simul)
+          argv = add_arg(argv, &argc, "-W");
+        break;
+      case dinfo:
+        argv = add_arg(argv, &argc, "-d");
+        argv = add_arg(argv, &argc, device);
+        argv = add_arg(argv, &argc, "-Ip");
+        break;
+      case minfo:
+        argv = add_arg(argv, &argc, "-d");
+        argv = add_arg(argv, &argc, device);
+        argv = add_arg(argv, &argc, "-m");
+        break;
+      case help:
+        argv = add_arg(argv, &argc, "-h");
+        break;
+      default:
+        if (debug && !daemonized)
+          std::cout << "unknown mode: " << mode << "\n";
+        return;
+      }
+
+      if ((cpid = createChildProcess(argv, &pipefd, NULL)) == -1) {
+#ifdef DAEMON_EN
+        if (daemonized)
+          // TODO: Redirect cout statements to file to emulate syslog behavior
+          std::cout << LOG_ERR << "Can't start child!\n";
+        else
+#endif
+          std::cout << "QSCAND: Can't start child!\n";
+        return;
+      } else {
+        // parent. copy messages from pipe to socket
+        close(pipefd[1]); // unused write end
+
+        std::cout << "QSCAND: child created, reading from pipe...\n";
+#ifdef _WIN32
+        send(arg->connfd, lineo, strlen(lineo), 0);
+#else
+        write(arg->connfd, lineo, strlen(lineo));
+#endif
+        int wn, woffs;
+        while ((n = readline((int)pipefd[0], lineo, MAXLINE, FD_PIPE)) >= 0) {
+          //  while((n = read(pipefd[0], lineo, MAXLINE)) > 0) {
+          //          sprintf(linei,"\nread #%d: %d bytes\n\0",idx, n);
+          //          write(arg->connfd, linei, strlen(linei));
+          //          idx++;
+          //                  printf(lineo);
+          woffs = 0;
+          while (woffs < n) {
+#ifdef _WIN32
+            wn = send(arg->connfd, lineo + woffs, n - woffs, 0);
+#else
+            wn = write(arg->connfd, lineo + woffs, n - woffs);
+#endif
+            if (wn < 0) {
+              switch (errno) {
+              case EAGAIN:
+                break;
+              default:
+                woffs = n;
+              }
+            } else {
+              woffs += wn;
+            }
+          }
+        }
+#ifdef DAEMON_EN
+        if (daemonized)
+          // TODO: Redirect cout statements to file to emulate syslog behavior
+          std::cout << LOG_WARNING << "Pipe end!\n";
+        else
+#endif
+          std::cout << "QSCAND: Pipe end!\n";
+        close(pipefd[0]);
+      }
+    } // if (mode != none)
+  }
+}
+
+void *child_thread(void *argp) {
+  child_arg_t *arg = (child_arg_t *)argp;
 
 //  childl++;
 //  pid=getpid();
 //  close(listenfd);
 #ifdef DAEMON_EN
-    if (daemonized)
+  if (daemonized)
     // TODO: Redirect cout statements to file to emulate syslog behavior
-        std::cout << LOG_INFO << "Client connected: " << inet_ntoa(arg->cliaddr.sin_addr) << ":" << ntohs(arg->cliaddr.sin_port) << "\n";
-    else
+    std::cout << LOG_INFO
+              << "Client connected: " << inet_ntoa(arg->cliaddr.sin_addr) << ":"
+              << ntohs(arg->cliaddr.sin_port) << "\n";
+  else
 #endif
-        std::cout << pid << ": Client connected: " << inet_ntoa(arg->cliaddr.sin_addr) << ":" << ntohs(arg->cliaddr.sin_port) << "\n";
+    std::cout << pid
+              << ": Client connected: " << inet_ntoa(arg->cliaddr.sin_addr)
+              << ":" << ntohs(arg->cliaddr.sin_port) << "\n";
 
-    /* serve connection */
-    child_proc(arg);
+  /* serve connection */
+  child_proc(arg);
 #ifdef DAEMON_EN
-    if (daemonized)
+  if (daemonized)
     // TODO: Redirect cout statements to file to emulate syslog behavior
-        std::cout << LOG_INFO << "Client disconnected: " << inet_ntoa(arg->cliaddr.sin_addr) << ":" << ntohs(arg->cliaddr.sin_port) << "\n";
-    else
+    std::cout << LOG_INFO
+              << "Client disconnected: " << inet_ntoa(arg->cliaddr.sin_addr)
+              << ":" << ntohs(arg->cliaddr.sin_port) << "\n";
+  else
 #endif
-        std::cout << pid << ": Client disconnected: " << inet_ntoa(arg->cliaddr.sin_addr) << ":" << ntohs(arg->cliaddr.sin_port) << "\n";
-    if (debug && !daemonized)
-        std::cout << pid << ": Closing client socket...\n";
-    shutdown(arg->connfd, SHUT_RDWR);
-    close(arg->connfd);
+    std::cout << pid
+              << ": Client disconnected: " << inet_ntoa(arg->cliaddr.sin_addr)
+              << ":" << ntohs(arg->cliaddr.sin_port) << "\n";
+  if (debug && !daemonized)
+    std::cout << pid << ": Closing client socket...\n";
+  shutdown(arg->connfd, SHUT_RDWR);
+  close(arg->connfd);
 
-    cmutex->lock();
-    clients--;
-    arg->used = 0;
-    cmutex->unlock();
+  cmutex->lock();
+  clients--;
+  arg->used = 0;
+  cmutex->unlock();
 
-    return 0;
-//  thread_exit(0);
+  return 0;
+  //  thread_exit(0);
 }
-

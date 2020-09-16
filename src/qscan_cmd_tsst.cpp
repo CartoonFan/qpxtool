@@ -85,7 +85,7 @@ int scan_tsst::cmd_dvd_errc_block(dvd_errc *data) {
   //	lba+=16;
 
   //	lba = ((dev->rd_buf[1] << 16 )& 0xFF0000) + ((dev->rd_buf[2] <<
-  //8)&0xFF00 ) + (dev->rd_buf[3] & 0xFF);
+  // 8)&0xFF00 ) + (dev->rd_buf[3] & 0xFF);
   lba = ntoh32(dev->rd_buf);
 
   data->pie = ntoh16(dev->rd_buf + 4);

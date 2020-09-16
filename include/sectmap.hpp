@@ -10,8 +10,8 @@
 
 #define _FILE_OFFSET_BITS 64
 
-#include <inttypes.h>
 #include "threads.hpp"
+#include <inttypes.h>
 
 enum mape { BM_WAIT = 0, BM_READ = 1, BM_DONE = 2, BM_FAIL = 3, BM_INV = 15 };
 

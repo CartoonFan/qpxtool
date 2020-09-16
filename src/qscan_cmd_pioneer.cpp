@@ -216,7 +216,7 @@ int scan_pioneer::cmd_dvd_errc_block(dvd_errc *data) {
   if (!r)
     r = cmd_dvd_errc_getdata(data);
   //	*pie = max( 0, (ntoh16(dev->rd_buf+13) - 1.5 * ntoh16(dev->rd_buf+5)) /
-  //40);
+  // 40);
   lba += 16 * interval;
   return r;
 }
