@@ -3446,7 +3446,7 @@ int detect_speeds(drive_info *drive) {
                      (spd < (drive->parms.max_read_speed_dvd + 2)));
            spd++) {
         //			for (spd=1; ((idx<speed_tbl_size) && (spd <
-        //17)); spd++) {
+        // 17)); spd++) {
         drive->parms.read_speed_kb = (int)(spd * (drive->parms.speed_mult + 1));
         if (!drive->silent)
           printf("Trying:  %dX (%d kB/s)\n", spd, drive->parms.read_speed_kb);
@@ -3492,7 +3492,7 @@ int detect_speeds(drive_info *drive) {
                      (spd < (drive->parms.max_read_speed_cd + 2)));
            spd++) {
         //			for (spd=1; ((idx<speed_tbl_size) && (spd <
-        //72)); spd++) {
+        // 72)); spd++) {
         drive->parms.read_speed_kb = (int)(spd * (drive->parms.speed_mult + 1));
         if (!drive->silent)
           printf("Trying:  %dX (%5d kB/s)\n", spd, drive->parms.read_speed_kb);

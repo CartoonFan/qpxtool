@@ -264,7 +264,8 @@ void TextSlider::mouseReleaseEvent(QMouseEvent *e) {
     update();
   }
   if (oldpos != op.sliderPosition) {
-    //		qDebug() << "mouseReleaseEvent()  oldpos: " << oldpos << "  pos: "
+    //		qDebug() << "mouseReleaseEvent()  oldpos: " << oldpos << "  pos:
+    //"
     //<< op.sliderPosition;
     emit valueChanged(op.sliderPosition);
   }

@@ -156,7 +156,7 @@ void QPxSettings::load() {
   geometry_mw = settings->value("mainwindow", QRect(0, 0, 0, 0)).toRect();
   geometry_pref = settings->value("preferences", QRect(0, 0, 0, 0)).toRect();
   //		geometry_testsel = settings->value("testselector",
-  //QRect(0,0,0,0)
+  // QRect(0,0,0,0)
   //).toRect();
   settings->endGroup();
 

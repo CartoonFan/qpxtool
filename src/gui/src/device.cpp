@@ -814,7 +814,8 @@ bool device::setComplexFeature(int f, DevFeatures *data) {
         cdvdopts << "--sm-cd-wr" << QString::number(data->sm_cd_wr);
         if (cap_rd & DEVICE_DVD) {
           cdvdopts << "--sm-dvd-rd" << QString::number(data->sm_dvd_rd);
-          //						cdvdopts << "--sm-dvd-wr"
+          //						cdvdopts <<
+          //"--sm-dvd-wr"
           //<< QString::number(data->sm_dvd_wr);
         }
         cdvdopts << "--sm-access" << (data->sm_access ? "fast" : "slow");
@@ -1856,7 +1857,7 @@ void device::qscan_process_test() {
         DI_Transfer di;
         sl = qout.split(" ", QString::SkipEmptyParts);
         //		for (int i=0; i<sl.size(); i++)
-        //qDebug(QString::number(i)
+        // qDebug(QString::number(i)
         //+ "  '" + sl[i] + "'");
         if (sl.size() >= 6) {
           di.lba = sl[1].toLongLong();
@@ -1894,7 +1895,7 @@ void device::qscan_process_test() {
         DI_Transfer di;
         sl = qout.split(" ", QString::SkipEmptyParts);
         //		for (int i=0; i<sl.size(); i++)
-        //qDebug(QString::number(i)
+        // qDebug(QString::number(i)
         //+ "  '" + sl[i] + "'");
         if (sl.size() >= 10) {
           di.lba = sl[2].toLongLong() << 9;
@@ -1917,8 +1918,8 @@ void device::qscan_process_test() {
           }
           pprocess = 100.0 * (float)di.lba / media.ctots;
           emit process_progress();
-          //						qDebug( sl[1] + " " + sl[3] + " " +
-          //sl[5]
+          //						qDebug( sl[1] + " " + sl[3] + " "
+          //+ sl[5]
           //);
         }
         //		qDebug(QString("lba: %1, spdx: %2, spdk:
