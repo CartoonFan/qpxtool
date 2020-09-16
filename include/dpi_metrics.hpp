@@ -15,20 +15,18 @@
 #include <QPaintDevice>
 //--------------------------------------------------------------
 static inline int inchesToPixelsX(float inches, QPaintDevice *device) {
-    return qRound(inches * device->logicalDpiX());
+  return qRound(inches * device->logicalDpiX());
 }
 static inline int inchesToPixelsY(float inches, QPaintDevice *device) {
-    return qRound(inches * device->logicalDpiY());
+  return qRound(inches * device->logicalDpiY());
 }
 static inline int inchesToPixelsX(float inches, int lDpiX) {
-    return qRound(inches * lDpiX);
+  return qRound(inches * lDpiX);
 }
 static inline int inchesToPixelsY(float inches, int lDpiY) {
-    return qRound(inches * lDpiY);
+  return qRound(inches * lDpiY);
 }
 //--------------------------------------------------------------
-static inline float mmToInches(double mm) {
-    return mm * 0.039370147;
-}
+static inline float mmToInches(double mm) { return mm * 0.039370147; }
 //--------------------------------------------------------------
 #endif // DPI_METRICS_H

@@ -37,46 +37,46 @@ class tabTA;
 class QPxGraph;
 
 class QPxMainWidget : public QWidget {
-    Q_OBJECT
+  Q_OBJECT
 public:
-    QPxMainWidget(QPxSettings *iset, devlist *idev, QWidget *p = 0);
-    ~QPxMainWidget();
-    void drawGraph(QImage &img, device *dev, int ttype, int eflags = 0);
+  QPxMainWidget(QPxSettings *iset, devlist *idev, QWidget *p = 0);
+  ~QPxMainWidget();
+  void drawGraph(QImage &img, device *dev, int ttype, int eflags = 0);
 
 public slots:
-    void clearDev();
-    void clearMedia();
-    void selectDevice();
-    void reconfig();
-    void setSidebarVisible(bool);
-    void setSimpleGraph(bool);
-    void selectTab(int);
-    // inline void reconfig() { emit configured(); };
+  void clearDev();
+  void clearMedia();
+  void selectDevice();
+  void reconfig();
+  void setSidebarVisible(bool);
+  void setSimpleGraph(bool);
+  void selectTab(int);
+  // inline void reconfig() { emit configured(); };
 
 private slots:
 
 signals:
-    void deviceSelected();
-    void configured();
+  void deviceSelected();
+  void configured();
 
 private:
-    devlist *devices;
-    QPxSettings *settings;
+  devlist *devices;
+  QPxSettings *settings;
 
-    QBoxLayout *layout;
-    QFrame *bframe;
-    QBoxLayout *layout_buttons;
-    QButtonGroup *grp;
-    QStackedLayout *stack;
+  QBoxLayout *layout;
+  QFrame *bframe;
+  QBoxLayout *layout_buttons;
+  QButtonGroup *grp;
+  QStackedLayout *stack;
 
-    tabDevInfo *tab_DevInfo;
-    tabMediaInfo *tab_MediaInfo;
-    tabTransfer *tab_RT;
-    tabTransfer *tab_WT;
-    tabERRC *tab_ERRC;
-    tabJB *tab_JB;
-    tabFETE *tab_FETE;
-    tabTA *tab_TA;
+  tabDevInfo *tab_DevInfo;
+  tabMediaInfo *tab_MediaInfo;
+  tabTransfer *tab_RT;
+  tabTransfer *tab_WT;
+  tabERRC *tab_ERRC;
+  tabJB *tab_JB;
+  tabFETE *tab_FETE;
+  tabTA *tab_TA;
 };
 
 #endif
