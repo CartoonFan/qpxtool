@@ -14,8 +14,8 @@
 
 #define PREF_PAGES 4
 
-#include <QDialog>
 #include "qpxsettings.hpp"
+#include <QDialog>
 
 class QFrame;
 class ImagesList;
@@ -25,41 +25,39 @@ class QScrollArea;
 class QPushButton;
 
 class QPxPreferences : public QDialog {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    QPxPreferences(QPxSettings *iset, QWidget *p=0, Qt::WindowFlags f=0);
-    virtual ~QPxPreferences();
+  QPxPreferences(QPxSettings *iset, QWidget *p = 0, Qt::WindowFlags f = 0);
+  virtual ~QPxPreferences();
 
 public slots:
-    void setPage(int);
+  void setPage(int);
 
 private slots:
-    void save();
-    void cancel();
+  void save();
+  void cancel();
 
 protected:
-    void closeEvent(QCloseEvent*);
-    void keyPressEvent(QKeyEvent*);
+  void closeEvent(QCloseEvent *);
+  void keyPressEvent(QKeyEvent *);
 
 private:
-    void winit();
-    int curPage;
+  void winit();
+  int curPage;
 
-    QPxSettings set;
-    QPxSettings *set_old;
+  QPxSettings set;
+  QPxSettings *set_old;
 
-    QHBoxLayout	*layout;
-    ImagesList	*ilist;
+  QHBoxLayout *layout;
+  ImagesList *ilist;
 
-    QVBoxLayout	*parea;
-    QFrame		*hline0;
-    QHBoxLayout	*layout_butt;
-    QPushButton *pb_save,
-                *pb_cancel;
-//	QWidget*	pagew;
-    QWidget*	pages[PREF_PAGES];
+  QVBoxLayout *parea;
+  QFrame *hline0;
+  QHBoxLayout *layout_butt;
+  QPushButton *pb_save, *pb_cancel;
+  //	QWidget*	pagew;
+  QWidget *pages[PREF_PAGES];
 };
 
 #endif
-

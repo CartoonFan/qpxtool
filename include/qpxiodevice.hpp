@@ -17,28 +17,26 @@
 #include <QString>
 #include <QStringList>
 
-class QPxIODevice : public QObject
-{
-    Q_OBJECT
+class QPxIODevice : public QObject {
+  Q_OBJECT
 public:
-    QPxIODevice(QObject*);
-    ~QPxIODevice();
-    void setIODevice(QIODevice*);
-    QIODevice* IODevice();
-    QString readLine();
-    int linesAvailable();
+  QPxIODevice(QObject *);
+  ~QPxIODevice();
+  void setIODevice(QIODevice *);
+  QIODevice *IODevice();
+  QString readLine();
+  int linesAvailable();
 
 signals:
-    void readyReadLine();
+  void readyReadLine();
 
 protected slots:
-    void splitInput();
+  void splitInput();
 
 private:
-    QIODevice   *io;
-    QString     buf;
-    QStringList lines;
+  QIODevice *io;
+  QString buf;
+  QStringList lines;
 };
 
 #endif
-

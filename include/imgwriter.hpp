@@ -10,23 +10,23 @@
 
 #define _FILE_OFFSET_BITS 64
 
-#include <cstdio>
 #include "threads.hpp"
+#include <cstdio>
 
 class smap;
 
 class imgwriter {
 public:
-    imgwriter(char *fn, smap *map);
-    ~imgwriter();
-    int write(int lba, int scnt, int ssz, void *buff);
-    //	void	set_file(char* fn);
-    //	int	open();
-    //	int	close();
+  imgwriter(char *fn, smap *map);
+  ~imgwriter();
+  int write(int lba, int scnt, int ssz, void *buff);
+  //	void	set_file(char* fn);
+  //	int	open();
+  //	int	close();
 private:
-    char *fname;
-    FILE *iso;
-    Mutex *mutex;
+  char *fname;
+  FILE *iso;
+  Mutex *mutex;
 };
 
 #endif

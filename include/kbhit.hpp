@@ -9,16 +9,16 @@
 
 class keyboard {
 public:
-    keyboard();
-    ~keyboard();
-    int kb_hit();
-    int kb_getch();
+  keyboard();
+  ~keyboard();
+  int kb_hit();
+  int kb_getch();
 
 private:
 #if defined(__unix) || defined(__unix__)
-    struct termios initial_settings, new_settings;
+  struct termios initial_settings, new_settings;
 #endif
-    int peek_character;
+  int peek_character;
 };
 
 #endif

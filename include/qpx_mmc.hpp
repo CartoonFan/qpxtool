@@ -28,50 +28,50 @@
 #define bufsz_ATIP 0x000800
 
 typedef struct {
-    int n;
-    int session;
-    int track_mode;
-    int data_mode;
-    int start;
-    msf msf_start;
-    int next_writable;
-    msf msf_next;
-    int free;
-    msf msf_free;
-    int packet_size;
-    int size;
-    msf msf_size;
-    int last;
-    msf msf_last;
-    //	int	end;
-    //	msf	msf_end;
+  int n;
+  int session;
+  int track_mode;
+  int data_mode;
+  int start;
+  msf msf_start;
+  int next_writable;
+  msf msf_next;
+  int free;
+  msf msf_free;
+  int packet_size;
+  int size;
+  msf msf_size;
+  int last;
+  msf msf_last;
+  //	int	end;
+  //	msf	msf_end;
 } trk;
 
 typedef struct {
-    int test;
-    int idx;
-    int32_t lba;
-    int block, blocks;
-    float speed_kb;
-    float speed_x;
-    int speed_h;
-    int err_total;
-    int err_max;
-    int err_cur;
-    int err_min;
-    int err_m;
-    int err_d;
-    float err_avg;
-    int pit;
-    int land;
-    float jmax;
-    float jmin;
-    float bmax;
-    float bmin;
-    long time;
-    int nte, ote;
-    int nfe, ofe;
-    int ext;
+  int test;
+  int idx;
+  int32_t lba;
+  int block, blocks;
+  float speed_kb;
+  float speed_x;
+  int speed_h;
+  int err_total;
+  int err_max;
+  int err_cur;
+  int err_min;
+  int err_m;
+  int err_d;
+  float err_avg;
+  int pit;
+  int land;
+  float jmax;
+  float jmin;
+  float bmax;
+  float bmin;
+  long time;
+  int nte, ote;
+  int nfe, ofe;
+  int ext;
 } block_data;
 
 #define DVD_KEY_SIZE 5
@@ -93,75 +93,75 @@ typedef struct {
 typedef uint8_t dvd_key_t[DVD_KEY_SIZE];
 
 typedef struct dvd_title_s {
-    int i_startlb;
-    dvd_key_t p_key;
-    struct dvd_title_s *p_next;
+  int i_startlb;
+  dvd_key_t p_key;
+  struct dvd_title_s *p_next;
 } dvd_title_t;
 
 typedef struct {
-    bool asf;     /* Authenication Success Flag */
-    uint8_t agid; /* Current Authenication Grant ID */
-    dvd_key_t BK; /* Current session key (Bus Key) */
-    dvd_key_t DK; /* This DVD disc's key */
-    uint8_t CK[2 * DVD_KEY_SIZE];
-    dvd_key_t K1;
-    dvd_key_t K2;
-    dvd_key_t TK; /* Current title key */
-    dvd_title_s *p_titles;
+  bool asf;     /* Authenication Success Flag */
+  uint8_t agid; /* Current Authenication Grant ID */
+  dvd_key_t BK; /* Current session key (Bus Key) */
+  dvd_key_t DK; /* This DVD disc's key */
+  uint8_t CK[2 * DVD_KEY_SIZE];
+  dvd_key_t K1;
+  dvd_key_t K2;
+  dvd_key_t TK; /* Current title key */
+  dvd_title_s *p_titles;
 
-    uint8_t protection;
-    uint8_t regmask;
-    int method;
-    int pos;
+  uint8_t protection;
+  uint8_t regmask;
+  int method;
+  int pos;
 #if (DVDCSS_KEY_CACHE > 0)
-    char psz_cachefile[PATH_MAX];
-    char *psz_block;
+  char psz_cachefile[PATH_MAX];
+  char *psz_block;
 #endif
 } dvdcss_t;
 
 #define MID_RAW_MAX 1024
 
 enum mid_type_t {
-    MID_type_NONE = 0,
-    MID_type_CD = 1,
-    MID_type_DVDp = 2,
-    MID_type_DVDm = 4,
-    MID_type_DVDRAM = 8,
-    MID_type_BD = 16
+  MID_type_NONE = 0,
+  MID_type_CD = 1,
+  MID_type_DVDp = 2,
+  MID_type_DVDm = 4,
+  MID_type_DVDRAM = 8,
+  MID_type_BD = 16
 };
 
 typedef struct {
-    char MID[48]; // MediaID for DVD, manufacturer for CD
-    mid_type_t MID_type;
-    uint8_t ATIP[bufsz_ATIP];
-    int ATIP_size;
-    uint16_t MID_size;
-    unsigned char MID_raw[4 + MID_RAW_MAX];
-    uint64_t type;     // Media subtype
-    uint8_t book_type; // Book type (DVD)
-    uint8_t max_rate;
-    uint8_t disc_size; // indicates 120/80mm disc
-    uint8_t polarity;  // Push-Pull polarity flags per layer for BD (indicates HtL
-    // or LtH)
-    uint8_t layers;    // Layers num (!CD)
-    uint8_t gbpl;      // Layers num (!CD)
-    int sectsize;
-    int32_t capacity; // Recorded capacity in sectors
-    msf capacity_msf;
-    int32_t capacity_free; // Free sectors
-    msf capacity_free_msf;
-    int32_t capacity_total; // Total sectors
-    msf capacity_total_msf;
-    int spare_psa_total, spare_ssa_total, spare_psa_free, spare_ssa_free;
-    int last_lead_out;
-    int dstatus; // Empty/Apeendable/Complete
-    int sstatus;
-    int sessions;
-    int tracks;
-    int erasable;
-    char writer[0x3F];
-    trk track[0xFF];
-    dvdcss_t dvdcss;
+  char MID[48]; // MediaID for DVD, manufacturer for CD
+  mid_type_t MID_type;
+  uint8_t ATIP[bufsz_ATIP];
+  int ATIP_size;
+  uint16_t MID_size;
+  unsigned char MID_raw[4 + MID_RAW_MAX];
+  uint64_t type;     // Media subtype
+  uint8_t book_type; // Book type (DVD)
+  uint8_t max_rate;
+  uint8_t disc_size; // indicates 120/80mm disc
+  uint8_t polarity;  // Push-Pull polarity flags per layer for BD (indicates HtL
+  // or LtH)
+  uint8_t layers; // Layers num (!CD)
+  uint8_t gbpl;   // Layers num (!CD)
+  int sectsize;
+  int32_t capacity; // Recorded capacity in sectors
+  msf capacity_msf;
+  int32_t capacity_free; // Free sectors
+  msf capacity_free_msf;
+  int32_t capacity_total; // Total sectors
+  msf capacity_total_msf;
+  int spare_psa_total, spare_ssa_total, spare_psa_free, spare_ssa_free;
+  int last_lead_out;
+  int dstatus; // Empty/Apeendable/Complete
+  int sstatus;
+  int sessions;
+  int tracks;
+  int erasable;
+  char writer[0x3F];
+  trk track[0xFF];
+  dvdcss_t dvdcss;
 } media_info;
 
 #define speed_tbl_size 64
@@ -170,46 +170,46 @@ typedef struct {
 #define STATUS_LOCK 0x0004
 
 typedef struct {
-    uint8_t status;
-    uint8_t event;
-    int interval;
-    int tests;
-    int8_t spindown_idx;
-    int16_t speed_idx;
-    float speed_mult;
-    int16_t speed_tbl[speed_tbl_size];
-    int32_t speed_tbl_kb[speed_tbl_size];
-    int16_t wr_speed_tbl[speed_tbl_size];
-    int32_t wr_speed_tbl_kb[speed_tbl_size];
-    float wr_speed_tbl_media[speed_tbl_size];
-    int32_t scan_speed_cd;
-    int32_t scan_speed_dvd;
-    int32_t read_speed_kb;
-    int32_t read_speed_cd;
-    int32_t read_speed_dvd;
-    int32_t max_read_speed_kb;
-    int32_t max_read_speed_cd;
-    int32_t max_read_speed_dvd;
-    int32_t max_write_speed_kb;
-    int32_t max_write_speed_cd;
-    int32_t max_write_speed_dvd;
-    int32_t write_speed_kb;
-    int32_t write_speed_cd;
-    int32_t write_speed_dvd;
+  uint8_t status;
+  uint8_t event;
+  int interval;
+  int tests;
+  int8_t spindown_idx;
+  int16_t speed_idx;
+  float speed_mult;
+  int16_t speed_tbl[speed_tbl_size];
+  int32_t speed_tbl_kb[speed_tbl_size];
+  int16_t wr_speed_tbl[speed_tbl_size];
+  int32_t wr_speed_tbl_kb[speed_tbl_size];
+  float wr_speed_tbl_media[speed_tbl_size];
+  int32_t scan_speed_cd;
+  int32_t scan_speed_dvd;
+  int32_t read_speed_kb;
+  int32_t read_speed_cd;
+  int32_t read_speed_dvd;
+  int32_t max_read_speed_kb;
+  int32_t max_read_speed_cd;
+  int32_t max_read_speed_dvd;
+  int32_t max_write_speed_kb;
+  int32_t max_write_speed_cd;
+  int32_t max_write_speed_dvd;
+  int32_t write_speed_kb;
+  int32_t write_speed_cd;
+  int32_t write_speed_dvd;
 } drive_parms;
 
 typedef struct {
-    int32_t lba_s;
-    int32_t spd_s;
-    int32_t lba_e;
-    int32_t spd_e;
+  int32_t lba_s;
+  int32_t spd_s;
+  int32_t lba_e;
+  int32_t spd_e;
 } perf_desc;
 
 typedef struct {
-    int max;
-    int min;
-    int m;
-    int d;
+  int max;
+  int min;
+  int m;
+  int d;
 } err;
 
 /*
@@ -230,162 +230,162 @@ typedef struct {
 */
 
 typedef struct {
-    char type;
-    char len;
-    char state;
-    char rd;
-    char wr;
-    char access;
-    char eject;
-    char load;
+  char type;
+  char len;
+  char state;
+  char rd;
+  char wr;
+  char access;
+  char eject;
+  char load;
 
-    char psaved;
-    char pstate;
-    char prd_cd;
-    char prd_dvd;
-    char pwr_cd;
-    //	char	pwr_dvd;
-    char paccess;
-    char peject;
-    char pload;
+  char psaved;
+  char pstate;
+  char prd_cd;
+  char prd_dvd;
+  char pwr_cd;
+  //	char	pwr_dvd;
+  char paccess;
+  char peject;
+  char pload;
 } plex_silent;
 
 typedef struct {
-    uint8_t number;
-    uint8_t type; // 0x25 == -R, 0xA1 == +R
-    char MID[12];
-    uint8_t crap2;
-    uint8_t enabled;
-    char counter[2];
-    uint8_t speed;
-    uint8_t crap3[13];
+  uint8_t number;
+  uint8_t type; // 0x25 == -R, 0xA1 == +R
+  char MID[12];
+  uint8_t crap2;
+  uint8_t enabled;
+  char counter[2];
+  uint8_t speed;
+  uint8_t crap3[13];
 } as_entry;
 
 typedef struct {
-    uint8_t number[2];
-    uint8_t crap[30];
+  uint8_t number[2];
+  uint8_t crap[30];
 } as_data;
 
 typedef struct {
-    char sizeb[2];
-    char crap1[4];
-    char dbcnt;
-    char entry_size;
-    as_entry entry[32];
-    as_data entry_data[32][7];
-    char state;
-    int size;
+  char sizeb[2];
+  char crap1[4];
+  char dbcnt;
+  char entry_size;
+  as_entry entry[32];
+  as_data entry_data[32][7];
+  char state;
+  int size;
 } plex_as;
 
 typedef struct {
-    bool ok;
-    uint16_t dn;
-    hms cr, cw, dr, dw;
+  bool ok;
+  uint16_t dn;
+  hms cr, cw, dr, dw;
 } plex_life;
 
 typedef struct {
-    char gigarec;           // Current GigaRec value
-    char gigarec_disc;      // GigaRec value of inserted CD
-    char powerec_state;     // Current PoweRec state
-    uint16_t powerec_spd;   // Current PoweRec recomended speed
-    char varirec_state_cd;  // Current VariRec CD state
-    char varirec_pwr_cd;    // Current VariRec CD LaserPower
-    char varirec_str_cd;    // Current VariRec CD Strategy
-    char varirec_state_dvd; // Current VariRec DVD state
-    char varirec_pwr_dvd;   // Current VariRec DVD LaserPower
-    char varirec_str_dvd;   // Current VariRec DVD Strategy
-    char hcdr;              // Hide CD-R State
-    char securec;
-    char securec_disc;
-    char sss;               // SingleSession State
-    char spdread;           // SpeedRead
-    char testwrite_dvdplus; // Simulation on DVD+R(W)
-    char plexeraser;        // PlexEraser mode
+  char gigarec;           // Current GigaRec value
+  char gigarec_disc;      // GigaRec value of inserted CD
+  char powerec_state;     // Current PoweRec state
+  uint16_t powerec_spd;   // Current PoweRec recomended speed
+  char varirec_state_cd;  // Current VariRec CD state
+  char varirec_pwr_cd;    // Current VariRec CD LaserPower
+  char varirec_str_cd;    // Current VariRec CD Strategy
+  char varirec_state_dvd; // Current VariRec DVD state
+  char varirec_pwr_dvd;   // Current VariRec DVD LaserPower
+  char varirec_str_dvd;   // Current VariRec DVD Strategy
+  char hcdr;              // Hide CD-R State
+  char securec;
+  char securec_disc;
+  char sss;               // SingleSession State
+  char spdread;           // SpeedRead
+  char testwrite_dvdplus; // Simulation on DVD+R(W)
+  char plexeraser;        // PlexEraser mode
 } plex_features;
 
 typedef struct {
-    char amqr;
-    char forcespeed;
-    uint32_t tattoo_i;
-    uint32_t tattoo_o;
-    uint32_t tattoo_rows;
+  char amqr;
+  char forcespeed;
+  uint32_t tattoo_i;
+  uint32_t tattoo_o;
+  uint32_t tattoo_rows;
 } yamaha_features;
 
 typedef struct {
-    char silent;
-    char limit;
-    bool peakpower;
-    char pureread;
+  char silent;
+  char limit;
+  bool peakpower;
+  char pureread;
 } pio_quiet;
 
 typedef struct {
-    uint8_t phase;
-    uint8_t region;
-    uint8_t ch_u;
-    uint8_t ch_v;
+  uint8_t phase;
+  uint8_t region;
+  uint8_t ch_u;
+  uint8_t ch_v;
 } rpc_state;
 
 class drive_info {
 public:
-    drive_info(const char *_device);
-    ~drive_info();
+  drive_info(const char *_device);
+  ~drive_info();
 
-    //	bool	isBusy();
-    //	bool	lock();
-    //	bool	unlock();
-    //	void	wait_free();
+  //	bool	isBusy();
+  //	bool	lock();
+  //	bool	unlock();
+  //	void	wait_free();
 
-    Scsi_Command cmd;
-    int err;
+  Scsi_Command cmd;
+  int err;
 
-    char *device;    // device adress
-    char ven[9];     // vendor string
-    uint32_t ven_ID; // drive vendor ID
-    char dev[17];    // model string
-    uint32_t dev_ID; // model ID
-    char fw[5];      // FirmWare
-    char serial[17]; // drive serial#
-    char TLA[5];     // TLA# - only rof Plextor PX-712, PX-716
-    uint16_t ver_id[8];
+  char *device;    // device adress
+  char ven[9];     // vendor string
+  uint32_t ven_ID; // drive vendor ID
+  char dev[17];    // model string
+  uint32_t dev_ID; // model ID
+  char fw[5];      // FirmWare
+  char serial[17]; // drive serial#
+  char TLA[5];     // TLA# - only rof Plextor PX-712, PX-716
+  uint16_t ver_id[8];
 
-    //	int	z;
+  //	int	z;
 
-    uint32_t buffer_size;     // drive buffer size
-    uint64_t capabilities;    // common capabilities
-    uint64_t rd_capabilities; // read capabilities
-    uint64_t wr_capabilities; // write capabilities
-    uint32_t wr_modes;        // write modes
-    uint32_t ven_features;    // vendor-specific features
-    uint32_t chk_features;    // media check features
+  uint32_t buffer_size;     // drive buffer size
+  uint64_t capabilities;    // common capabilities
+  uint64_t rd_capabilities; // read capabilities
+  uint64_t wr_capabilities; // write capabilities
+  uint32_t wr_modes;        // write modes
+  uint32_t ven_features;    // vendor-specific features
+  uint32_t chk_features;    // media check features
 
-    uint32_t iface_id;
-    str_if iface;
-    uint8_t loader_id;
+  uint32_t iface_id;
+  str_if iface;
+  uint8_t loader_id;
 
-    short book_plus_r;
-    short book_plus_rw;
-    short book_plus_rdl;
+  short book_plus_r;
+  short book_plus_rw;
+  short book_plus_rdl;
 
-    yamaha_features yamaha;
-    plex_features plextor;
-    plex_life life;
-    plex_as astrategy;
-    plex_silent plextor_silent;
-    pio_quiet pioneer;
-    media_info media;
-    drive_parms parms;
-    perf_desc perf;
+  yamaha_features yamaha;
+  plex_features plextor;
+  plex_life life;
+  plex_as astrategy;
+  plex_silent plextor_silent;
+  pio_quiet pioneer;
+  media_info media;
+  drive_parms parms;
+  perf_desc perf;
 
-    uint8_t *rd_buf;
-    char mmc;
+  uint8_t *rd_buf;
+  char mmc;
 
-    rpc_state rpc;
+  rpc_state rpc;
 
-    bool get_performance_fail;
-    char silent;
+  bool get_performance_fail;
+  char silent;
 
 private:
-    bool busy;
+  bool busy;
 };
 
 static const int drive_info_size = sizeof(drive_info);

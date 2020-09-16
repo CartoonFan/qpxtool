@@ -13,11 +13,11 @@
 #ifndef DB_REPORT_SELECTION
 #define DB_REPORT_SELECTION
 
-#include <QDialog>
-#include <QSqlDatabase>
 #include <QAbstractListModel>
-#include <QModelIndex>
+#include <QDialog>
 #include <QIcon>
+#include <QModelIndex>
+#include <QSqlDatabase>
 
 class QLabel;
 class QLineEdit;
@@ -29,70 +29,60 @@ class QBoxLayout;
 class QEvent;
 class QTextBrowser;
 
-class ListModel : public QAbstractListModel
-{
-    Q_OBJECT
+class ListModel : public QAbstractListModel {
+  Q_OBJECT
 public:
-    ListModel(QObject *p) : QAbstractListModel(p) {};
-    ~ListModel() {};
+  ListModel(QObject *p) : QAbstractListModel(p){};
+  ~ListModel(){};
 
-    void clear();
-    virtual int rowCount(const QModelIndex&) const;
-    virtual int columnCount(const QModelIndex&) const;
-    virtual QVariant data(const QModelIndex&, int role) const;
-    void addRow(int, QString, QIcon icon = QIcon());
-    bool setData(int, int role, QVariant);
-    void removeRow(int);
-    int  getKey(int);
+  void clear();
+  virtual int rowCount(const QModelIndex &) const;
+  virtual int columnCount(const QModelIndex &) const;
+  virtual QVariant data(const QModelIndex &, int role) const;
+  void addRow(int, QString, QIcon icon = QIcon());
+  bool setData(int, int role, QVariant);
+  void removeRow(int);
+  int getKey(int);
 
 private:
-    QList<QString>		tdata;
-    QList<QIcon>		idata;
-    QList<int>		keys;
+  QList<QString> tdata;
+  QList<QIcon> idata;
+  QList<int> keys;
 };
 
-
-
-class DbReportSelection : public QDialog
-{
-    Q_OBJECT
+class DbReportSelection : public QDialog {
+  Q_OBJECT
 
 public:
-    DbReportSelection(QString conn, QWidget *parent = NULL, Qt::WindowFlags fl = 0);
-    ~DbReportSelection();
-    int getReportID() const {
-        return report_id;
-    };
+  DbReportSelection(QString conn, QWidget *parent = NULL,
+                    Qt::WindowFlags fl = 0);
+  ~DbReportSelection();
+  int getReportID() const { return report_id; };
 
 private slots:
-    void load();
-    void search();
-    void itemActivated(const QModelIndex);
+  void load();
+  void search();
+  void itemActivated(const QModelIndex);
 
 protected:
-    bool eventFilter(QObject *o, QEvent *e);
-    static QImage getMediaLogo(quint64);
+  bool eventFilter(QObject *o, QEvent *e);
+  static QImage getMediaLogo(quint64);
 
 private:
-    void winit();
+  void winit();
 
-    QBoxLayout	*layout,
-                *layout_l,
-                *layout_pb;
-    QTextBrowser *info;
+  QBoxLayout *layout, *layout_l, *layout_pb;
+  QTextBrowser *info;
 
-    QLabel		*llabel;
-    QLineEdit	*elabel;
-    QToolButton *elabel_clear,
-                *elabel_search;
-    QListView	*list;
-    QPushButton	*pb_load,
-                *pb_cancel;
+  QLabel *llabel;
+  QLineEdit *elabel;
+  QToolButton *elabel_clear, *elabel_search;
+  QListView *list;
+  QPushButton *pb_load, *pb_cancel;
 
-    ListModel	*model;
-    QSqlDatabase db;
-    int			report_id;
+  ListModel *model;
+  QSqlDatabase db;
+  int report_id;
 };
 
 #endif // DB_REPORT_SELECTION
-

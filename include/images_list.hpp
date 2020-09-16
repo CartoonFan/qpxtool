@@ -12,8 +12,8 @@
 #ifndef __images_list_h
 #define __images_list_h
 
-#include <QScrollArea>
 #include <QList>
+#include <QScrollArea>
 
 #ifndef QT_NO_DEBUG
 //#define __images_list_debug
@@ -24,49 +24,44 @@ class QWidget;
 class ImageLabel;
 class ImageDialog;
 
-
-class ImagesList : public QScrollArea
-{
-    Q_OBJECT
+class ImagesList : public QScrollArea {
+  Q_OBJECT
 
 public:
-    enum ListDir {
-        Vertical   = 1,
-        Horizontal = 2
-    };
+  enum ListDir { Vertical = 1, Horizontal = 2 };
 
-    ImagesList(int minW, QWidget *parent, ListDir	orient = Vertical);
-    ImagesList(int minW, QSize isize, QWidget *parent, ListDir orient = Vertical);
-    ImagesList(int minW, int iw, int ih, QWidget *parent, ListDir orient = Vertical);
-    ~ImagesList();
+  ImagesList(int minW, QWidget *parent, ListDir orient = Vertical);
+  ImagesList(int minW, QSize isize, QWidget *parent, ListDir orient = Vertical);
+  ImagesList(int minW, int iw, int ih, QWidget *parent,
+             ListDir orient = Vertical);
+  ~ImagesList();
 
-    int addLabel(QString label, QImage image, int imgid=-1);
+  int addLabel(QString label, QImage image, int imgid = -1);
 
 public slots:
-    void clear();
+  void clear();
 
 private slots:
-    void clicked(int);
+  void clicked(int);
 
 signals:
-    void selected(int);
+  void selected(int);
 
 protected:
-    void keyPressEvent(QKeyEvent*);
+  void keyPressEvent(QKeyEvent *);
 
 private:
-    void winit(ListDir orient);
+  void winit(ListDir orient);
 
-    int	current;
-//	QScrollArea *w;
-    void clear_img();
-    QWidget		*cwidget;
-    QBoxLayout	*clayout;
+  int current;
+  //	QScrollArea *w;
+  void clear_img();
+  QWidget *cwidget;
+  QBoxLayout *clayout;
 
-    QList<ImageLabel*>	images_l;
-    int iconw, iconh;
-    int minW;
+  QList<ImageLabel *> images_l;
+  int iconw, iconh;
+  int minW;
 };
 
 #endif
-

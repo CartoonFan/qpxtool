@@ -15,28 +15,26 @@
 
 #include <QWidget>
 
-class SplitButton : public QWidget
-{
-    Q_OBJECT
+class SplitButton : public QWidget {
+  Q_OBJECT
 
 public:
-    SplitButton(Qt::Orientation o, QWidget *p=0, Qt::WindowFlags f=0);
-    ~SplitButton();
+  SplitButton(Qt::Orientation o, QWidget *p = 0, Qt::WindowFlags f = 0);
+  ~SplitButton();
 
 protected:
-    void paintEvent(QPaintEvent*);
-    void mousePressEvent(QMouseEvent*);
-    void mouseReleaseEvent(QMouseEvent*);
-    void enterEvent(QEvent*);
-    void leaveEvent(QEvent*);
+  void paintEvent(QPaintEvent *);
+  void mousePressEvent(QMouseEvent *);
+  void mouseReleaseEvent(QMouseEvent *);
+  void enterEvent(QEvent *);
+  void leaveEvent(QEvent *);
 
 private:
-    Qt::Orientation orient;
-    bool mouseFocus;
+  Qt::Orientation orient;
+  bool mouseFocus;
 
 signals:
-    void clicked();
+  void clicked();
 };
 
 #endif
-
