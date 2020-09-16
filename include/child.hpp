@@ -18,14 +18,14 @@
 #include <sys/types.h>
 
 typedef struct {
-    bool used;
-    struct sockaddr_in cliaddr;
-    int connfd;
+  bool used;
+  struct sockaddr_in cliaddr;
+  int connfd;
 } child_arg_t;
 
 typedef struct {
-    thread_t tid;
-    child_arg_t arg;
+  thread_t tid;
+  child_arg_t arg;
 } child_t;
 
 extern child_t childs[CLIENTS_MAX + 1];

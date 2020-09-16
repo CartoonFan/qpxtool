@@ -20,41 +20,41 @@
 #include "version.hpp"
 
 AboutDialog::AboutDialog(QWidget *p, Qt::WindowFlags fl) : QDialog(p, fl) {
-    QFile f;
+  QFile f;
 
-    setWindowTitle(tr("About QPxTool"));
+  setWindowTitle(tr("About QPxTool"));
 
-    layout = new QVBoxLayout(this);
-    layout->setMargin(3);
-    layout->setSpacing(3);
+  layout = new QVBoxLayout(this);
+  layout->setMargin(3);
+  layout->setSpacing(3);
 
-    lversion = new QLabel("QPxTool version " VERSION, this);
-    lversion->setAlignment(Qt::AlignCenter);
-    layout->addWidget(lversion);
+  lversion = new QLabel("QPxTool version " VERSION, this);
+  lversion->setAlignment(Qt::AlignCenter);
+  layout->addWidget(lversion);
 
-    tw = new QTabWidget(this);
-    layout->addWidget(tw);
+  tw = new QTabWidget(this);
+  layout->addWidget(tw);
 
-    te_about = new QTextEdit(this);
-    te_about->setReadOnly(true);
-    te_licence = new QTextEdit(this);
-    te_licence->setReadOnly(true);
-    te_licence->setFontFamily("Monospace");
+  te_about = new QTextEdit(this);
+  te_about->setReadOnly(true);
+  te_licence = new QTextEdit(this);
+  te_licence->setReadOnly(true);
+  te_licence->setFontFamily("Monospace");
 
-    f.setFileName(":about.html");
-    f.open(QIODevice::ReadOnly);
-    te_about->setHtml(f.readAll());
-    f.close();
+  f.setFileName(":about.html");
+  f.open(QIODevice::ReadOnly);
+  te_about->setHtml(f.readAll());
+  f.close();
 
-    f.setFileName(":COPYING");
-    f.open(QIODevice::ReadOnly);
-    te_licence->setPlainText(f.readAll());
-    f.close();
+  f.setFileName(":COPYING");
+  f.open(QIODevice::ReadOnly);
+  te_licence->setPlainText(f.readAll());
+  f.close();
 
-    tw->addTab(te_about, tr("About QPxTool"));
-    tw->addTab(te_licence, tr("Licence"));
+  tw->addTab(te_about, tr("About QPxTool"));
+  tw->addTab(te_licence, tr("Licence"));
 
-    resize(600, 400);
+  resize(600, 400);
 }
 
 AboutDialog::~AboutDialog() {}
