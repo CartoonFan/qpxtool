@@ -16,7 +16,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
-
+#include <iostream>
 #include <unistd.h>
 //#include <sys/time.h>
 
@@ -1773,7 +1773,7 @@ int test_dma_speed(drive_info *drive, long msecs) {
   drive->silent--;
 
   uint32_t buf_size = read_echo_buffer_size(drive);
-  printf("Echo buffer size: %d\n", buf_size);
+  std::cout << "Echo buffer size: " << buf_size << "\n";
 
   buf_size = 4096;
 
