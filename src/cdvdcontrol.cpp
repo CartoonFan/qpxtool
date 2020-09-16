@@ -511,7 +511,6 @@ auto main(int argc, char *argv[]) -> int {
   const int six_bit_limit_minus_one = 63;
   const int eight_bit_limit = 256;
   int i = 0;
-  int drvcnt = 0;
   char *device = nullptr;
   drive_info *dev = nullptr;
   char aslfn[eleven_bit_limit];
@@ -1247,6 +1246,7 @@ auto main(int argc, char *argv[]) -> int {
   }
 
   if (flags & FL_SCAN) {
+    int drvcnt = 0;
     drvcnt = scanbus(DEV_PLEXTOR | DEV_YAMAHA);
     if (!drvcnt)
       std::cout << "ERR: no drives found!\n";

@@ -168,7 +168,6 @@ readline_end:
 }
 
 void child_proc(child_arg_t *arg) {
-  ssize_t n;
   char speeds[16];
   char linei[MAXLINE + 1];
   char lineo[MAXLINE + IDENT_LEN + 1];
@@ -185,6 +184,7 @@ void child_proc(child_arg_t *arg) {
   write(arg->connfd, IDENTV, IDENTV_LEN);
 #endif
   for (;;) {
+    ssize_t n;
     mode = none;
     if (term)
       return;

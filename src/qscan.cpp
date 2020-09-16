@@ -495,27 +495,27 @@ int main(int argc, char **argv) {
 //			printf("Yamaha ForceSpeed   : %s\n", drive->yamaha.forcespeed ? "ON":"OFF");
 #endif
     printf(CAPVND "Hide CD-R         : %s\n",
-           dev->ven_features & PX_HCDRSS ? (dev->plextor.hcdr ? "ON" : "OFF")
+           (dev->ven_features & PX_HCDRSS) ? (dev->plextor.hcdr ? "ON" : "OFF")
                                          : "-");
     printf(CAPVND "SingleSession     : %s\n",
-           dev->ven_features & PX_HCDRSS ? (dev->plextor.sss ? "ON" : "OFF")
+           (dev->ven_features & PX_HCDRSS) ? (dev->plextor.sss ? "ON" : "OFF")
                                          : "-");
     printf(CAPVND "SpeedRead         : %s\n",
-           dev->ven_features & PX_SPDREAD
+           (dev->ven_features & PX_SPDREAD)
                ? (dev->plextor.spdread ? "ON" : "OFF")
                : "-");
     printf(CAPVND "Silent mode       : %s\n",
-           dev->ven_features & PX_SILENT
+           (dev->ven_features & PX_SILENT)
                ? (dev->plextor_silent.state ? "ON" : "OFF")
                : "-");
     if ((dev->ven_features & PX_SILENT) && (dev->plextor_silent.state))
       plextor_print_silentmode_state(dev);
     printf(CAPVND "SecuRec           : %s\n",
-           dev->ven_features & PX_SECUREC
+           (dev->ven_features & PX_SECUREC)
                ? (dev->plextor.securec ? "ON" : "OFF")
                : "-");
     printf(CAPVND "PoweRec           : %s\n",
-           dev->ven_features & PX_POWEREC
+           (dev->ven_features & PX_POWEREC)
                ? (dev->plextor.powerec_state ? "ON" : "OFF")
                : "-");
     if (dev->ven_features & PX_POWEREC) {
@@ -531,33 +531,33 @@ int main(int argc, char **argv) {
     if (dev->ven_features & PX_GIGAREC)
       print_gigarec_value(dev);
     printf(CAPVND "VariRec CD        : %s\n",
-           dev->ven_features & PX_VARIREC_CD
+           (dev->ven_features & PX_VARIREC_CD)
                ? (dev->plextor.varirec_state_cd ? "ON" : "OFF")
                : "-");
     if ((dev->ven_features & PX_VARIREC_CD) && (dev->plextor.varirec_state_cd))
       print_varirec(dev, VARIREC_CD);
     if (dev->wr_capabilities & DEVICE_DVD) {
       printf(CAPVND "VariRec DVD       : %s\n",
-             dev->ven_features & PX_VARIREC_DVD
+             (dev->ven_features & PX_VARIREC_DVD)
                  ? (dev->plextor.varirec_state_dvd ? "ON" : "OFF")
                  : "-");
       if ((dev->ven_features & PX_VARIREC_DVD) &&
           (dev->plextor.varirec_state_dvd))
         print_varirec(dev, VARIREC_DVD);
       printf(CAPVND "DVD+R bitset      : %s\n",
-             dev->ven_features & PX_BITSET_R
+             (dev->ven_features & PX_BITSET_R)
                  ? (dev->book_plus_r ? "DVD-ROM book" : "DVD+R book")
                  : "-");
       printf(CAPVND "DVD+R DL bitset   : %s\n",
-             dev->ven_features & PX_BITSET_RDL
+             (dev->ven_features & PX_BITSET_RDL)
                  ? (dev->book_plus_rdl ? "DVD-ROM book" : "DVD+R DL book")
                  : "-");
       printf(CAPVND "DVD+ testwrite    : %s\n",
-             dev->ven_features & PX_SIMUL_PLUS
+             (dev->ven_features & PX_SIMUL_PLUS)
                  ? (dev->plextor.testwrite_dvdplus ? "ON" : "OFF")
                  : "-");
       printf(CAPVND "AutoStrategy      : %s%s\n",
-             dev->ven_features & PX_ASTRATEGY ? "YES" : "-",
+             (dev->ven_features & PX_ASTRATEGY) ? "YES" : "-",
              ((dev->dev_ID == PLEXTOR_755) || (dev->dev_ID == PLEXTOR_760))
                  ? " (EXTENDED)"
                  : "");
@@ -567,7 +567,7 @@ int main(int argc, char **argv) {
       }
     }
     printf(CAPVND "PlexEraser        : %s\n",
-           dev->ven_features & PX_ERASER ? "YES" : "-");
+           (dev->ven_features & PX_ERASER) ? "YES" : "-");
 
     printf("\nDevice Read/Write capabilities:\n");
     for (int idx = 0;
