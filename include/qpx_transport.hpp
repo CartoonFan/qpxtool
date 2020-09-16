@@ -96,17 +96,13 @@ extern void sperror(const char *cmd, int err); //,  Scsi_Command *scsi);
 
 class autofree {
 private:
-    unsigned char *ptr;
+  unsigned char *ptr;
 
 public:
-    autofree();
-    ~autofree();
-    unsigned char *operator=(unsigned char *str) {
-        return ptr = str;
-    }
-    operator unsigned char *() {
-        return ptr;
-    }
+  autofree();
+  ~autofree();
+  unsigned char *operator=(unsigned char *str) { return ptr = str; }
+  operator unsigned char *() { return ptr; }
 };
 
 #if defined(__linux) || defined(__GNU__)
@@ -135,9 +131,9 @@ public:
 #endif
 
 typedef enum {
-    NONE = CGC_DATA_NONE,  // 3
-    READ = CGC_DATA_READ,  // 2
-    WRITE = CGC_DATA_WRITE // 1
+  NONE = CGC_DATA_NONE,  // 3
+  READ = CGC_DATA_READ,  // 2
+  WRITE = CGC_DATA_WRITE // 1
 } Direction;
 #ifdef SG_IO
 
@@ -147,22 +143,17 @@ static const int Dir_xlate[4] = { // should have been defined
     0,                 // implementation-dependent...
     SG_DXFER_TO_DEV,   // 1,CGC_DATA_WRITE
     SG_DXFER_FROM_DEV, // 2,CGC_DATA_READ
-    SG_DXFER_NONE
-};    // 3,CGC_DATA_NONE
+    SG_DXFER_NONE};    // 3,CGC_DATA_NONE
 
 class USE_SG_IO {
 private:
-    int yes_or_no;
+  int yes_or_no;
 
 public:
-    USE_SG_IO();
-    ~USE_SG_IO();
-    operator int() const {
-        return yes_or_no;
-    }
-    int operator[](Direction dir) const {
-        return Dir_xlate[dir];
-    }
+  USE_SG_IO();
+  ~USE_SG_IO();
+  operator int() const { return yes_or_no; }
+  int operator[](Direction dir) const { return Dir_xlate[dir]; }
 };
 
 static const class USE_SG_IO use_sg_io;
@@ -171,35 +162,35 @@ static const class USE_SG_IO use_sg_io;
 
 class Scsi_Command {
 private:
-    //    long cmd_time;
-    int fd, autoclose;
-    char *filename;
-    struct cdrom_generic_command cgc;
-    union sense_union {
-        struct request_sense s;
-        unsigned char u[18];
-    } _sense;
+  //    long cmd_time;
+  int fd, autoclose;
+  char *filename;
+  struct cdrom_generic_command cgc;
+  union sense_union {
+    struct request_sense s;
+    unsigned char u[18];
+  } _sense;
 #ifdef SG_IO
-    struct sg_io_hdr sg_io;
+  struct sg_io_hdr sg_io;
 #else
-    struct {
-        int cmd_len, timeout;
-    } sg_io;
+  struct {
+    int cmd_len, timeout;
+  } sg_io;
 #endif
 public:
-    Scsi_Command();
-    Scsi_Command(int f);
-    Scsi_Command(void *f);
-    ~Scsi_Command();
-    int associate(const char *file, const struct stat *ref);
-    unsigned char &operator[](size_t i);
-    unsigned char &operator()(size_t i);
-    unsigned char *sense();
-    void timeout(int i);
-    size_t residue();
-    int transport(Direction dir = NONE, void *buf = NULL, size_t sz = 0);
-    int umount(int f);
-    int is_reload_needed();
+  Scsi_Command();
+  Scsi_Command(int f);
+  Scsi_Command(void *f);
+  ~Scsi_Command();
+  int associate(const char *file, const struct stat *ref);
+  unsigned char &operator[](size_t i);
+  unsigned char &operator()(size_t i);
+  unsigned char *sense();
+  void timeout(int i);
+  size_t residue();
+  int transport(Direction dir = NONE, void *buf = NULL, size_t sz = 0);
+  int umount(int f);
+  int is_reload_needed();
 };
 
 #elif defined(__OpenBSD__) || defined(__NetBSD__)
@@ -222,24 +213,24 @@ typedef enum { NONE = 0, READ = SCCMD_READ, WRITE = SCCMD_WRITE } Direction;
 
 class Scsi_Command {
 private:
-    int fd, autoclose;
-    char *filename;
-    scsireq_t req;
+  int fd, autoclose;
+  char *filename;
+  scsireq_t req;
 
 public:
-    Scsi_Command();
-    Scsi_Command(int f);
-    Scsi_Command(void *f);
-    ~Scsi_Command();
-    int associate(const char *file, const struct stat *ref);
-    unsigned char &operator[](size_t i);
-    unsigned char &operator()(size_t i);
-    unsigned char *sense();
-    void timeout(int i);
-    size_t residue();
-    int transport(Direction dir = NONE, void *buf = NULL, size_t sz = 0);
-    int umount(int f);
-    int is_reload_needed();
+  Scsi_Command();
+  Scsi_Command(int f);
+  Scsi_Command(void *f);
+  ~Scsi_Command();
+  int associate(const char *file, const struct stat *ref);
+  unsigned char &operator[](size_t i);
+  unsigned char &operator()(size_t i);
+  unsigned char *sense();
+  void timeout(int i);
+  size_t residue();
+  int transport(Direction dir = NONE, void *buf = NULL, size_t sz = 0);
+  int umount(int f);
+  int is_reload_needed();
 };
 
 #elif defined(__FreeBSD__) || defined(__FreeBSD_kernel__)
@@ -265,34 +256,34 @@ typedef off_t off64_t;
 #define ioctl_fd (((struct cam_device *)ioctl_handle)->fd)
 
 typedef enum {
-    NONE = CAM_DIR_NONE,
-    READ = CAM_DIR_IN,
-    WRITE = CAM_DIR_OUT
+  NONE = CAM_DIR_NONE,
+  READ = CAM_DIR_IN,
+  WRITE = CAM_DIR_OUT
 } Direction;
 
 class Scsi_Command {
 private:
-    int fd, autoclose;
-    char *filename;
-    struct cam_device *cam;
-    union ccb ccb;
+  int fd, autoclose;
+  char *filename;
+  struct cam_device *cam;
+  union ccb ccb;
 
 public:
-    Scsi_Command();
-    Scsi_Command(int f);
-    Scsi_Command(void *f);
-    ~Scsi_Command();
+  Scsi_Command();
+  Scsi_Command(int f);
+  Scsi_Command(void *f);
+  ~Scsi_Command();
 
-    int associate(const char *file, const struct stat *ref);
-    unsigned char &operator[](size_t i);
-    unsigned char &operator()(size_t i);
-    unsigned char *sense();
-    void timeout(int i);
-    size_t residue();
-    int transport(Direction dir = NONE, void *buf = NULL, size_t sz = 0);
-    int umount(int f);
+  int associate(const char *file, const struct stat *ref);
+  unsigned char &operator[](size_t i);
+  unsigned char &operator()(size_t i);
+  unsigned char *sense();
+  void timeout(int i);
+  size_t residue();
+  int transport(Direction dir = NONE, void *buf = NULL, size_t sz = 0);
+  int umount(int f);
 #define RELOAD_NEVER_NEEDED // according to Matthew Dillon
-    int is_reload_needed();
+  int is_reload_needed();
 };
 
 //*
@@ -312,40 +303,40 @@ public:
 #endif
 
 typedef enum {
-    NONE = SCSI_IOCTL_DATA_UNSPECIFIED,
-    READ = SCSI_IOCTL_DATA_IN,
-    WRITE = SCSI_IOCTL_DATA_OUT
+  NONE = SCSI_IOCTL_DATA_UNSPECIFIED,
+  READ = SCSI_IOCTL_DATA_IN,
+  WRITE = SCSI_IOCTL_DATA_OUT
 } Direction;
 
 typedef struct {
-    SCSI_PASS_THROUGH_DIRECT spt;
-    unsigned char sense[18];
+  SCSI_PASS_THROUGH_DIRECT spt;
+  unsigned char sense[18];
 } SPKG;
 
 class Scsi_Command {
 private:
-    HANDLE fd;
-    int autoclose;
-    char *filename;
-    SPKG p;
+  HANDLE fd;
+  int autoclose;
+  char *filename;
+  SPKG p;
 
 public:
-    Scsi_Command();
-    Scsi_Command(void *f);
-    ~Scsi_Command();
-    int associate(const char *file, const struct stat *ref = NULL);
-    unsigned char &operator[](size_t i);
-    unsigned char &operator()(size_t i);
-    unsigned char *sense();
-    void timeout(int i);
-    size_t residue() {
-        return 0; // bogus
-    }
-    int transport(Direction dir = NONE, void *buf = NULL, size_t sz = 0);
-    int umount(int f = -1);
+  Scsi_Command();
+  Scsi_Command(void *f);
+  ~Scsi_Command();
+  int associate(const char *file, const struct stat *ref = NULL);
+  unsigned char &operator[](size_t i);
+  unsigned char &operator()(size_t i);
+  unsigned char *sense();
+  void timeout(int i);
+  size_t residue() {
+    return 0; // bogus
+  }
+  int transport(Direction dir = NONE, void *buf = NULL, size_t sz = 0);
+  int umount(int f = -1);
 
 #define RELOAD_NEVER_NEEDED
-    int is_reload_needed();
+  int is_reload_needed();
 };
 //*/
 
@@ -390,42 +381,42 @@ static int iokit_err(IOReturn ioret, SCSITaskStatus stat,
   })
 
 typedef enum {
-    NONE = kSCSIDataTransfer_NoDataTransfer,
-    READ = kSCSIDataTransfer_FromTargetToInitiator,
-    WRITE = kSCSIDataTransfer_FromInitiatorToTarget
+  NONE = kSCSIDataTransfer_NoDataTransfer,
+  READ = kSCSIDataTransfer_FromTargetToInitiator,
+  WRITE = kSCSIDataTransfer_FromInitiatorToTarget
 } Direction;
 
 class Scsi_Command {
 private:
-    int autoclose, _timeout;
-    char *filename;
-    io_object_t scsiob;
-    IOCFPlugInInterface **plugin;
-    MMCDeviceInterface **mmcdif;
-    SCSITaskDeviceInterface **taskif;
-    unsigned char cdb[16];
-    union {
-        SCSI_Sense_Data s;
-        unsigned char u[18];
-    } _sense;
-    size_t cdblen, resid;
+  int autoclose, _timeout;
+  char *filename;
+  io_object_t scsiob;
+  IOCFPlugInInterface **plugin;
+  MMCDeviceInterface **mmcdif;
+  SCSITaskDeviceInterface **taskif;
+  unsigned char cdb[16];
+  union {
+    SCSI_Sense_Data s;
+    unsigned char u[18];
+  } _sense;
+  size_t cdblen, resid;
 
 public:
-    Scsi_Command();
-    Scsi_Command(void *f);
-    ~Scsi_Command();
+  Scsi_Command();
+  Scsi_Command(void *f);
+  ~Scsi_Command();
 
-    int associate(const char *file, const struct stat *ref = NULL);
+  int associate(const char *file, const struct stat *ref = NULL);
 
-    unsigned char &operator[](size_t i);
-    unsigned char &operator()(size_t i);
-    unsigned char *sense();
-    void timeout(int i);
-    size_t residue();
-    int transport(Direction dir = NONE, void *buf = NULL, size_t sz = 0);
-    int umount(int f = -1);
+  unsigned char &operator[](size_t i);
+  unsigned char &operator()(size_t i);
+  unsigned char *sense();
+  void timeout(int i);
+  size_t residue();
+  int transport(Direction dir = NONE, void *buf = NULL, size_t sz = 0);
+  int umount(int f = -1);
 #define RELOAD_NEVER_NEEDED
-    int is_reload_needed(int not_used);
+  int is_reload_needed(int not_used);
 };
 
 #else
