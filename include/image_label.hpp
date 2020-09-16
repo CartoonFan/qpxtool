@@ -22,41 +22,45 @@ class QBoxLayout;
 
 class ImageLabel : public QWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	ImageLabel(int minW, QString label, QImage image, int idx, QWidget *parent);
-	ImageLabel(int minW, QSize is, QString label, QImage image, int idx, QWidget *parent);
-	ImageLabel(int minW, int iw, int ih, QString label, QImage image, int idx, QWidget *parent);
-	~ImageLabel();
-	inline void setLabel(QString label) { name = label; };
-	inline void setImage(QImage image) { img = image; };
+    ImageLabel(int minW, QString label, QImage image, int idx, QWidget *parent);
+    ImageLabel(int minW, QSize is, QString label, QImage image, int idx, QWidget *parent);
+    ImageLabel(int minW, int iw, int ih, QString label, QImage image, int idx, QWidget *parent);
+    ~ImageLabel();
+    inline void setLabel(QString label) {
+        name = label;
+    };
+    inline void setImage(QImage image) {
+        img = image;
+    };
 
 signals:
-	void selected(int);
+    void selected(int);
 
 public slots:
-	void select(int);
+    void select(int);
 
 protected:
-	void mousePressEvent(QMouseEvent*);
+    void mousePressEvent(QMouseEvent*);
 
 #ifdef HIGHLIGHT_FOCUSED
-	void enterEvent(QEvent*);
-	void leaveEvent(QEvent*);
+    void enterEvent(QEvent*);
+    void leaveEvent(QEvent*);
 #endif
-	void paintEvent(QPaintEvent*);
+    void paintEvent(QPaintEvent*);
 
 private:
-	bool	ck;
+    bool	ck;
 #ifdef HIGHLIGHT_FOCUSED
-	bool	focus;
+    bool	focus;
 #endif
-	QString name;
-	QImage	img;
-	int id;
-	int iconw, iconh;
-	int minW;
+    QString name;
+    QImage	img;
+    int id;
+    int iconw, iconh;
+    int minW;
 };
 
 #endif

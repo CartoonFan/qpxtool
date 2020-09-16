@@ -24,38 +24,38 @@
 
 DBParams::DBParams()
 {
-	driver = "QPSQL";
-	host = "localhost";
-	port = 5432;
-	conn_name = "new connection";
+    driver = "QPSQL";
+    host = "localhost";
+    port = 5432;
+    conn_name = "new connection";
 };
 
 DBParams::DBParams(QString idriver,
-			QString ihost, 
-			QString iname,
-			QString iuser, 
-			QString ipass,
-			int iport
-		)
+                   QString ihost,
+                   QString iname,
+                   QString iuser,
+                   QString ipass,
+                   int iport
+                  )
 {
-	driver = idriver;
-	host = ihost;
-	name = iname;
-	user = iuser;
-	pass = ipass;
-	port = iport;
-	conn_name = "";
+    driver = idriver;
+    host = ihost;
+    name = iname;
+    user = iuser;
+    pass = ipass;
+    port = iport;
+    conn_name = "";
 };
 
 bool SqlProbeConnection(const DBParams& par, QString CONNECTION)
 {
-	QSqlDatabase Sql_DB;
+    QSqlDatabase Sql_DB;
     QString r;
     if (SqlOpenConnection(par, CONNECTION)) {
-		SqlCloseConnection(CONNECTION);
-		return 1;
+        SqlCloseConnection(CONNECTION);
+        return 1;
     } else {
-		return 0;
+        return 0;
     }
 }
 
@@ -64,27 +64,27 @@ bool SqlOpenConnection(const DBParams& par, QString CONNECTION)
 #ifndef QT_NO_DEBUG
     qDebug("Connect...");
 #endif
-	QSqlDatabase db;
-	if (CONNECTION.isEmpty()) {
-		db = QSqlDatabase::addDatabase(par.driver);
-	} else {
-		db = QSqlDatabase::addDatabase(par.driver, CONNECTION);
-	}
+    QSqlDatabase db;
+    if (CONNECTION.isEmpty()) {
+        db = QSqlDatabase::addDatabase(par.driver);
+    } else {
+        db = QSqlDatabase::addDatabase(par.driver, CONNECTION);
+    }
     db.setHostName( par.host );
     db.setDatabaseName( par.name );
     db.setUserName( par.user );
     db.setPassword( par.pass );
     db.setPort( par.port );
-	if ( !db.open() ) {
+    if ( !db.open() ) {
 #ifndef QT_NO_DEBUG
-		qDebug() << "Failed to open database: (" << par.driver << ")" << par.name << "@" << par.host << ":";
-		qDebug() << db.lastError().driverText();
-		qDebug() << db.lastError().databaseText();
+        qDebug() << "Failed to open database: (" << par.driver << ")" << par.name << "@" << par.host << ":";
+        qDebug() << db.lastError().driverText();
+        qDebug() << db.lastError().databaseText();
 #endif
-		QMessageBox::critical(0,
-		    "Error",
-		    db.lastError().text());
-		return 0;
+        QMessageBox::critical(0,
+                              "Error",
+                              db.lastError().text());
+        return 0;
     }
     return 1;
 }
@@ -94,16 +94,16 @@ void SqlCloseConnection(QString CONNECTION)
 #ifndef QT_NO_DEBUG
     qDebug( "Disconnecting..." );
 #endif
-	{
-		QSqlDatabase db;
-		if (CONNECTION.isEmpty()) {
-			db = QSqlDatabase::database();
-		} else {
-			db = QSqlDatabase::database(CONNECTION);
-		}
-		if (db.isOpen()) db.close();
-	}
+    {
+        QSqlDatabase db;
+        if (CONNECTION.isEmpty()) {
+            db = QSqlDatabase::database();
+        } else {
+            db = QSqlDatabase::database(CONNECTION);
+        }
+        if (db.isOpen()) db.close();
+    }
 //    Sql_DB.removeDatabase(CONNECTION);
-	if (!CONNECTION.isEmpty()) QSqlDatabase::removeDatabase(CONNECTION);
+    if (!CONNECTION.isEmpty()) QSqlDatabase::removeDatabase(CONNECTION);
 }
 

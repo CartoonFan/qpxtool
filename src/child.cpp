@@ -145,18 +145,18 @@ int readline(int fd, char *buf, int maxlen, fdtype_t fdtype)
                 if (debug && !daemonized)
                     std::cout << "read = " << r << ", " << errno << ", " << strerror(errno) << "\n";
                 switch (errno) {
-                    case EAGAIN:
+                case EAGAIN:
                     //  printf("EAGAIN\n");
-                        continue;
-                    case EINTR: 
+                    continue;
+                case EINTR:
                     //  printf("EINTR\n");
-                        continue;
-                    default:
-                        return -1;
+                    continue;
+                default:
+                    return -1;
                 }
             }
             if (!r) return -1;
-    // look for CR/LF/CR+LF
+            // look for CR/LF/CR+LF
             if (fdtype == FD_SOCKET) {
                 if (buf[cnt] == 0x0A || buf[cnt] == 0x0D) goto readline_end;
             } else if (cnt && (buf[cnt-1] == 0x0A || buf[cnt-1] == 0x0D)) {
@@ -204,7 +204,7 @@ void child_proc(child_arg_t *arg)
 #endif
         if ((n = readline(arg->connfd, linei, MAXLINE, FD_SOCKET)) < 0)
         {
-        //if ((n = fgets(line, MAXLINE, arg->connfd)) == EOF) {
+            //if ((n = fgets(line, MAXLINE, arg->connfd)) == EOF) {
             //printf("Client disconnected\n");
             return;
         }
@@ -299,9 +299,9 @@ void child_proc(child_arg_t *arg)
             }
             continue;
         } else {
-        //  sprintf(lineo, "str len: %d, cmd len: %d. '%d'\n", n, strlen(linei), linei);
+            //  sprintf(lineo, "str len: %d, cmd len: %d. '%d'\n", n, strlen(linei), linei);
             //sprintf(lineo, "str len: %d, cmd len: %d, last %02x %02x\n", n, strlen(linei), linei[n-2], linei[n-1]);
-        //  write(arg->connfd, lineo, strlen(lineo));
+            //  write(arg->connfd, lineo, strlen(lineo));
             std::cout << lineo << "QSCAND: invalid command. try \"help\"\n";
 #ifdef _WIN32
             send(arg->connfd, lineo, strlen(lineo), 0);
@@ -309,7 +309,7 @@ void child_proc(child_arg_t *arg)
             write(arg->connfd, lineo, strlen(lineo));
 #endif
         }
-        
+
         if (mode != none) {
             int    argc = 0;
             char **argv = (char**) malloc(sizeof(char*));
@@ -317,7 +317,7 @@ void child_proc(child_arg_t *arg)
             if ( ((mode == scan) || (mode == dinfo) || (mode == minfo))  && !strlen(device)) {
 #ifdef DAEMON_EN
                 if (daemonized)
-                // TODO: Redirect cout statements to file to emulate syslog behavior
+                    // TODO: Redirect cout statements to file to emulate syslog behavior
                     std::cout << LOG_WARNING << "QSCAND: No device specified!\n";
                 else
 #endif
@@ -327,7 +327,7 @@ void child_proc(child_arg_t *arg)
             if ( (mode == scan) && !strlen(test)) {
 #ifdef DAEMON_EN
                 if (daemonized)
-                // TODO: Redirect cout statements to file to emulate syslog behavior
+                    // TODO: Redirect cout statements to file to emulate syslog behavior
                     std::cout << LOG_WARNING << "QSCAND: No test specified!\n";
                 else
 #endif
@@ -336,53 +336,53 @@ void child_proc(child_arg_t *arg)
             }
             argv = add_arg(argv, &argc, "qscan");
             switch (mode) {
-                case scanbus:
-                    argv = add_arg(argv, &argc, "-l");
-                    break;
-                case scan:
-                    argv = add_arg(argv, &argc, "-d");
-                    argv = add_arg(argv, &argc, device);
+            case scanbus:
+                argv = add_arg(argv, &argc, "-l");
+                break;
+            case scan:
+                argv = add_arg(argv, &argc, "-d");
+                argv = add_arg(argv, &argc, device);
 
-                    argv = add_arg(argv, &argc, "-t");
-                    argv = add_arg(argv, &argc, test);
+                argv = add_arg(argv, &argc, "-t");
+                argv = add_arg(argv, &argc, test);
 
-                    std::cout << speed;
-                    argv = add_arg(argv, &argc, "-s");
-                    argv = add_arg(argv, &argc, speeds);
+                std::cout << speed;
+                argv = add_arg(argv, &argc, "-s");
+                argv = add_arg(argv, &argc, speeds);
 
-                    if (!strcmp(test, "wt") && !WT_simul)
-                        argv = add_arg(argv, &argc, "-W");
-                    break;
-                case dinfo:
-                    argv = add_arg(argv, &argc, "-d");
-                    argv = add_arg(argv, &argc, device);
-                    argv = add_arg(argv, &argc, "-Ip");
-                    break;
-                case minfo:
-                    argv = add_arg(argv, &argc, "-d");
-                    argv = add_arg(argv, &argc, device);
-                    argv = add_arg(argv, &argc, "-m");
-                    break;
-                case help:
-                    argv = add_arg(argv, &argc, "-h");
-                    break;
-                default:
-                    if (debug && !daemonized)
-                        std::cout << "unknown mode: " << mode << "\n";
-                    return;
+                if (!strcmp(test, "wt") && !WT_simul)
+                    argv = add_arg(argv, &argc, "-W");
+                break;
+            case dinfo:
+                argv = add_arg(argv, &argc, "-d");
+                argv = add_arg(argv, &argc, device);
+                argv = add_arg(argv, &argc, "-Ip");
+                break;
+            case minfo:
+                argv = add_arg(argv, &argc, "-d");
+                argv = add_arg(argv, &argc, device);
+                argv = add_arg(argv, &argc, "-m");
+                break;
+            case help:
+                argv = add_arg(argv, &argc, "-h");
+                break;
+            default:
+                if (debug && !daemonized)
+                    std::cout << "unknown mode: " << mode << "\n";
+                return;
             }
 
             if ((cpid = createChildProcess(argv, &pipefd, NULL)) == -1) {
 #ifdef DAEMON_EN
                 if (daemonized)
-                // TODO: Redirect cout statements to file to emulate syslog behavior
+                    // TODO: Redirect cout statements to file to emulate syslog behavior
                     std::cout << LOG_ERR << "Can't start child!\n";
                 else
 #endif
                     std::cout << "QSCAND: Can't start child!\n";
                 return;
             } else {
-                // parent. copy messages from pipe to socket 
+                // parent. copy messages from pipe to socket
                 close(pipefd[1]); // unused write end
 
                 std::cout << "QSCAND: child created, reading from pipe...\n";
@@ -393,10 +393,10 @@ void child_proc(child_arg_t *arg)
 #endif
                 int wn, woffs;
                 while((n = readline((int)pipefd[0], lineo, MAXLINE, FD_PIPE))>=0) {
-            //  while((n = read(pipefd[0], lineo, MAXLINE)) > 0) {
-        //          sprintf(linei,"\nread #%d: %d bytes\n\0",idx, n);
-        //          write(arg->connfd, linei, strlen(linei));
-        //          idx++;
+                    //  while((n = read(pipefd[0], lineo, MAXLINE)) > 0) {
+                    //          sprintf(linei,"\nread #%d: %d bytes\n\0",idx, n);
+                    //          write(arg->connfd, linei, strlen(linei));
+                    //          idx++;
 //                  printf(lineo);
                     woffs=0;
                     while (woffs<n) {
@@ -407,10 +407,10 @@ void child_proc(child_arg_t *arg)
 #endif
                         if (wn<0) {
                             switch (errno) {
-                                case EAGAIN:
-                                    break;
-                                default:
-                                    woffs=n;
+                            case EAGAIN:
+                                break;
+                            default:
+                                woffs=n;
                             }
                         } else {
                             woffs+=wn;
@@ -419,7 +419,7 @@ void child_proc(child_arg_t *arg)
                 }
 #ifdef DAEMON_EN
                 if (daemonized)
-                // TODO: Redirect cout statements to file to emulate syslog behavior
+                    // TODO: Redirect cout statements to file to emulate syslog behavior
                     std::cout << LOG_WARNING << "Pipe end!\n";
                 else
 #endif
@@ -439,7 +439,7 @@ void *child_thread(void *argp)
 //  close(listenfd);
 #ifdef DAEMON_EN
     if (daemonized)
-    // TODO: Redirect cout statements to file to emulate syslog behavior
+        // TODO: Redirect cout statements to file to emulate syslog behavior
         std::cout << LOG_INFO << "Client connected: " << inet_ntoa(arg->cliaddr.sin_addr) << ":" << ntohs(arg->cliaddr.sin_port) << "\n";
     else
 #endif
@@ -449,7 +449,7 @@ void *child_thread(void *argp)
     child_proc(arg);
 #ifdef DAEMON_EN
     if (daemonized)
-    // TODO: Redirect cout statements to file to emulate syslog behavior
+        // TODO: Redirect cout statements to file to emulate syslog behavior
         std::cout << LOG_INFO << "Client disconnected: " << inet_ntoa(arg->cliaddr.sin_addr) << ":" << ntohs(arg->cliaddr.sin_port) << "\n";
     else
 #endif

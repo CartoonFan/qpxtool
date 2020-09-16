@@ -34,54 +34,54 @@ class ColorLabel;
 
 class tabTA : public QWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	tabTA(QPxSettings *iset, devlist *idev, QString iname, QWidget *p=0, Qt::WindowFlags fl = 0);
-	~tabTA();
-	void drawGraph(QImage& img, device *dev, int ttype, int eflags=0);
+    tabTA(QPxSettings *iset, devlist *idev, QString iname, QWidget *p=0, Qt::WindowFlags fl = 0);
+    ~tabTA();
+    void drawGraph(QImage& img, device *dev, int ttype, int eflags=0);
 
 public slots:
-	void clear();
-	void selectDevice();
+    void clear();
+    void selectDevice();
 //	void infoToggle();
-	void updateAll();
-	void updateLast();
-	void reconfig();
+    void updateAll();
+    void updateLast();
+    void reconfig();
 
 private:
-	devlist		*devices;
-	QPxSettings	*settings;
-	QString		name;
-	timeval		prevT;	
-	
-	QBoxLayout	*layout;
+    devlist		*devices;
+    QPxSettings	*settings;
+    QString		name;
+    timeval		prevT;
+
+    QBoxLayout	*layout;
 // Selectors/time
-	QBoxLayout	*layoutl;
+    QBoxLayout	*layoutl;
 #ifdef __LEGEND_SHOW_TA
-	ColorLabel	*cl_pit,
-				*cl_land;
+    ColorLabel	*cl_pit,
+                *cl_land;
 #endif
-	QGroupBox    *box_layer;
-	QBoxLayout   *lay_layer;
-	QButtonGroup *grp_layer;
-	QRadioButton *layer0;
-	QRadioButton *layer1;
+    QGroupBox    *box_layer;
+    QBoxLayout   *lay_layer;
+    QButtonGroup *grp_layer;
+    QRadioButton *layer0;
+    QRadioButton *layer1;
 
-	QGroupBox    *box_zone;
-	QBoxLayout   *lay_zone;
-	QButtonGroup *grp_zone;
-	QRadioButton *zone0;
-	QRadioButton *zone1;
-	QRadioButton *zone2;
+    QGroupBox    *box_zone;
+    QBoxLayout   *lay_zone;
+    QButtonGroup *grp_zone;
+    QRadioButton *zone0;
+    QRadioButton *zone1;
+    QRadioButton *zone2;
 
-	QGroupBox	*grp_time;
-	QBoxLayout	*layoutt;
-	QLabel		*ltime;
+    QGroupBox	*grp_time;
+    QBoxLayout	*layoutt;
+    QLabel		*ltime;
 
 // Pit / Land TA graphs
-	QBoxLayout	*layoutg;
-	QPxGraph	*graphPit;
-	QPxGraph	*graphLand;
+    QBoxLayout	*layoutg;
+    QPxGraph	*graphPit;
+    QPxGraph	*graphLand;
 };
 
 #endif

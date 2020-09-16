@@ -18,20 +18,28 @@
 class ColorLabel : public QWidget
 {
 public:
-	ColorLabel(QColor icol, QString itext, bool ieditable, QWidget *p=0, Qt::WindowFlags f=0);
-	~ColorLabel();
-	inline QColor color() { return col; };
-	inline void setColor(QColor c) { col = c; update(); };
-	inline void setText(QString t) { text = t; update(); };
+    ColorLabel(QColor icol, QString itext, bool ieditable, QWidget *p=0, Qt::WindowFlags f=0);
+    ~ColorLabel();
+    inline QColor color() {
+        return col;
+    };
+    inline void setColor(QColor c) {
+        col = c;
+        update();
+    };
+    inline void setText(QString t) {
+        text = t;
+        update();
+    };
 
 protected:
-	void mousePressEvent(QMouseEvent*);
-	void paintEvent(QPaintEvent*);
+    void mousePressEvent(QMouseEvent*);
+    void paintEvent(QPaintEvent*);
 
 private:
-	QColor  col;
-	QString text;
-	bool	editable;
+    QColor  col;
+    QString text;
+    bool	editable;
 };
 
 #endif

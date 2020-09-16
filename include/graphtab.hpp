@@ -29,42 +29,45 @@ class QPxSettings;
 
 class GraphTab : public QWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	GraphTab(QPxSettings *iset, devlist *idev, QString iname, int test, QWidget *p=0, Qt::WindowFlags fl = 0);
-	~GraphTab();
-	void drawGraph(QImage& img, device *dev, int ttype, int eflags=0);
+    GraphTab(QPxSettings *iset, devlist *idev, QString iname, int test, QWidget *p=0, Qt::WindowFlags fl = 0);
+    ~GraphTab();
+    void drawGraph(QImage& img, device *dev, int ttype, int eflags=0);
 
 public slots:
-	void clear();
-	virtual void selectDevice()=0;
-	void updateLast(int, bool *Tvalid=NULL, bool force=0);
+    void clear();
+    virtual void selectDevice()=0;
+    void updateLast(int, bool *Tvalid=NULL, bool force=0);
 //	void setDevice(device *idev);
-	void reconfig() { updateLegend(); updateGraph(); };
+    void reconfig() {
+        updateLegend();
+        updateGraph();
+    };
 
 private slots:
-	void infoToggle();
+    void infoToggle();
 
 protected:
-	virtual void updateGraph()=0;
-	virtual void updateLegend()=0;
+    virtual void updateGraph()=0;
+    virtual void updateLegend()=0;
 
-	devlist		*devices;
-	QPxSettings	*settings;
-	QWidget		*infow;
-	QPxGraph	*graph;
-	QLabel		*ltime;
-	timeval		prevT;	
+    devlist		*devices;
+    QPxSettings	*settings;
+    QWidget		*infow;
+    QPxGraph	*graph;
+    QLabel		*ltime;
+    timeval		prevT;
 
 private:
-	QString		name;
-	QBoxLayout	*layout;
-	QBoxLayout	*layoutl;
-	QWidget		*lw;
-	QGroupBox	*grp_time;
-	QBoxLayout	*layoutt;
-	SplitButton	*split;
-	QFrame		*vline0;
+    QString		name;
+    QBoxLayout	*layout;
+    QBoxLayout	*layoutl;
+    QWidget		*lw;
+    QGroupBox	*grp_time;
+    QBoxLayout	*layoutt;
+    SplitButton	*split;
+    QFrame		*vline0;
 //	bool		prevTvalid;
 };
 

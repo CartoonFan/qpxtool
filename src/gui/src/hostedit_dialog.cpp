@@ -18,47 +18,47 @@
 #include "hostedit_dialog.hpp"
 
 hostEditDialog::hostEditDialog(QString host, int port, QWidget* p, Qt::WindowFlags f)
-	: QDialog(p,f)
+    : QDialog(p,f)
 {
-	setWindowTitle(tr("Add host"));
+    setWindowTitle(tr("Add host"));
 
-	layout = new QGridLayout(this);
-	layout->setMargin(3);
-	layout->setSpacing(3);
+    layout = new QGridLayout(this);
+    layout->setMargin(3);
+    layout->setSpacing(3);
 
-	l_host = new QLabel(tr("Host:"), this);
-	layout->addWidget(l_host, 0, 0);
+    l_host = new QLabel(tr("Host:"), this);
+    layout->addWidget(l_host, 0, 0);
 
-	e_host = new QLineEdit(this);
-	e_host->setText(host);
+    e_host = new QLineEdit(this);
+    e_host->setText(host);
 //	e_host->setInputMask("000.000.000.000; ");
-	layout->addWidget(e_host, 0, 1, 1, 2);
+    layout->addWidget(e_host, 0, 1, 1, 2);
 
-	l_port = new QLabel(tr("Port:"), this);
-	layout->addWidget(l_port, 1, 0);
+    l_port = new QLabel(tr("Port:"), this);
+    layout->addWidget(l_port, 1, 0);
 
-	e_port = new QSpinBox(this);
-	e_port->setMinimum(1);
-	e_port->setMaximum(65535);
-	e_port->setValue(port);
-	layout->addWidget(e_port, 1, 1);
+    e_port = new QSpinBox(this);
+    e_port->setMinimum(1);
+    e_port->setMaximum(65535);
+    e_port->setValue(port);
+    layout->addWidget(e_port, 1, 1);
 
-	bdef = new QPushButton(this);
-	bdef->setMaximumSize(22,22);
-	bdef->setIcon(QIcon(":images/edit-undo.png"));
-	layout->addWidget(bdef, 1, 2);
+    bdef = new QPushButton(this);
+    bdef->setMaximumSize(22,22);
+    bdef->setIcon(QIcon(":images/edit-undo.png"));
+    layout->addWidget(bdef, 1, 2);
 
-	bbox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, Qt::Horizontal , this);
-	layout->addWidget(bbox, 2, 1, 1, 2);
+    bbox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, Qt::Horizontal, this);
+    layout->addWidget(bbox, 2, 1, 1, 2);
 
-	layout->setColumnStretch(0,2);
-	layout->setColumnStretch(1,20);
-	layout->setColumnStretch(2,1);
+    layout->setColumnStretch(0,2);
+    layout->setColumnStretch(1,20);
+    layout->setColumnStretch(2,1);
 
-	connect(e_host, SIGNAL(textChanged(QString&)), this, SLOT(hostChanged(QString&)));
-	connect(bdef, SIGNAL(clicked()), this,  SLOT(setPortDfl()));
-	connect(bbox, SIGNAL(accepted()), this, SLOT(accept()));
-	connect(bbox, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(e_host, SIGNAL(textChanged(QString&)), this, SLOT(hostChanged(QString&)));
+    connect(bdef, SIGNAL(clicked()), this,  SLOT(setPortDfl()));
+    connect(bbox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(bbox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 hostEditDialog::~hostEditDialog()
@@ -68,13 +68,13 @@ hostEditDialog::~hostEditDialog()
 
 void hostEditDialog::setPortDfl()
 {
-	e_port->setValue(46660);
+    e_port->setValue(46660);
 }
 
 void hostEditDialog::hostChanged(QString& h)
 {
-	QPushButton *pb = bbox->button(QDialogButtonBox::Ok);
-	if (!pb) return;
-	pb->setEnabled(!h.isEmpty());
+    QPushButton *pb = bbox->button(QDialogButtonBox::Ok);
+    if (!pb) return;
+    pb->setEnabled(!h.isEmpty());
 }
 

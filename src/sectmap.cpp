@@ -14,7 +14,7 @@
 
 #include "sectmap.hpp"
 
-long fsize(FILE* f){
+long fsize(FILE* f) {
     struct stat st;
     fstat(fileno(f), &st);
     return st.st_size;
@@ -31,8 +31,8 @@ smap::smap(char* fn, unsigned int sects) {
 }
 
 smap::~smap() {
-	save();
-	delete mutex;
+    save();
+    delete mutex;
     delete arr;
 }
 
@@ -71,13 +71,15 @@ int smap::get_fail() {
     return cnt;
 }
 
-int smap::get_tot() { return sectors; }
+int smap::get_tot() {
+    return sectors;
+}
 
 unsigned int smap::get_next(unsigned int *lba, mape state, int *count) {
     unsigned int offs=0;
     int cnt=0;
     int icount=1;
-	if (count) icount = *count;
+    if (count) icount = *count;
 
 //	if (lba+scnt > sectors) scnt = sectors - lba;
 
@@ -85,30 +87,30 @@ unsigned int smap::get_next(unsigned int *lba, mape state, int *count) {
 
     if (lba) offs=*lba;
     if (icount<2) {
-		while ((get(offs) != state) && (offs<sectors)) offs++;
+        while ((get(offs) != state) && (offs<sectors)) offs++;
     } else {
-		while ((cnt<icount) && (offs<sectors)) {
-			if (get(offs+cnt) == state) {
-				cnt++;
-			} else {
-				offs+=cnt;
-				offs++;
-				cnt=0;
-			}
-	    }
+        while ((cnt<icount) && (offs<sectors)) {
+            if (get(offs+cnt) == state) {
+                cnt++;
+            } else {
+                offs+=cnt;
+                offs++;
+                cnt=0;
+            }
+        }
     }
 //	printf("capacity: %x, offs: %x\n", sectors, offs);
     if (offs >= sectors) {
-		if (icount > 2) {
+        if (icount > 2) {
 //			printf("Can't find %d sectors block", icount);
-			(*count)--;
-			return get_next(lba, state, count);
-		} else {
-			offs = 0xFFFFFFFF;
-		}
-	}
+            (*count)--;
+            return get_next(lba, state, count);
+        } else {
+            offs = 0xFFFFFFFF;
+        }
+    }
     if (lba)   *lba=offs;
-	if (count) *count = icount;
+    if (count) *count = icount;
     return offs;
 }
 
@@ -117,9 +119,9 @@ void smap::set(unsigned int sector, mape state, int count) {
 //	    if (sector>sectors) return 1;
 //	    if (sector+count>sectors) return 2;
     if(count) {
-		for (int i=0; i<count; i++) set_one(sector+i, state);
+        for (int i=0; i<count; i++) set_one(sector+i, state);
     } else {
-		set_one(sector, state);
+        set_one(sector, state);
     }
 //    return 0;
 }
@@ -129,35 +131,37 @@ void smap::set_one(unsigned int sector, mape state) {
     unsigned int row=sector/map_block_sz;
     unsigned int col=sector%map_block_sz;
     if (sector > sectors) return;
-    arr[row][col]=state;	    
+    arr[row][col]=state;
 }
 
 
-void smap::fill(mape state){
+void smap::fill(mape state) {
     for (unsigned int i=0; i<blocks; i++)
-	for (unsigned int j=0; j<map_block_sz; j++) arr[i][j]=state;
+        for (unsigned int j=0; j<map_block_sz; j++) arr[i][j]=state;
 }
 
-void smap::set_file(char* fn) { fname = fn; }
+void smap::set_file(char* fn) {
+    fname = fn;
+}
 
 int smap::load() {
     FILE* f;
     int s;
     map_block	tarr;
     printf("loading map : '%s'... ", fname);
-    if (!(f = fopen(fname,"r"))){
-		printf("can't open map file!\n");
-		return 1;
+    if (!(f = fopen(fname,"r"))) {
+        printf("can't open map file!\n");
+        return 1;
     }
     s=fsize(f);
     fseek(f, 0, SEEK_SET);
     for (unsigned i=0; (i<blocks) && (!feof(f)); i++) {
-	if (fread((void*)&tarr, map_block_sz, sizeof(mape), f) < sizeof(mape)) {
-		printf("error reading map file!\n");
-		return 1;
-	}
-	for (unsigned j=0; (j<map_block_sz) && (i*map_block_sz+j)<(s/sizeof(mape)); j++)
-	set(i*map_block_sz+j, tarr[j]);
+        if (fread((void*)&tarr, map_block_sz, sizeof(mape), f) < sizeof(mape)) {
+            printf("error reading map file!\n");
+            return 1;
+        }
+        for (unsigned j=0; (j<map_block_sz) && (i*map_block_sz+j)<(s/sizeof(mape)); j++)
+            set(i*map_block_sz+j, tarr[j]);
     }
     fclose(f);
     printf("done\n");
@@ -167,19 +171,23 @@ int smap::load() {
 int smap::save() {
     FILE* f;
     printf("\nsaving map  : '%s'...\n", fname);
-    if (!(f = fopen(fname,"w"))){
-		printf("can't create map file!\n");
-		return 1;
+    if (!(f = fopen(fname,"w"))) {
+        printf("can't create map file!\n");
+        return 1;
     }
     fseek(f, 0, SEEK_SET);
     for (unsigned i=0; i<blocks; i++)
-	fwrite((void*)arr[i], map_block_sz, sizeof(mape), f);
+        fwrite((void*)arr[i], map_block_sz, sizeof(mape), f);
     fclose(f);
     printf("\nSector map saved!\n");
     return 0;
 }
 
-void smap::lock()   { mutex->lock(); }
+void smap::lock()   {
+    mutex->lock();
+}
 
-void smap::unlock() { mutex->unlock(); }
+void smap::unlock() {
+    mutex->unlock();
+}
 

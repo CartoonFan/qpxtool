@@ -47,13 +47,19 @@
 class AbstractPreview;
 class AbstractPreviewPrivate;
 //--------------------------------------------------------------
-int QPageInfo::page() const { return fpage; }
-QRect QPageInfo::rect() const { return frect; }
+int QPageInfo::page() const {
+    return fpage;
+}
+QRect QPageInfo::rect() const {
+    return frect;
+}
 //--------------------------------------------------------------
 class QMousePressData
 {
 public:
-    QMousePressData() {press = false;}
+    QMousePressData() {
+        press = false;
+    }
     bool press;
     QPoint pos;
 };
@@ -94,37 +100,39 @@ private:
 class TilesCache
 {
 private:
-	class Tile
-	{
-	public:
-	    Tile(QPixmap *pix, int p, int x, int y) : data(pix), page(p), xidx(x), yidx(y) {};
-	    ~Tile() { if (data) delete data; };
+    class Tile
+    {
+    public:
+        Tile(QPixmap *pix, int p, int x, int y) : data(pix), page(p), xidx(x), yidx(y) {};
+        ~Tile() {
+            if (data) delete data;
+        };
 
-	    QPixmap *data;
-	    int	page,
-		xidx,
-		yidx;
-	};
+        QPixmap *data;
+        int	page,
+            xidx,
+            yidx;
+    };
 
 public:
-	TilesCache();
-	~TilesCache();
-	void clear();
-	void setTileSize(int maxW, int maxH);
-	void insertPages(int start, int count);
-	void deletePages(int start, int count);
-	void addTile(QPixmap*, int page, int x, int y);
-	QPixmap* getTile(int page, int x, int y);
+    TilesCache();
+    ~TilesCache();
+    void clear();
+    void setTileSize(int maxW, int maxH);
+    void insertPages(int start, int count);
+    void deletePages(int start, int count);
+    void addTile(QPixmap*, int page, int x, int y);
+    QPixmap* getTile(int page, int x, int y);
 private:
-	int	maxWidth,
-		maxHeight;
-	int	maxTiles;
-	QList<Tile*> tiles;
+    int	maxWidth,
+        maxHeight;
+    int	maxTiles;
+    QList<Tile*> tiles;
 };
 //--------------------------------------------------------------
 class AbstractPreviewPrivate
 {
-friend class AbstractPreview;
+    friend class AbstractPreview;
 public:
     AbstractPreviewPrivate(AbstractPreview *preview, QPrinter *printer);
     ~AbstractPreviewPrivate();
@@ -152,9 +160,9 @@ protected:
     void recalcMarginsFromMM();
 private:
     int tileWidth,
-	tileHeight;
+        tileHeight;
     int tileCols,
-	tileRows;
+        tileRows;
     TilesCache cache;
 
     AbstractPreview *preview;
@@ -174,27 +182,27 @@ private:
     QSizeF pageSizeMM;      //Прямоугольник рабочей области страницы в мм
     QSize  pageSize;	    //то же, но с учетом округления и в пикселах
     QSize  pageSizeScaled;  // с учетом масштаба
-   
-	QVector<QRect> marginRects;
+
+    QVector<QRect> marginRects;
     int   w, h;        //высота и ширина рабочей области с учётом округления
     //Отступы страницы и расстояние между страницами
     int   pageMargin, interPageSpacing;
-	int   pageLabelHeight;
-	QRect pageLabelRect;
-	
+    int   pageLabelHeight;
+    QRect pageLabelRect;
+
     // отступы на листе в мм
     qreal mm_left,
-    	  mm_right,
-    	  mm_top,
-    	  mm_bottom;
+          mm_right,
+          mm_top,
+          mm_bottom;
     // то же, но в пикселах
     int   mp_left,
-		  mp_right,
-		  mp_top,
-		  mp_bottom;
-	// с учетом масштаба
+          mp_right,
+          mp_top,
+          mp_bottom;
+    // с учетом масштаба
     int   ms_left,
-    	  ms_top;
+          ms_top;
 //  int	  ms_right,
 //    	  ms_bottom;
     //Общее количество страниц, колонок и строк страниц
@@ -204,9 +212,9 @@ private:
     QPoint scrollBarValueOnMousePress;
     //Мастштаб
     double scale,
-    	  scaleStep,
-    	  scaleMax,
-    	  scaleMin;
+           scaleStep,
+           scaleMax,
+           scaleMin;
 
     //Координаты для начальной страницы
     qreal xx, yy;
@@ -235,99 +243,99 @@ private:
 
 TilesCache::TilesCache()
 {
-	maxWidth  = TILE_MAX_WIDTH;
-	maxHeight = TILE_MAX_HEIGHT;
-	maxTiles  = CACHE_SIZE_MAX / maxWidth / maxHeight;
+    maxWidth  = TILE_MAX_WIDTH;
+    maxHeight = TILE_MAX_HEIGHT;
+    maxTiles  = CACHE_SIZE_MAX / maxWidth / maxHeight;
 #ifndef QT_NO_DEBUG
-	qDebug() << "maxTiles: " << maxTiles;
+    qDebug() << "maxTiles: " << maxTiles;
 #endif
 }
 
 TilesCache::~TilesCache()
 {
-	clear();
+    clear();
 }
 
 void TilesCache::clear()
 {
 #ifndef QT_NO_DEBUG
-	qDebug() << "TilesCache::clear()";
+    qDebug() << "TilesCache::clear()";
 #endif
-	for (int i=tiles.size(); i>0; i--)
-		delete tiles.takeLast();
-	tiles.clear();
+    for (int i=tiles.size(); i>0; i--)
+        delete tiles.takeLast();
+    tiles.clear();
 }
 
 void TilesCache::setTileSize(int maxW, int maxH)
 {
 #ifndef QT_NO_DEBUG
-	qDebug() << "TilesCache::setTileSize() " << maxW << "x" << maxH;
+    qDebug() << "TilesCache::setTileSize() " << maxW << "x" << maxH;
 #endif
-	clear();
-	maxWidth = maxW;
-	maxHeight = maxH;
-	maxTiles = CACHE_SIZE_MAX / maxWidth / maxHeight;
+    clear();
+    maxWidth = maxW;
+    maxHeight = maxH;
+    maxTiles = CACHE_SIZE_MAX / maxWidth / maxHeight;
 #ifndef QT_NO_DEBUG
-	qDebug() << "maxTiles: " << maxTiles;
+    qDebug() << "maxTiles: " << maxTiles;
 #endif
 }
 
 void TilesCache::insertPages(int start, int count)
 {
 #ifndef QT_NO_DEBUG
-	qDebug() << "TilesCache::insertPages() start: " << start << " count: " << count;
+    qDebug() << "TilesCache::insertPages() start: " << start << " count: " << count;
 #endif
-	for (int i=tiles.size()-1; i>=0; i--)
-		if (tiles[i]->page >= start) tiles[i]->page+=count;
+    for (int i=tiles.size()-1; i>=0; i--)
+        if (tiles[i]->page >= start) tiles[i]->page+=count;
 }
 
 void TilesCache::deletePages(int start, int count)
 {
-	int end = start+count-1;
+    int end = start+count-1;
 #ifndef QT_NO_DEBUG
-	qDebug() << "TilesCache::deletePages() start: " << start << " count: " << count;
+    qDebug() << "TilesCache::deletePages() start: " << start << " count: " << count;
 #endif
-	for (int i=tiles.size()-1; i>=0; i--) {
-		if (tiles[i]->page >  end) tiles[i]->page-=count;
-		else if (tiles[i]->page >= start) delete tiles.takeAt(i);
-	}
+    for (int i=tiles.size()-1; i>=0; i--) {
+        if (tiles[i]->page >  end) tiles[i]->page-=count;
+        else if (tiles[i]->page >= start) delete tiles.takeAt(i);
+    }
 }
 
 QPixmap* TilesCache::getTile(int page, int xidx, int yidx)
 {
-	Tile *tile;
+    Tile *tile;
 #ifndef QT_NO_DEBUG
 //	qDebug() << "TilesCache::getTile(): " << page << " x:" << xidx << " y:" << yidx;
 #endif
-	for (int i=0; i<tiles.size(); i++) {
-		tile  = tiles[i];
-		if (tile->page == page && tile->xidx == xidx && tile->yidx == yidx) {
-			if (i) {
-				tile  = tiles.takeAt(i);
-				tiles.prepend(tile);
-			}
+    for (int i=0; i<tiles.size(); i++) {
+        tile  = tiles[i];
+        if (tile->page == page && tile->xidx == xidx && tile->yidx == yidx) {
+            if (i) {
+                tile  = tiles.takeAt(i);
+                tiles.prepend(tile);
+            }
 #ifndef QT_NO_DEBUG
 //	qDebug() << "Tile found at index " << i;
 #endif
-			return tile->data;
-		}
-	}
-	return NULL;
+            return tile->data;
+        }
+    }
+    return NULL;
 }
 
 void TilesCache::addTile(QPixmap *pix, int page, int x, int y)
 {
-	Tile *tile = new Tile(pix,page,x,y);
+    Tile *tile = new Tile(pix,page,x,y);
 #ifndef QT_NO_DEBUG
 //	qDebug() << "TilesCache::addTile(): " << tile->page << " x:" << tile->xidx << " y:" << tile->yidx;
 #endif
-	tiles.prepend(tile);
-	if (tiles.size()>maxTiles) {
+    tiles.prepend(tile);
+    if (tiles.size()>maxTiles) {
 #ifndef QT_NO_DEBUG
-		qDebug() << "maxTiles reached. removing last";
+        qDebug() << "maxTiles reached. removing last";
 #endif
-		delete tiles.takeLast();
-	}
+        delete tiles.takeLast();
+    }
 }
 
 //--------------------------------------------------------------
@@ -342,7 +350,7 @@ AbstractPreviewPrivate::AbstractPreviewPrivate(AbstractPreview *preview, QPrinte
 
     interPageSpacing = 8;
     pageMargin = 5;
-	pageLabelHeight = 0;
+    pageLabelHeight = 0;
 
     offsXpage = pageMargin;
     offsYpage = pageMargin;
@@ -389,9 +397,9 @@ void AbstractPreviewPrivate::changeScale()
 {
     qreal fw,fh,pw,ph;
 //	QRect rect;
-	flushCache();
-	ms_left   = mp_left * scale;
-	ms_top    = mp_top * scale;
+    flushCache();
+    ms_left   = mp_left * scale;
+    ms_top    = mp_top * scale;
 //	ms_right  = mp_right * scale;
 //	ms_bottom = mp_bottom * scale;
 
@@ -415,16 +423,16 @@ void AbstractPreviewPrivate::changeScale()
     if(ph - ((qreal)(int)ph) > 0.0) pageSizeScaled.setHeight((int)ph + 1);
     else pageSizeScaled.setHeight((int)ph);
 
-	fh = paperSizeScaled.height();
-	fw = paperSizeScaled.width();
-	ph = pageSizeScaled.height();
-	pw = pageSizeScaled.width();
+    fh = paperSizeScaled.height();
+    fw = paperSizeScaled.width();
+    ph = pageSizeScaled.height();
+    pw = pageSizeScaled.width();
 
-	marginRects.clear();
-	marginRects << QRect( QPoint(1,1),             QSize( ms_left-1,  fh-1));
-	marginRects << QRect( QPoint(ms_left + pw,1), QSize( fw - pw - ms_left, fh-1));
-	marginRects << QRect( QPoint(ms_left,1),       QSize( pw, ms_top-1));
-	marginRects << QRect( QPoint(ms_left, ph + ms_top), QSize( pw, fh - ph - ms_top));
+    marginRects.clear();
+    marginRects << QRect( QPoint(1,1),             QSize( ms_left-1,  fh-1));
+    marginRects << QRect( QPoint(ms_left + pw,1), QSize( fw - pw - ms_left, fh-1));
+    marginRects << QRect( QPoint(ms_left,1),       QSize( pw, ms_top-1));
+    marginRects << QRect( QPoint(ms_left, ph + ms_top), QSize( pw, fh - ph - ms_top));
 
 
     tileWidth  = qMin(pageSizeScaled.width()+1, TILE_MAX_WIDTH);
@@ -466,9 +474,9 @@ void AbstractPreviewPrivate::setup()
 {
     paperSizeMM = printer->paperRect(QPrinter::Millimeter).size();
     paperSize = QSize(
-		inchesToPixelsX ( mmToInches(paperSizeMM.width()),  currentDevice) +1,
-		inchesToPixelsY ( mmToInches(paperSizeMM.height()), currentDevice) +1
-	);
+                    inchesToPixelsX ( mmToInches(paperSizeMM.width()),  currentDevice) +1,
+                    inchesToPixelsY ( mmToInches(paperSizeMM.height()), currentDevice) +1
+                );
 
 //    if(paperSizeMM.width() -  ((qreal)(int)paperSize.width()) > 0.0)  paperSize.setWidth ((int)paperSize.width() + 1);
 //    if(paperSizeMM.height() - ((qreal)(int)paperSize.height()) > 0.0) paperSize.setHeight((int)paperSize.height() + 1);
@@ -477,21 +485,21 @@ void AbstractPreviewPrivate::setup()
 //    if(pageSizeMM.height() - ((qreal)(int)pageSize.height()) > 0.0) pageSize.setHeight((int)pageSize.height() + 1);
 
     printer->getPageMargins(&mm_left, &mm_top, &mm_right, &mm_bottom, QPrinter::Millimeter);
-	recalcMarginsFromMM();
+    recalcMarginsFromMM();
 
 #if (PRINTER_USE_FULLPAGE == 1) || (QT_VERSION < 0x040500)
-	pageSizeMM = QSize(
-		paperSizeMM.width() - mm_left - mm_right,
-		paperSizeMM.height() - mm_top - mm_bottom
-	);
+    pageSizeMM = QSize(
+                     paperSizeMM.width() - mm_left - mm_right,
+                     paperSizeMM.height() - mm_top - mm_bottom
+                 );
 #else
-	pageSizeMM = printer->pageRect(QPrinter::Millimeter).size();
+    pageSizeMM = printer->pageRect(QPrinter::Millimeter).size();
 #endif
 
-	pageSize = QSize(
-		inchesToPixelsX ( mmToInches(pageSizeMM.width()),  currentDevice) + 1,
-		inchesToPixelsY ( mmToInches(pageSizeMM.height()), currentDevice) + 1
-	);
+    pageSize = QSize(
+                   inchesToPixelsX ( mmToInches(pageSizeMM.width()),  currentDevice) + 1,
+                   inchesToPixelsY ( mmToInches(pageSizeMM.height()), currentDevice) + 1
+               );
 
     w = paperSize.width();
     h = paperSize.height();
@@ -541,10 +549,18 @@ void AbstractPreviewPrivate::calcParamDraw()
 }
 //--------------------------------------------------------------
 
-int AbstractPreviewPrivate::paperWidthToScale()  { return paperSizeScaled.width(); }
-int AbstractPreviewPrivate::paperHeightToScale() { return paperSizeScaled.height(); }
-int AbstractPreviewPrivate::paperWidth()  { return paperSize.width(); }
-int AbstractPreviewPrivate::paperHeight() { return paperSize.height(); }
+int AbstractPreviewPrivate::paperWidthToScale()  {
+    return paperSizeScaled.width();
+}
+int AbstractPreviewPrivate::paperHeightToScale() {
+    return paperSizeScaled.height();
+}
+int AbstractPreviewPrivate::paperWidth()  {
+    return paperSize.width();
+}
+int AbstractPreviewPrivate::paperHeight() {
+    return paperSize.height();
+}
 
 //--------------------------------------------------------------
 void AbstractPreviewPrivate::flushCache()
@@ -620,13 +636,13 @@ void AbstractPreviewPrivate::clear()
 }
 //--------------------------------------------------------------
 AbstractPreview::AbstractPreview(QWidget *parent, QPrinter *printer)
-        : QAbstractScrollArea(parent)
+    : QAbstractScrollArea(parent)
 {
     setMouseTracking(true);
 
     dv = new AbstractPreviewPrivate(this, printer);
-	dp = NULL;
-	d = dv;
+    dp = NULL;
+    d = dv;
 
     verticalScrollBar()->setSingleStep(20);
     horizontalScrollBar()->setSingleStep(20);
@@ -636,13 +652,13 @@ AbstractPreview::AbstractPreview(QWidget *parent, QPrinter *printer)
 }
 //--------------------------------------------------------------
 AbstractPreview::AbstractPreview(QWidget *parent, QPrinter *printer, int _countPage)
-        : QAbstractScrollArea(parent)
+    : QAbstractScrollArea(parent)
 {
     setMouseTracking(true);
 
     dv = new AbstractPreviewPrivate(this, printer);
-	dp = NULL;
-	d = dv;
+    dp = NULL;
+    d = dv;
 
     verticalScrollBar()->setSingleStep(20);
     horizontalScrollBar()->setSingleStep(20);
@@ -665,25 +681,25 @@ int  AbstractPreview::sizeToCountPage()
     if(!d->pagesData.count()) {
         verticalScrollBar()->setRange(0, 0);
         horizontalScrollBar()->setRange(0, 0);
-    	d->cols = 0;
-    	d->rows = 0;
-		return 0;
+        d->cols = 0;
+        d->rows = 0;
+        return 0;
     }
 
     int cols;
     if(d->viewMode == AbstractPreview::Mode_Normal) {
         cols = (int)(viewport()->width() - 2 * d->pageMargin + d->interPageSpacing) /
                (d->paperSize.width() * d->scale + d->interPageSpacing);
-	} else {
-		cols = 1;
-	}
+    } else {
+        cols = 1;
+    }
     if(!cols)cols = 1;
     if(cols > d->pagesData.count())cols = d->pagesData.count();
 
     int rows = (d->pagesData.count() + cols - 1) / cols;
     int h = qRound(double (rows * (d->paperHeightToScale() + d->pageLabelHeight) +
-                   (rows - 1) * d->interPageSpacing + 
-				   2 * d->pageMargin));
+                           (rows - 1) * d->interPageSpacing +
+                           2 * d->pageMargin));
     int w = qRound(double (cols * d->paperWidthToScale() + 2 * d->pageMargin));
     horizontalScrollBar()->setRange(0, w - viewport()->width());
     horizontalScrollBar()->setPageStep(viewport()->width());
@@ -698,15 +714,15 @@ int  AbstractPreview::sizeToCountPage()
 void AbstractPreview::autoscaleThumbs()
 {
 //	qDebug() << "autoscaleThumbs(): w=" << d->w << " viewport()->width()=" << viewport()->width();
-	int w = viewport()->width() - 2 * d->pageMargin + d->interPageSpacing - 10;
-	if (w<1) w=1;
-	qreal scale = w / (float) d->paperSize.width();
+    int w = viewport()->width() - 2 * d->pageMargin + d->interPageSpacing - 10;
+    if (w<1) w=1;
+    qreal scale = w / (float) d->paperSize.width();
 
-	if (scale != d->scale) {
-		d->scale = scale;
-		d->changeScale();
-		d->pageLabelRect = QRect(1,d->paperSizeScaled.height() + 3, d->paperSizeScaled.width(), d->pageLabelHeight);
-	}
+    if (scale != d->scale) {
+        d->scale = scale;
+        d->changeScale();
+        d->pageLabelRect = QRect(1,d->paperSizeScaled.height() + 3, d->paperSizeScaled.width(), d->pageLabelHeight);
+    }
     sizeToCountPage();
 }
 //--------------------------------------------------------------
@@ -715,10 +731,10 @@ void AbstractPreview::resizeEvent(QResizeEvent *)
     d->enterPageInfo = QPageInfo();
 
     if(d->viewMode == AbstractPreview::Mode_Thumbs) {
-		autoscaleThumbs();
-	} else {
-		sizeToCountPage();
-	}
+        autoscaleThumbs();
+    } else {
+        sizeToCountPage();
+    }
     d->calcParamDraw();
 }
 //--------------------------------------------------------------
@@ -758,16 +774,16 @@ void AbstractPreview::paintBorder(QPainter *p)
 
 QPixmap* AbstractPreview::getTile(int page, int tx, int ty)
 {
-	QPixmap *pix = d->cache.getTile(page,tx,ty);
-	if(!pix) {
+    QPixmap *pix = d->cache.getTile(page,tx,ty);
+    if(!pix) {
 #ifndef QT_NO_DEBUG
 //	qDebug() << "Tile not found in cache, rendering new one";
 #endif
-               // tile->data = new QPixmap(d->paperWidthToScale() + 1, d->paperHeightToScale() + 1);
-		pix = new QPixmap(
-			qMin(d->tileWidth,  (d->pageSizeScaled.width()  - d->tileWidth * tx)),
-			qMin(d->tileHeight, (d->pageSizeScaled.height() - d->tileHeight * ty))
-		);
+        // tile->data = new QPixmap(d->paperWidthToScale() + 1, d->paperHeightToScale() + 1);
+        pix = new QPixmap(
+            qMin(d->tileWidth,  (d->pageSizeScaled.width()  - d->tileWidth * tx)),
+            qMin(d->tileHeight, (d->pageSizeScaled.height() - d->tileHeight * ty))
+        );
 //                qDebug() << "page " << page << "  tile: " << ty << "," << tx << " " << pix->width() << "x" << pix->height();
         //tile->data->fill(d->bkg);
         QPainter pp(pix);
@@ -780,18 +796,18 @@ QPixmap* AbstractPreview::getTile(int page, int tx, int ty)
 
         paintPage(&pp, page, QRect( QPoint(d->tileWidth * tx, d->tileHeight * ty) / d->scale, pix->size() / d->scale ) );
 
-		d->cache.addTile(pix, page, tx, ty);
-	}
-/*
-#ifndef QT_NO_DEBUG
-	    qDebug() << "QPainter  @" << (void*)p;
-	    qDebug() << "Tile      @" << (void*)tile;
-	    if (tile) {
-	    	qDebug() << "Tile data @" << (void*)tile->data;
-	    }
-#endif
-*/
-	return pix;
+        d->cache.addTile(pix, page, tx, ty);
+    }
+    /*
+    #ifndef QT_NO_DEBUG
+    	    qDebug() << "QPainter  @" << (void*)p;
+    	    qDebug() << "Tile      @" << (void*)tile;
+    	    if (tile) {
+    	    	qDebug() << "Tile data @" << (void*)tile->data;
+    	    }
+    #endif
+    */
+    return pix;
 }
 void AbstractPreview::updatePage(int page, QRect rect)
 {
@@ -835,131 +851,131 @@ void AbstractPreview::updatePage(int page, QRect rect)
 
 void AbstractPreview::paintEvent(QPaintEvent *)
 {
-        d->pagesRect.clear();//Буфер координат текущих отрисованных страниц
+    d->pagesRect.clear();//Буфер координат текущих отрисованных страниц
 
-	QPainter *p = new QPainter(viewport());
+    QPainter *p = new QPainter(viewport());
 //    QPixmap *pix = NULL;
-	int page = d->beginPageNumber;
-	const QColor bkg = viewport()->backgroundRole();
-	int xx = d->xx, yy = -d->yy;
-	int xx2,yy2;
-	int ty_sta,ty_end,tx_sta,tx_end;
-	QRect mrect;
+    int page = d->beginPageNumber;
+    const QColor bkg = viewport()->backgroundRole();
+    int xx = d->xx, yy = -d->yy;
+    int xx2,yy2;
+    int ty_sta,ty_end,tx_sta,tx_end;
+    QRect mrect;
+
+    p->save();
+
+    p->translate(xx, yy);
+    yy += (d->ms_top);
+
+    for(int y = 0; y < d->countPagesRow; y++) {
+        xx = d->xx + d->ms_left;
+        yy2 = yy+d->pageSizeScaled.height();
+        ty_sta = (yy<0) ? (-yy / d->tileHeight) : 0;
+        ty_end = (yy2<viewport()->height()) ? d->tileRows : ( (viewport()->height()-yy) / d->tileHeight)+1;
 
         p->save();
-
-	p->translate(xx, yy);
-	yy += (d->ms_top);
-
-	for(int y = 0; y < d->countPagesRow; y++) {
-		xx = d->xx + d->ms_left;
-		yy2 = yy+d->pageSizeScaled.height();
-		ty_sta = (yy<0) ? (-yy / d->tileHeight) : 0;
-		ty_end = (yy2<viewport()->height()) ? d->tileRows : ( (viewport()->height()-yy) / d->tileHeight)+1;
-
-		p->save();
-		for(int x = 0; x < d->cols; x++) {
-			xx2 = xx+d->pageSizeScaled.width();
-			tx_sta = (xx<0) ? (-xx / d->tileWidth) : 0;
-			tx_end = (xx2<viewport()->width()) ? d->tileCols : ( (viewport()->width()-xx) / d->tileWidth)+1;
+        for(int x = 0; x < d->cols; x++) {
+            xx2 = xx+d->pageSizeScaled.width();
+            tx_sta = (xx<0) ? (-xx / d->tileWidth) : 0;
+            tx_end = (xx2<viewport()->width()) ? d->tileCols : ( (viewport()->width()-xx) / d->tileWidth)+1;
 
             p->save();
             p->translate(d->ms_left, d->ms_top);
 #ifdef DEBUG_PAINT_TIME
-			timeval tb,te;
-			gettimeofday(&tb, NULL);
+            timeval tb,te;
+            gettimeofday(&tb, NULL);
 #endif
-			for(int ty=ty_sta; ty<ty_end; ty++) {
-				for(int tx=tx_sta; tx<tx_end; tx++) {
-					p->drawPixmap(d->tileWidth * tx, d->tileHeight * ty, *(getTile(page, tx, ty)));
-				}
-			}
+            for(int ty=ty_sta; ty<ty_end; ty++) {
+                for(int tx=tx_sta; tx<tx_end; tx++) {
+                    p->drawPixmap(d->tileWidth * tx, d->tileHeight * ty, *(getTile(page, tx, ty)));
+                }
+            }
 #ifdef DEBUG_PAINT_TIME
-			gettimeofday(&te, NULL);
-			qDebug() << "Page: " << page << "  " << tx_sta << "." << ty_sta << " - " << tx_end << "." << ty_end
-			<< QString("  time: %1 s").arg(te.tv_sec - tb.tv_sec + (te.tv_usec - tb.tv_usec)/1000000.0,0,'f',4);
+            gettimeofday(&te, NULL);
+            qDebug() << "Page: " << page << "  " << tx_sta << "." << ty_sta << " - " << tx_end << "." << ty_end
+                     << QString("  time: %1 s").arg(te.tv_sec - tb.tv_sec + (te.tv_usec - tb.tv_usec)/1000000.0,0,'f',4);
 #endif
 //	    p->drawPixmap(0, 0, *(getTile(page, 0, 0)));
-			p->restore();
+            p->restore();
 
-			mrect = QRect( QPoint(-xx + d->ms_left, -yy + d->ms_top), viewport()->size() );
-			for (int i=0; i<d->marginRects.size(); i++) {
-				if (!i && d->viewMode == AbstractPreview::Mode_Normal) {
-				//	qDebug() << "page #" << page << mrect << d->marginRects[i] << d->marginRects[i].intersected(mrect);
-				}
-				p->fillRect(d->marginRects[i].intersected(mrect), QBrush(Qt::white));
-			}
+            mrect = QRect( QPoint(-xx + d->ms_left, -yy + d->ms_top), viewport()->size() );
+            for (int i=0; i<d->marginRects.size(); i++) {
+                if (!i && d->viewMode == AbstractPreview::Mode_Normal) {
+                    //	qDebug() << "page #" << page << mrect << d->marginRects[i] << d->marginRects[i].intersected(mrect);
+                }
+                p->fillRect(d->marginRects[i].intersected(mrect), QBrush(Qt::white));
+            }
 
-			p->save();
-			p->scale(d->scale, d->scale);
+            p->save();
+            p->scale(d->scale, d->scale);
 
-			if(d->viewMode == AbstractPreview::Mode_Thumbs && d->selectPageIndex == page) {
+            if(d->viewMode == AbstractPreview::Mode_Thumbs && d->selectPageIndex == page) {
 #ifndef QT_NO_DEBUG
-				qDebug() << "Thumbs selected page: " << page;
+                qDebug() << "Thumbs selected page: " << page;
 #endif
-				QRect rr = QRect( QPoint(0,0), d->paperSize);
-				//p->setCompositionMode(QPainter::CompositionMode_Multiply);
-				//p->setCompositionMode(QPainter::CompositionMode_Xor);
-				QColor col = palette().color(QPalette::Highlight);
-				QColor colb = palette().color(QPalette::Highlight);
-				colb.setAlpha(0x80);
-				p->setPen(col);
-				p->setBrush(colb);
-				p->drawRect(rr);
-				//p->setCompositionMode(QPainter::CompositionMode_SourceOver);
-			}
-			paintBorder(p);
+                QRect rr = QRect( QPoint(0,0), d->paperSize);
+                //p->setCompositionMode(QPainter::CompositionMode_Multiply);
+                //p->setCompositionMode(QPainter::CompositionMode_Xor);
+                QColor col = palette().color(QPalette::Highlight);
+                QColor colb = palette().color(QPalette::Highlight);
+                colb.setAlpha(0x80);
+                p->setPen(col);
+                p->setBrush(colb);
+                p->drawRect(rr);
+                //p->setCompositionMode(QPainter::CompositionMode_SourceOver);
+            }
+            paintBorder(p);
 
-                        //Сохраняем параметры прорисованных страниц
-                        QPageInfo pg(page,
-                                     QRect(xx - d->ms_left,
-                                           yy - d->ms_top,
-                                           d->paperWidthToScale(),
-                                           d->paperHeightToScale()));
-                        d->pagesRect.append(pg);
+            //Сохраняем параметры прорисованных страниц
+            QPageInfo pg(page,
+                         QRect(xx - d->ms_left,
+                               yy - d->ms_top,
+                               d->paperWidthToScale(),
+                               d->paperHeightToScale()));
+            d->pagesRect.append(pg);
 
-                        //Дополнительная прорисовка страницы
-                        QRect rr(0, 0, viewport()->width() - 1, viewport()->height() - 1);
-                        QRect rr1 = pg.rect().intersected(rr);
-                        p->save();
-                        additionalPaintEvent(p, page, rr1); //Дополнительная прорисовка страниц
-                        p->restore();
+            //Дополнительная прорисовка страницы
+            QRect rr(0, 0, viewport()->width() - 1, viewport()->height() - 1);
+            QRect rr1 = pg.rect().intersected(rr);
+            p->save();
+            additionalPaintEvent(p, page, rr1); //Дополнительная прорисовка страниц
+            p->restore();
 
-			p->restore();
+            p->restore();
 
-			if (d->pageLabelHeight) {
-				p->setPen(palette().color(QPalette::Text));
-				p->drawText( d->pageLabelRect, Qt::AlignCenter, QString::number(page+1));
-			}
+            if (d->pageLabelHeight) {
+                p->setPen(palette().color(QPalette::Text));
+                p->drawText( d->pageLabelRect, Qt::AlignCenter, QString::number(page+1));
+            }
 
-			page++;
-			if(page == d->pagesData.count()) break;
-			xx += (d->paperWidthToScale() + d->interPageSpacing);
-			p->translate((d->paperWidthToScale() + d->interPageSpacing), 0);
-		} //end for(int x = 0; x < d->cols; x++)
+            page++;
+            if(page == d->pagesData.count()) break;
+            xx += (d->paperWidthToScale() + d->interPageSpacing);
+            p->translate((d->paperWidthToScale() + d->interPageSpacing), 0);
+        } //end for(int x = 0; x < d->cols; x++)
 
-		if(d->viewMode != Mode_Thumbs) {
-			int _y = yy - d->ms_top;
-			if(_y < (viewport()->height()>>1)) {
-				d->selectPageIndex = page - 1;
-			}
-		}
+        if(d->viewMode != Mode_Thumbs) {
+            int _y = yy - d->ms_top;
+            if(_y < (viewport()->height()>>1)) {
+                d->selectPageIndex = page - 1;
+            }
+        }
 
-		p->restore();
-                if(page == d->pagesData.count())break;
-		p->translate(0, d->paperHeightToScale() + d->interPageSpacing + d->pageLabelHeight);
-		yy += (d->paperHeightToScale() + d->interPageSpacing + d->pageLabelHeight);
-	} //end for(int y = 0; y < d->countPagesRow; y++)
         p->restore();
+        if(page == d->pagesData.count())break;
+        p->translate(0, d->paperHeightToScale() + d->interPageSpacing + d->pageLabelHeight);
+        yy += (d->paperHeightToScale() + d->interPageSpacing + d->pageLabelHeight);
+    } //end for(int y = 0; y < d->countPagesRow; y++)
+    p->restore();
 //        for(int i = 0; i < d->pagesRect.count(); i++) {
 //            p->setPen(Qt::red);
 //            p->drawRect(d->pagesRect[i].rect());
 //        }
-	delete p;
+    delete p;
 
-        if(d->viewMode != Mode_Thumbs && d->selectPageIndex >= 0) {
-            emit currentPage(d->selectPageIndex);
-        }
+    if(d->viewMode != Mode_Thumbs && d->selectPageIndex >= 0) {
+        emit currentPage(d->selectPageIndex);
+    }
 }
 //--------------------------------------------------------------
 void AbstractPreview::additionalPaintEvent(QPainter *p, int page, const QRect &rect)
@@ -968,8 +984,12 @@ void AbstractPreview::additionalPaintEvent(QPainter *p, int page, const QRect &r
     Q_UNUSED(page);
 }
 //--------------------------------------------------------------
-QSize AbstractPreview::getPaperSize() { return d->paperSize; }
-QSize AbstractPreview::getPageSize()  { return d->pageSize; }
+QSize AbstractPreview::getPaperSize() {
+    return d->paperSize;
+}
+QSize AbstractPreview::getPageSize()  {
+    return d->pageSize;
+}
 //--------------------------------------------------------------
 int AbstractPreview::page(QPoint point)
 {
@@ -1139,7 +1159,7 @@ void AbstractPreview::mouseReleaseEvent(QMouseEvent *e)
 }
 //--------------------------------------------------------------
 void AbstractPreview::mousePressPageEvent(QMouseEvent *event, int page,
-                                          QRect rect, QPoint point)
+        QRect rect, QPoint point)
 {
     Q_UNUSED(event);
     Q_UNUSED(page);
@@ -1199,7 +1219,7 @@ int  AbstractPreview::pageCount()
 void AbstractPreview::setMargins(qreal ml, qreal mt, qreal mr, qreal mb)
 {
     if(d->mm_left == ml && d->mm_right == mr &&
-       d->mm_top == mt && d->mm_bottom == mb)return;
+            d->mm_top == mt && d->mm_bottom == mb)return;
     d->mm_left = ml;
     d->mm_right = mr;
     d->mm_top = mt;
@@ -1245,15 +1265,31 @@ void AbstractPreview::setMarginBottom(qreal mb)
 }
 //--------------------------------------------------------------
 
-qreal AbstractPreview::marginLeft() { return d->mm_left; }
-qreal AbstractPreview::marginTop()  { return d->mm_top; }
-qreal AbstractPreview::marginRight() { return d->mm_right; }
-qreal AbstractPreview::marginBottom() { return d->mm_bottom; }
+qreal AbstractPreview::marginLeft() {
+    return d->mm_left;
+}
+qreal AbstractPreview::marginTop()  {
+    return d->mm_top;
+}
+qreal AbstractPreview::marginRight() {
+    return d->mm_right;
+}
+qreal AbstractPreview::marginBottom() {
+    return d->mm_bottom;
+}
 
-int AbstractPreview::marginLeftPx() { return d->mp_left; }
-int AbstractPreview::marginTopPx() { return d->mp_top; }
-int AbstractPreview::marginRightPx() { return d->mp_right; }
-int AbstractPreview::marginBottomPx() { return d->mp_bottom; }
+int AbstractPreview::marginLeftPx() {
+    return d->mp_left;
+}
+int AbstractPreview::marginTopPx() {
+    return d->mp_top;
+}
+int AbstractPreview::marginRightPx() {
+    return d->mp_right;
+}
+int AbstractPreview::marginBottomPx() {
+    return d->mp_bottom;
+}
 
 //--------------------------------------------------------------
 void AbstractPreview::addedPages(int count, int begin)
@@ -1309,13 +1345,13 @@ QVariant AbstractPreview::pageData(int index)
 void AbstractPreview::setViewMode(AbstractPreview::PreviewMode mode)
 {
     if(d->viewMode == mode)return;
-	if (mode == Mode_Thumbs) {
-		setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-		d->pageLabelHeight = 18;
-	} else {
-		setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-		d->pageLabelHeight = 0;
-	}
+    if (mode == Mode_Thumbs) {
+        setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+        d->pageLabelHeight = 18;
+    } else {
+        setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+        d->pageLabelHeight = 0;
+    }
     d->viewMode = mode;
     sizeToCountPage();
     d->calcParamDraw();
@@ -1330,100 +1366,100 @@ AbstractPreview::PreviewMode AbstractPreview::viewMode()
 #ifdef PRINTER_CHANGE_DEVICE
 void AbstractPreview::changeDevice(QPaintDevice* device)
 {
-	if (device == d->printer) {
-		if (!dp) dp = new AbstractPreviewPrivate(this, d->printer);
-		d = dp;
-		d->currentDevice = device;
-		deviceChanged(d->currentDevice);
-		setupPageFormat();
-	} else {
-		d = dv;
-		if (dp) {
-			delete dp;
-			dp = NULL;
-		}
-		d->currentDevice = device;
-		deviceChanged(d->currentDevice);
-	}
+    if (device == d->printer) {
+        if (!dp) dp = new AbstractPreviewPrivate(this, d->printer);
+        d = dp;
+        d->currentDevice = device;
+        deviceChanged(d->currentDevice);
+        setupPageFormat();
+    } else {
+        d = dv;
+        if (dp) {
+            delete dp;
+            dp = NULL;
+        }
+        d->currentDevice = device;
+        deviceChanged(d->currentDevice);
+    }
 }
 #endif
 //--------------------------------------------------------------
 void AbstractPreview::print()
 {
 #ifndef QT_NO_DEBUG
-	qDebug("STA: AbstractPreview::print()");
+    qDebug("STA: AbstractPreview::print()");
 #endif
     QPrintDialog *dlg = new QPrintDialog(d->printer, NULL);
 //    d->printer->setOutputFormat(QPrinter::PdfFormat);
     if(dlg->exec() == QDialog::Accepted) {
-		printPages(d->printer);
+        printPages(d->printer);
     }
     delete dlg;
 #ifndef QT_NO_DEBUG
-	qDebug("END: AbstractPreview::print()");
+    qDebug("END: AbstractPreview::print()");
 #endif
 }
 
 void AbstractPreview::print(QPrinter *printer)
 {
-	printPages(printer);
+    printPages(printer);
 }
 
 void AbstractPreview::printPages(QPrinter *printer)
 {
 #ifdef DEBUG_PRINT_TIME
-		timeval tpb,tpe;
+    timeval tpb,tpe;
 #ifdef PRINTER_CHANGE_DEVICE
-		timeval tsb;
+    timeval tsb;
 #endif
 #endif
-		int fromPage = printer->fromPage();
-		int toPage = printer->toPage();
-        int count = d->pagesData.count();
-		if (fromPage) fromPage--;
-		if (!toPage || toPage>count) toPage = count;
+    int fromPage = printer->fromPage();
+    int toPage = printer->toPage();
+    int count = d->pagesData.count();
+    if (fromPage) fromPage--;
+    if (!toPage || toPage>count) toPage = count;
 
 #ifdef PRINTER_CHANGE_DEVICE
 #ifdef DEBUG_PRINT_TIME
-		gettimeofday(&tsb, NULL);
+    gettimeofday(&tsb, NULL);
 #endif
-		changeDevice(printer);
+    changeDevice(printer);
 #endif
 #ifdef DEBUG_PRINT_TIME
-		gettimeofday(&tpb, NULL);
+    gettimeofday(&tpb, NULL);
 #endif
-		QPainter p;
-		p.begin(printer);
+    QPainter p;
+    p.begin(printer);
 #ifndef PRINTER_CHANGE_DEVICE
-		float scaleX = (float) d->printer->logicalDpiX() / d->preview->logicalDpiX();
-		float scaleY = (float) d->printer->logicalDpiY() / d->preview->logicalDpiY();
-		qDebug() << "Printer scale: "<< scaleX << "x" << scaleY;
-		p.scale(scaleX, scaleY);
+    float scaleX = (float) d->printer->logicalDpiX() / d->preview->logicalDpiX();
+    float scaleY = (float) d->printer->logicalDpiY() / d->preview->logicalDpiY();
+    qDebug() << "Printer scale: "<< scaleX << "x" << scaleY;
+    p.scale(scaleX, scaleY);
 #endif
 #if (PRINTER_USE_FULLPAGE == 1)
-		p.translate(d->mp_left, d->mp_top);
+    p.translate(d->mp_left, d->mp_top);
 #endif
-		for(int i = fromPage; i < toPage; i++) {
+    for(int i = fromPage; i < toPage; i++) {
 #ifndef QT_NO_DEBUG
-			qDebug() << "printing page " << i << " ...";
+        qDebug() << "printing page " << i << " ...";
 #endif
-			if (i != fromPage) d->printer->newPage();
-			paintPage(&p, i, QRect( QPoint(0,0), d->pageSize));
-		}
-		p.end();
+        if (i != fromPage) d->printer->newPage();
+        paintPage(&p, i, QRect( QPoint(0,0), d->pageSize));
+    }
+    p.end();
 #ifdef DEBUG_PRINT_TIME
-		gettimeofday(&tpe, NULL);
+    gettimeofday(&tpe, NULL);
 #endif
 
 #ifdef PRINTER_CHANGE_DEVICE
-		changeDevice(d->preview);
+    changeDevice(d->preview);
 #ifdef DEBUG_PRINT_TIME
-		qDebug() << "Setup time: " << QString(" %1 s").arg(tpb.tv_sec - tsb.tv_sec + (tpb.tv_usec - tsb.tv_usec)/1000000.0,0,'f',4);
+    qDebug() << "Setup time: " << QString(" %1 s").arg(tpb.tv_sec - tsb.tv_sec + (tpb.tv_usec - tsb.tv_usec)/1000000.0,0,'f',4);
 #endif
 #endif
 
 #ifdef DEBUG_PRINT_TIME
-		qDebug() << "Pages time: " << QString(" %1 s").arg(tpe.tv_sec - tpb.tv_sec + (tpe.tv_usec - tpb.tv_usec)/1000000.0,0,'f',4);
+    qDebug() << "Pages time: " << QString(" %1 s").arg(tpe.tv_sec - tpb.tv_sec + (tpe.tv_usec - tpb.tv_usec)/1000000.0,0,'f',4);
 #endif
 }
 //--------------------------------------------------------------
@@ -1451,7 +1487,9 @@ void AbstractPreview::scaleOut()
     setScale( d->scale / d->scaleStep );
 }
 //--------------------------------------------------------------
-void AbstractPreview::scaleOrig() { setScale(1.0); }
+void AbstractPreview::scaleOrig() {
+    setScale(1.0);
+}
 
 void AbstractPreview::setScale(double z)
 {
@@ -1478,17 +1516,19 @@ double AbstractPreview::scaleStep()
 //--------------------------------------------------------------
 void AbstractPreview::setScaleRange(double zmin, double zmax)
 {
-	if (zmin > zmax) { qSwap(zmin,zmax); }
-	d->scaleMin = zmin;
-	d->scaleMax = zmax;
-	if(d->scale < zmin) {
-		setScale(zmin);
-		return;
-	}
-	if(d->scale > zmax) {
-		setScale(zmax);
-		return;
-	}
+    if (zmin > zmax) {
+        qSwap(zmin,zmax);
+    }
+    d->scaleMin = zmin;
+    d->scaleMax = zmax;
+    if(d->scale < zmin) {
+        setScale(zmin);
+        return;
+    }
+    if(d->scale > zmax) {
+        setScale(zmax);
+        return;
+    }
 }
 //--------------------------------------------------------------
 void AbstractPreview::setScaleMaximum(double zmax)
@@ -1559,11 +1599,11 @@ void AbstractPreview::clear()
 void AbstractPreview::setupPageFormat()
 {
 #ifndef QT_NO_DEBUG
-	qDebug("setupPageFormat()");
+    qDebug("setupPageFormat()");
 #endif
     d->setup();
     if (d->viewMode == Mode_Thumbs) {
-            autoscaleThumbs();
+        autoscaleThumbs();
     }
     updatePageFormat();
     d->changeScale();
@@ -1601,11 +1641,23 @@ void AbstractPreview::setMouseTrackingPage(bool mtp)
     setMouseTracking(d->mouseTrackingPage);
 }
 //--------------------------------------------------------------
-bool AbstractPreview::isMouseTrackingPage() { return d->mouseTrackingPage; }
-QPageInfo AbstractPreview::enterPageInfo() { return d->enterPageInfo; }
-void AbstractPreview::setMouseEnterLeavePage(bool melp) { d->mouseEnterLeavePage = melp; }
-bool AbstractPreview::mouseEnterLeavePage() { return d->mouseEnterLeavePage; }
+bool AbstractPreview::isMouseTrackingPage() {
+    return d->mouseTrackingPage;
+}
+QPageInfo AbstractPreview::enterPageInfo() {
+    return d->enterPageInfo;
+}
+void AbstractPreview::setMouseEnterLeavePage(bool melp) {
+    d->mouseEnterLeavePage = melp;
+}
+bool AbstractPreview::mouseEnterLeavePage() {
+    return d->mouseEnterLeavePage;
+}
 //--------------------------------------------------------------
-void AbstractPreview::setMovedContents(bool move) { d->movedContents = move; }
-bool AbstractPreview::movedContents() { return d->movedContents; }
+void AbstractPreview::setMovedContents(bool move) {
+    d->movedContents = move;
+}
+bool AbstractPreview::movedContents() {
+    return d->movedContents;
+}
 //--------------------------------------------------------------

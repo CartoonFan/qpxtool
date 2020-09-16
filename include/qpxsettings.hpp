@@ -23,113 +23,117 @@
 #include "db_connection.hpp"
 
 struct colorSet {
-	QString		name;
-	QColor		bg,grid,rspeed,wspeed,
-				errc[8],
-				jitter,asymm,
-				fe,te,
-				tapit,taland;
+    QString		name;
+    QColor		bg,grid,rspeed,wspeed,
+                errc[8],
+                jitter,asymm,
+                fe,te,
+                tapit,taland;
 };
 
 static const colorSet defColors = {
-	"Default",
-	0xFFFFFF,
-	0x808080,
-	0x009000,
-	0xC00000,
-	{	
-		0x009000,
-		0x00C000,
-		0x00FF00,
-		0xFFAA00,
-		0x0055FF,
-		0x550080,
-		0xFF0000,
-		Qt::black
-	},
-	0x00A000,
-	0xA00000,
-	0xA00000,
-	0x0000A0,
-	0xA00000,
-	0x0000A0
+    "Default",
+    0xFFFFFF,
+    0x808080,
+    0x009000,
+    0xC00000,
+    {
+        0x009000,
+        0x00C000,
+        0x00FF00,
+        0xFFAA00,
+        0x0055FF,
+        0x550080,
+        0xFF0000,
+        Qt::black
+    },
+    0x00A000,
+    0xA00000,
+    0xA00000,
+    0x0000A0,
+    0xA00000,
+    0x0000A0
 };
 
 class Scale {
 public:
-	Scale(QString iname);
-	~Scale();
+    Scale(QString iname);
+    ~Scale();
 
-	enum ScalePolicy {
-		Auto	= 1,
-		Fixed	= 2
-	};
+    enum ScalePolicy {
+        Auto	= 1,
+        Fixed	= 2
+    };
 
-	enum ScaleType {
-		Linear	= 4,
-		Log		= 8
-	};
+    enum ScaleType {
+        Linear	= 4,
+        Log		= 8
+    };
 
-	QString		name;
+    QString		name;
 //	ScaleType	type;
 //	ScaleMode	mode;
-	int			policy;
-	int			type;
-	int			value;
+    int			policy;
+    int			type;
+    int			value;
 
-	inline bool operator== (const QString &s)  { return name == s; };
-	inline bool operator== (const Scale &o)    { return name == o.name; };
+    inline bool operator== (const QString &s)  {
+        return name == s;
+    };
+    inline bool operator== (const Scale &o)    {
+        return name == o.name;
+    };
 };
 
 class ScaleList : public QList<Scale> {
-	public:
-		inline Scale& get(const QString s) {
-			int idx = indexOf(s);
-			if (idx>=0)
-				return (*this)[idx];
-			append(Scale(s));
-			return (*this)[indexOf(s)];
-		};
+public:
+    inline Scale& get(const QString s) {
+        int idx = indexOf(s);
+        if (idx>=0)
+            return (*this)[idx];
+        append(Scale(s));
+        return (*this)[indexOf(s)];
+    };
 };
 
-struct ErrcColorCD{
-	QColor *bler;
-	QColor *e11;
-	QColor *e21;
-	QColor *e31;
-	QColor *e12;
-	QColor *e22;
-	QColor *e32;
-	QColor *uncr;
+struct ErrcColorCD {
+    QColor *bler;
+    QColor *e11;
+    QColor *e21;
+    QColor *e31;
+    QColor *e12;
+    QColor *e22;
+    QColor *e32;
+    QColor *uncr;
 };
 
-struct ErrcColorDVD{
-	QColor *res0;
-	QColor *pie;
-	QColor *pi8;
-	QColor *pif;
-	QColor *poe;
-	QColor *po8;
-	QColor *pof;
-	QColor *uncr;
+struct ErrcColorDVD {
+    QColor *res0;
+    QColor *pie;
+    QColor *pi8;
+    QColor *pif;
+    QColor *poe;
+    QColor *po8;
+    QColor *pof;
+    QColor *uncr;
 };
 
-struct ErrcColorBD{
-	QColor *res0;
-	QColor *ldc;
-	QColor *res1;
-	QColor *res2;
-	QColor *bis;
-	QColor *res3;
-	QColor *res4;
-	QColor *uncr;
+struct ErrcColorBD {
+    QColor *res0;
+    QColor *ldc;
+    QColor *res1;
+    QColor *res2;
+    QColor *bis;
+    QColor *res3;
+    QColor *res4;
+    QColor *uncr;
 };
 
-union ErrcColor{
-	QColor *raw[8];
-	ErrcColorCD cd;
-	ErrcColorDVD dvd;
-	ErrcColorBD bd;
+union ErrcColor {
+    QColor *raw[8];
+    ErrcColorCD cd;
+    ErrcColorDVD dvd;
+    ErrcColorBD bd;
 };
 
 #define AFLAG_MWATCH			0x0001
@@ -147,65 +151,65 @@ union ErrcColor{
 
 class QPxSettings {
 public:
-	QPxSettings();
-	QPxSettings(const QPxSettings&);
-	~QPxSettings();
-	void load();
-	void save();
-	void loadScale(QString name);
-	void saveScale();
+    QPxSettings();
+    QPxSettings(const QPxSettings&);
+    ~QPxSettings();
+    void load();
+    void save();
+    void loadScale(QString name);
+    void saveScale();
 
-	void setDefaultColors();
-	QPxSettings& operator = (const QPxSettings& o);
+    void setDefaultColors();
+    QPxSettings& operator = (const QPxSettings& o);
 
 // geometry
-	QRect		geometry_mw;
-	QRect		geometry_pref;
+    QRect		geometry_mw;
+    QRect		geometry_pref;
 //	QRect		geometry_testsel;
-	int			tests;
+    int			tests;
 
 // general options
-	bool		show_sidebar;
-	bool		show_simplegraph;
-	bool		show_allctl;
-	bool		report_autosave;
-	QString		report_path;
-	uint32_t	actions_flags;
+    bool		show_sidebar;
+    bool		show_simplegraph;
+    bool		show_allctl;
+    bool		report_autosave;
+    QString		report_path;
+    uint32_t	actions_flags;
 
-	bool		use_reports_db;
-	bool		report_autosave_db;
-	DBParams	db;
+    bool		use_reports_db;
+    bool		report_autosave_db;
+    DBParams	db;
 
 // device settings
-	bool		useLocal;
-	bool		useRemote;
-	QStringList	hosts;
-	QStringList ports;
+    bool		useLocal;
+    bool		useRemote;
+    QStringList	hosts;
+    QStringList ports;
 
 // graph settings
-	QColor		col_bg;
-	QColor		col_bginv;
-	QColor		col_grid;
-	QColor		col_rspeed;
-	QColor		col_wspeed;
+    QColor		col_bg;
+    QColor		col_bginv;
+    QColor		col_grid;
+    QColor		col_rspeed;
+    QColor		col_wspeed;
 
-	ErrcColor	col_errc;
+    ErrcColor	col_errc;
 
-	QColor		col_jitter;
-	QColor		col_asymm;
+    QColor		col_jitter;
+    QColor		col_asymm;
 
-	QColor		col_fe;
-	QColor		col_te;
+    QColor		col_fe;
+    QColor		col_te;
 
-	QColor		col_tapit;
-	QColor		col_taland;
+    QColor		col_tapit;
+    QColor		col_taland;
 
-	ScaleList	scales;
+    ScaleList	scales;
 
 // paths
-	QString		last_res_path_native,
-				last_res_path_html,
-				last_res_path_pdf;
+    QString		last_res_path_native,
+                last_res_path_html,
+                last_res_path_pdf;
 };
 
 #endif

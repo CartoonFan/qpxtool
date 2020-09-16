@@ -75,8 +75,8 @@ const   uint32_t    FLAS_ACT        = 0x00000020;
 const   uint32_t    FLAS_DEACT      = 0x00000040;
 const   uint32_t    FLAS_CLEAR      = 0x00000080;
 
-    uint32_t    flags = 0;
-    uint32_t    flags_as = 0;
+uint32_t    flags = 0;
+uint32_t    flags_as = 0;
 
 auto get_device_info(drive_info* dev) -> int
 {
@@ -109,7 +109,7 @@ auto get_device_info(drive_info* dev) -> int
         if (plextor_get_hidecdr_singlesession(dev) == 0) {
             dev->ven_features|=PX_HCDRSS;
         }
-        if (plextor_get_speedread(dev) == 0) { 
+        if (plextor_get_speedread(dev) == 0) {
             dev->ven_features|=PX_SPDREAD;
         }
         if (dev->wr_capabilities == 0U) {
@@ -213,8 +213,9 @@ auto get_device_info(drive_info* dev) -> int
         std::cout << "\n** Current drive settings:\n";
     }
     if (((dev->capabilities & CAP_LOCK) != 0U)      && ((flags & FL_CURRENT) != 0U))
-        { get_lock(dev);
-        std::cout << "Lock state          : " << (((dev->parms.status & STATUS_LOCK) != 0) ? "ON":"OFF") << "\n"; }
+    {   get_lock(dev);
+        std::cout << "Lock state          : " << (((dev->parms.status & STATUS_LOCK) != 0) ? "ON":"OFF") << "\n";
+    }
 //  if ((dev->ven_features & YMH_AMQR)       && ((flags & FL_CURRENT) || (flags & FL_YMH_AMQR)))
 //      std::cout << "AudioMaster Q.R.    : " << ((dev->yamaha.amqr) ? "ON":"OFF") << "\n";
 //  if ((dev->ven_features & YMH_FORCESPEED)       && ((flags & FL_CURRENT) || (flags & FL_YMH_FORCESPEED)))
@@ -256,17 +257,17 @@ auto get_device_info(drive_info* dev) -> int
     if (((dev->ven_features & PX_VARIREC_CD) != 0U)  && (((flags & FL_CURRENT) != 0U) || ((flags & FL_VARIREC_CD) != 0U)))
     {
         std::cout << "VariRec CD state    : " << (((dev->plextor.varirec_state_cd) != 0) ? "ON":"OFF") << "\n";
-        if ((dev->plextor.varirec_state_cd) != 0){
+        if ((dev->plextor.varirec_state_cd) != 0) {
             print_varirec(dev, VARIREC_CD);
-            }
         }
+    }
     if (((dev->ven_features & PX_VARIREC_DVD) != 0U) && (((flags & FL_CURRENT) != 0U) || ((flags & FL_VARIREC_DVD) != 0U)))
     {
         std::cout << "VariRec DVD state   : " << (((dev->plextor.varirec_state_dvd) != 0) ? "ON":"OFF") << "\n";
-        if ((dev->plextor.varirec_state_dvd) != 0){
+        if ((dev->plextor.varirec_state_dvd) != 0) {
             print_varirec(dev, VARIREC_DVD);
-            }
         }
+    }
     if (((dev->ven_features & PX_SECUREC) != 0U) && (((flags & FL_CURRENT) != 0U) || ((flags & FL_SECUREC) != 0U))) {
         std::cout << "SecuRec state       : " << (((dev->plextor.securec) != 0) ? "ON":"OFF") << "\n";
     }
@@ -274,8 +275,8 @@ auto get_device_info(drive_info* dev) -> int
         std::cout << "Silent mode         : " << (((dev->plextor_silent.state) != 0) ? "ON":"OFF") << "\n";
         if ((dev->plextor_silent.state) != 0U) {
             plextor_print_silentmode_state(dev);
-            }
         }
+    }
     if (((dev->ven_features & PX_BITSET_R) != 0U)    && (((flags & FL_CURRENT) != 0U) || ((flags & FL_BOOK_R) != 0U))) {
         std::cout << "DVD+R bitsetting    : " << (((dev->book_plus_r) != 0) ? "ON":"OFF") << "\n";
     }
@@ -291,12 +292,12 @@ auto get_device_info(drive_info* dev) -> int
     if ((dev->ven_features & PX_ERASER) != 0U) {
         std::cout << "PlexEraser          : supported\n";
     }
-    if (((dev->ven_features & PIO_QUIET) != 0U) && (((flags & FL_CURRENT) != 0U) || ((flags & FL_PIOQUIET) != 0U))){
+    if (((dev->ven_features & PIO_QUIET) != 0U) && (((flags & FL_CURRENT) != 0U) || ((flags & FL_PIOQUIET) != 0U))) {
         std::cout << "QuietMode setting   : " << pioneer_silent_tbl[(int)dev->pioneer.silent] << "\n";
     }
     if (((dev->ven_features & PIO_QUIET) != 0U) && (((flags & FL_CURRENT) != 0U) || ((flags & FL_PIOLIMIT) != 0U))) {
         std::cout << "Speed Limit         : " << (((dev->pioneer.limit) != 0) ? "ON" : "OFF") << "\n";
-        }
+    }
     return 0;
 }
 
@@ -442,22 +443,22 @@ auto main (int argc, char* argv[]) -> int
         const char* conflicting_lock_option = "Conflicting/duplicated lock/unlock option!\n";
 //      std::cout << "arg[" << i << "]: " << argv[i] << "\n";
         if(strcmp(argv[i],"-d") == 0) {
-                if(argc>(i+1)) {
-                    i++;
-                    flags |= FL_DEVICE;
-                    device = argv[i];
-                } else {
-                    needs_parameter(argv, i);
-                    exit (1);
-                }
+            if(argc>(i+1)) {
+                i++;
+                flags |= FL_DEVICE;
+                device = argv[i];
+            } else {
+                needs_parameter(argv, i);
+                exit (1);
+            }
         }
         else if((strcmp(argv[i],"-h") == 0) || (strcmp(argv[i],"--help") == 0)) {
-             flags |= FL_HELP;
-         }
-        else if((strcmp(argv[i],"-c") == 0) || (strcmp(argv[i],"--current") == 0)) { 
+            flags |= FL_HELP;
+        }
+        else if((strcmp(argv[i],"-c") == 0) || (strcmp(argv[i],"--current") == 0)) {
             flags |= FL_CURRENT;
         }
-        else if((strcmp(argv[i],"-s")) == 0 || (strcmp(argv[i],"--supported") == 0)) { 
+        else if((strcmp(argv[i],"-s")) == 0 || (strcmp(argv[i],"--supported") == 0)) {
             flags |= FL_SUPPORTED;
         }
         else if((strcmp(argv[i],"-l")) == 0 || (strcmp(argv[i],"--scanbus")) == 0) {
@@ -466,7 +467,7 @@ auto main (int argc, char* argv[]) -> int
 //  ************   Lock
         else if((strcmp(argv[i],"--unlock")) == 0) {
             if ( (flags & FL_LOCK) == 0U) {
-                flags |= FL_LOCK; 
+                flags |= FL_LOCK;
                 lock=0;
             } else {
                 std::cout << conflicting_lock_option;
@@ -474,7 +475,7 @@ auto main (int argc, char* argv[]) -> int
         }
         else if((strcmp(argv[i],"--lock") == 0)) {
             if ( (flags & FL_LOCK) == 0U) {
-                flags |= FL_LOCK; 
+                flags |= FL_LOCK;
                 lock=1;
             } else {
                 std::cout << conflicting_lock_option;
@@ -482,7 +483,7 @@ auto main (int argc, char* argv[]) -> int
         }
         else if((strcmp(argv[i],"--lockt")) == 0) {
             if ( (flags & FL_LOCK) == 0U) {
-                flags |= FL_LOCK; 
+                flags |= FL_LOCK;
                 lock=2;
             } else {
                 std::cout << conflicting_lock_option;
@@ -490,7 +491,7 @@ auto main (int argc, char* argv[]) -> int
         }
         else if((strcmp(argv[i],"--load")) ==0) {
             if ( (flags & FL_LOEJ) == 0U) {
-                flags |= FL_LOEJ; 
+                flags |= FL_LOEJ;
                 eject=0;
             } else {
                 std::cout << conflicting_lock_option;
@@ -498,7 +499,7 @@ auto main (int argc, char* argv[]) -> int
         }
         else if((strcmp(argv[i],"--eject")) == 0) {
             if ( (flags & FL_LOEJ) == 0U) {
-                flags |= FL_LOEJ; 
+                flags |= FL_LOEJ;
                 eject=1;
             } else {
                 std::cout << conflicting_lock_option;
@@ -506,7 +507,7 @@ auto main (int argc, char* argv[]) -> int
         }
         else if((strcmp(argv[i],"--loej")) == 0) {
             if ( (flags & FL_LOEJ) == 0U) {
-                flags |= FL_LOEJ; 
+                flags |= FL_LOEJ;
                 eject=2;
             } else {
                 std::cout << conflicting_lock_option;
@@ -640,33 +641,33 @@ auto main (int argc, char* argv[]) -> int
                         return 5;
                     } else {
                         switch(val) {
-                        case -4: 
-                        varirec_cd_pwr = VARIREC_MINUS_4; 
-                        break;
-                        case -3: 
-                        varirec_cd_pwr = VARIREC_MINUS_3; 
-                        break;
-                        case -2: 
-                        varirec_cd_pwr = VARIREC_MINUS_2; 
-                        break;
-                        case -1: 
-                        varirec_cd_pwr = VARIREC_MINUS_1; 
-                        break;
-                        case  0: 
-                        varirec_cd_pwr = VARIREC_NULL; 
-                        break;
-                        case  1: 
-                        varirec_cd_pwr = VARIREC_PLUS_1; 
-                        break;
-                        case  2: 
-                        varirec_cd_pwr = VARIREC_PLUS_2; 
-                        break;
-                        case  3: 
-                        varirec_cd_pwr = VARIREC_PLUS_3; 
-                        break;
-                        case  4: 
-                        varirec_cd_pwr = VARIREC_PLUS_4; 
-                        break;
+                        case -4:
+                            varirec_cd_pwr = VARIREC_MINUS_4;
+                            break;
+                        case -3:
+                            varirec_cd_pwr = VARIREC_MINUS_3;
+                            break;
+                        case -2:
+                            varirec_cd_pwr = VARIREC_MINUS_2;
+                            break;
+                        case -1:
+                            varirec_cd_pwr = VARIREC_MINUS_1;
+                            break;
+                        case  0:
+                            varirec_cd_pwr = VARIREC_NULL;
+                            break;
+                        case  1:
+                            varirec_cd_pwr = VARIREC_PLUS_1;
+                            break;
+                        case  2:
+                            varirec_cd_pwr = VARIREC_PLUS_2;
+                            break;
+                        case  3:
+                            varirec_cd_pwr = VARIREC_PLUS_3;
+                            break;
+                        case  4:
+                            varirec_cd_pwr = VARIREC_PLUS_4;
+                            break;
                         }
                     }
                 }
@@ -682,8 +683,7 @@ auto main (int argc, char* argv[]) -> int
                 int val = std::stol(argv[i]);
                 if (!errno && val>=-1 && val<max_varirec_args) {
                     varirec_cd_str = val+1;
-                } else
-                if ((strcmp(argv[i],"default")) == 0)  {
+                } else if ((strcmp(argv[i],"default")) == 0)  {
                     varirec_cd_str = 0;
                 }
                 else if ((strcmp(argv[i],"azo")) == 0) {
@@ -727,16 +727,34 @@ auto main (int argc, char* argv[]) -> int
                         std::cout << "Illegal VariREC DVD power value: " << argv[i] << "\n";
                         return 5;
                     } else switch(val) {
-                        case -4: varirec_dvd_pwr = VARIREC_MINUS_4; break;
-                        case -3: varirec_dvd_pwr = VARIREC_MINUS_3; break;
-                        case -2: varirec_dvd_pwr = VARIREC_MINUS_2; break;
-                        case -1: varirec_dvd_pwr = VARIREC_MINUS_1; break;
-                        case  0: varirec_dvd_pwr = VARIREC_NULL; break;
-                        case  1: varirec_dvd_pwr = VARIREC_PLUS_1; break;
-                        case  2: varirec_dvd_pwr = VARIREC_PLUS_2; break;
-                        case  3: varirec_dvd_pwr = VARIREC_PLUS_3; break;
-                        case  4: varirec_dvd_pwr = VARIREC_PLUS_4; break;
-                    }
+                        case -4:
+                            varirec_dvd_pwr = VARIREC_MINUS_4;
+                            break;
+                        case -3:
+                            varirec_dvd_pwr = VARIREC_MINUS_3;
+                            break;
+                        case -2:
+                            varirec_dvd_pwr = VARIREC_MINUS_2;
+                            break;
+                        case -1:
+                            varirec_dvd_pwr = VARIREC_MINUS_1;
+                            break;
+                        case  0:
+                            varirec_dvd_pwr = VARIREC_NULL;
+                            break;
+                        case  1:
+                            varirec_dvd_pwr = VARIREC_PLUS_1;
+                            break;
+                        case  2:
+                            varirec_dvd_pwr = VARIREC_PLUS_2;
+                            break;
+                        case  3:
+                            varirec_dvd_pwr = VARIREC_PLUS_3;
+                            break;
+                        case  4:
+                            varirec_dvd_pwr = VARIREC_PLUS_4;
+                            break;
+                        }
                 }
             } else {
                 needs_parameter(argv, i);
@@ -764,7 +782,7 @@ auto main (int argc, char* argv[]) -> int
                 i++;
                 strcpy(passwd,argv[i]);
                 flags |= FL_SECUREC;
-            //  std::cout << "SecuRec pass: " << passwd << "\n";
+                //  std::cout << "SecuRec pass: " << passwd << "\n";
             } else {
                 needs_parameter(argv, i);
                 return 5;
@@ -911,7 +929,9 @@ auto main (int argc, char* argv[]) -> int
             }
         }
         else if(!strcmp(argv[i],"--sm-load")) {
-            flags |= FL_SILENT; silent = 1; silent_tray = 1;
+            flags |= FL_SILENT;
+            silent = 1;
+            silent_tray = 1;
             if (argc>(i+1)) {
                 i++;
                 silent_load = (int)strtol(argv[i], NULL, 0);
@@ -922,7 +942,9 @@ auto main (int argc, char* argv[]) -> int
             }
         }
         else if(!strcmp(argv[i],"--sm-eject")) {
-            flags |= FL_SILENT; silent = 1; silent_tray = 1;
+            flags |= FL_SILENT;
+            silent = 1;
+            silent_tray = 1;
             if (argc>(i+1)) {
                 i++;
                 silent_eject = (int)strtol(argv[i], NULL, 0);
@@ -933,7 +955,8 @@ auto main (int argc, char* argv[]) -> int
             }
         }
         else if(!strcmp(argv[i],"--sm-access")) {
-            flags |= FL_SILENT; silent = 1;
+            flags |= FL_SILENT;
+            silent = 1;
             if (argc>(i+1)) {
                 i++;
                 if     (!strcmp(argv[i],"fast"))  silent_access = SILENT_ACCESS_FAST;
@@ -944,7 +967,9 @@ auto main (int argc, char* argv[]) -> int
             }
         }
         else if(!strcmp(argv[i],"--sm-cd-rd")) {
-            flags |= FL_SILENT; silent = 1; silent_cd = 1;
+            flags |= FL_SILENT;
+            silent = 1;
+            silent_cd = 1;
             if (argc>(i+1)) {
                 i++;
                 if      (!strcmp(argv[i],"48")) silent_cd_rd = SILENT_CD_RD_48X;
@@ -961,7 +986,9 @@ auto main (int argc, char* argv[]) -> int
             }
         }
         else if(!strcmp(argv[i],"--sm-cd-wr")) {
-            flags |= FL_SILENT; silent = 1; silent_cd = 1;
+            flags |= FL_SILENT;
+            silent = 1;
+            silent_cd = 1;
             if (argc>(i+1)) {
                 i++;
                 if      (!strcmp(argv[i],"48")) silent_cd_wr = SILENT_CD_WR_48X;
@@ -978,7 +1005,9 @@ auto main (int argc, char* argv[]) -> int
             }
         }
         else if(!strcmp(argv[i],"--sm-dvd-rd")) {
-            flags |= FL_SILENT; silent = 1; silent_dvd = 1;
+            flags |= FL_SILENT;
+            silent = 1;
+            silent_dvd = 1;
             if (argc>(i+1)) {
                 i++;
                 if      (!strcmp(argv[i],"16")) silent_dvd_rd = SILENT_DVD_RD_16X;
@@ -993,31 +1022,37 @@ auto main (int argc, char* argv[]) -> int
                 return 5;
             }
         }
-/*
-        else if(!strcmp(argv[i],"--sm-dvd-wr")) {
-            flags |= FL_SILENT; silent = 1; silent_dvd = 1;
-            if (argc>(i+1)) {
-                i++;
-                if      (!strcmp(argv[i],"18")) silent_dvd_wr = SILENT_DVD_WR_18X;
-                else if (!strcmp(argv[i],"16")) silent_dvd_wr = SILENT_DVD_WR_12X;
-                else if (!strcmp(argv[i],"12")) silent_dvd_wr = SILENT_DVD_WR_12X;
-                else if (!strcmp(argv[i], "8")) silent_dvd_wr =  SILENT_DVD_WR_8X;
-                else if (!strcmp(argv[i], "6")) silent_dvd_wr =  SILENT_DVD_WR_6X;
-                else if (!strcmp(argv[i], "4")) silent_dvd_wr =  SILENT_DVD_WR_4X;
-                else
-                    std::cout << "invalid --sm-dvd-wr parameter: " << argv[i] << "\n";
-            } else {
-                needs_parameter(argv, i);
-                return 5;
-            }
-        }
-*/
+        /*
+                else if(!strcmp(argv[i],"--sm-dvd-wr")) {
+                    flags |= FL_SILENT; silent = 1; silent_dvd = 1;
+                    if (argc>(i+1)) {
+                        i++;
+                        if      (!strcmp(argv[i],"18")) silent_dvd_wr = SILENT_DVD_WR_18X;
+                        else if (!strcmp(argv[i],"16")) silent_dvd_wr = SILENT_DVD_WR_12X;
+                        else if (!strcmp(argv[i],"12")) silent_dvd_wr = SILENT_DVD_WR_12X;
+                        else if (!strcmp(argv[i], "8")) silent_dvd_wr =  SILENT_DVD_WR_8X;
+                        else if (!strcmp(argv[i], "6")) silent_dvd_wr =  SILENT_DVD_WR_6X;
+                        else if (!strcmp(argv[i], "4")) silent_dvd_wr =  SILENT_DVD_WR_4X;
+                        else
+                            std::cout << "invalid --sm-dvd-wr parameter: " << argv[i] << "\n";
+                    } else {
+                        needs_parameter(argv, i);
+                        return 5;
+                    }
+                }
+        */
         else if(!strcmp(argv[i],"--sm-nosave")) silent_save = 0;
         else if(!strcmp(argv[i],"--destruct")) {
             if (argc>(i+1)) {
                 i++;
-                if (!strcmp(argv[i],"quick")) { flags |= FL_PXERASER; pxeraser = PLEXERASER_QUICK; }
-                if (!strcmp(argv[i],"full"))  { flags |= FL_PXERASER; pxeraser = PLEXERASER_FULL;  }
+                if (!strcmp(argv[i],"quick")) {
+                    flags |= FL_PXERASER;
+                    pxeraser = PLEXERASER_QUICK;
+                }
+                if (!strcmp(argv[i],"full"))  {
+                    flags |= FL_PXERASER;
+                    pxeraser = PLEXERASER_FULL;
+                }
             } else {
                 needs_parameter(argv, i);
                 return 5;
@@ -1040,12 +1075,12 @@ auto main (int argc, char* argv[]) -> int
             }
 
 
-//  std::cout << "\t--pio-limit [on|off]         limit (or not) read speed by 24x for CD and 8x for DVD\n"; 
+//  std::cout << "\t--pio-limit [on|off]         limit (or not) read speed by 24x for CD and 8x for DVD\n";
 //  std::cout << "\t--pio-quiet [quiet|perf|std] select QuietMode setting: Quiet, Performance or Standard (default: quiet)\n";
 //  std::cout << "\t--pio-nosave                don't save settings to drive (changes will be lost after reboot)\n";
 
         } else if(!strcmp(argv[i],"--pio-nosave")) {
-            silent_save = 0; 
+            silent_save = 0;
         } else if(!strcmp(argv[i],"--pio-limit")) {
             flags |= FL_PIOLIMIT;
             if (argc>(i+1)) {
@@ -1159,19 +1194,19 @@ auto main (int argc, char* argv[]) -> int
     if (flags & FL_LOCK) {
 //      dev->silent++;
         switch (lock) {
-            case 0:
-                std::cout << "Unlocking media...\n";
-                dev->parms.status &= (~STATUS_LOCK);
-                break;
-            case 1:
-                std::cout << "Locking media...\n";
-                dev->parms.status |= STATUS_LOCK;
-                break;
-            case 2:
-                std::cout << "Toggle media lock state...\n";
-                get_lock(dev);
-                dev->parms.status ^= STATUS_LOCK;
-                break;
+        case 0:
+            std::cout << "Unlocking media...\n";
+            dev->parms.status &= (~STATUS_LOCK);
+            break;
+        case 1:
+            std::cout << "Locking media...\n";
+            dev->parms.status |= STATUS_LOCK;
+            break;
+        case 2:
+            std::cout << "Toggle media lock state...\n";
+            get_lock(dev);
+            dev->parms.status ^= STATUS_LOCK;
+            break;
         }
         set_lock(dev);
         std::cout << "Media is " << ((dev->parms.status & STATUS_LOCK) ? "" : " NOT") << " locked\n";
@@ -1193,16 +1228,16 @@ auto main (int argc, char* argv[]) -> int
         dev->plextor.powerec_state = powerec;
         plextor_set_powerec(dev);
     }
-/*
-    if (flags & FL_YMH_AMQR) {
-        dev->yamaha.amqr = amqr;
-        yamaha_set_amqr(dev);
-    }
-    if (flags & FL_YMH_FORCESPEED) {
-        dev->yamaha.forcespeed = forcespeed;
-        yamaha_set_forcespeed(dev);
-    }
-*/
+    /*
+        if (flags & FL_YMH_AMQR) {
+            dev->yamaha.amqr = amqr;
+            yamaha_set_amqr(dev);
+        }
+        if (flags & FL_YMH_FORCESPEED) {
+            dev->yamaha.forcespeed = forcespeed;
+            yamaha_set_forcespeed(dev);
+        }
+    */
     if (flags & FL_GIGAREC) {
 //      std::cout << "Set GigaREC...\n";
         dev->plextor.gigarec = gigarec;
@@ -1270,7 +1305,7 @@ auto main (int argc, char* argv[]) -> int
         }
         if (as_mqck >= 0) {
             dev->parms.max_write_speed_kb = (int) (as_mqck_spd * dev->parms.speed_mult),
-            set_rw_speeds(dev);
+                 set_rw_speeds(dev);
             get_rw_speeds(dev);
             if ( !(dev->media.type & (DISC_DVD)) ) {
                 std::cout << "MQCK: Media Quality Check supported on DVD media only!\n";
@@ -1291,14 +1326,14 @@ auto main (int argc, char* argv[]) -> int
                     std::cout << "MQCK: Media is GOOD for writing at selected speed\n";
             } else {
                 switch (dev->rd_buf[0x10]) {
-                    case 0x01:
-                        std::cout << "MQCK: Write error may occur\n";
-                        break;
-                    case 0x03:
-                        std::cout << "MQCK: Drive may not write correctly at selected speed\n";
-                        break;
-                    default:
-                        std::cout << "MQCK: Unknown MQCK error: 0x" << dev->rd_buf[0x10] << " X\n";
+                case 0x01:
+                    std::cout << "MQCK: Write error may occur\n";
+                    break;
+                case 0x03:
+                    std::cout << "MQCK: Drive may not write correctly at selected speed\n";
+                    break;
+                default:
+                    std::cout << "MQCK: Unknown MQCK error: 0x" << dev->rd_buf[0x10] << " X\n";
                 }
             }
         }
@@ -1330,12 +1365,16 @@ auto main (int argc, char* argv[]) -> int
         plextor_create_strategy(dev, ascre);
     }
     if (flags_as & FLAS_RETR) {
-        unsigned char hdr[9]; memset(hdr, 0, 9);
+        unsigned char hdr[9];
+        memset(hdr, 0, 9);
         std::cout << "AS RETR...\n";
         plextor_get_strategy(dev);
         std::cout << "Saving AS DB...\n";
         asf = fopen(assfn,"wb");
-        if (!asf) { std::cout << "can't create asdb file!\n"; return 6; }
+        if (!asf) {
+            std::cout << "can't create asdb file!\n";
+            return 6;
+        }
         memcpy(hdr,"ASDB ",5);
         hdr[5] = dev->astrategy.dbcnt;
         fwrite((void*)hdr,1,8,asf);
@@ -1347,25 +1386,38 @@ auto main (int argc, char* argv[]) -> int
         fclose(asf);
     }
     if (flags_as & FLAS_STOR) {
-        unsigned char hdr[9]; memset(hdr, 0, 9);
+        unsigned char hdr[9];
+        memset(hdr, 0, 9);
         std::cout << "AS STOR...\n";
 
         std::cout << "Loading AS DB...\n";
         asf = fopen(aslfn,"rb");
         if (!asf)
-            { std::cout << "can't open asdb file!\n"; return 6; }
+        {
+            std::cout << "can't open asdb file!\n";
+            return 6;
+        }
         if (fread((void*)hdr,1,8,asf)<8)
-            { std::cout << "error reading asdb file!\n"; return 6; }
+        {
+            std::cout << "error reading asdb file!\n";
+            return 6;
+        }
 
         if (!strncmp((char*)hdr,"ASDB ",5))
-        dev->astrategy.dbcnt = hdr[5];
+            dev->astrategy.dbcnt = hdr[5];
         i=0;
         while (!feof(asf) && i<dev->astrategy.dbcnt) {
             if (fread((void*)&dev->astrategy.entry[i],1,0x20,asf)<0x20)
-                { std::cout << "error reading asdb file!\n"; return 6; }
+            {
+                std::cout << "error reading asdb file!\n";
+                return 6;
+            }
             for (int j=0; j<7; j++)
                 if (fread((void*)&dev->astrategy.entry_data[i][j],1,0x20,asf)<0x20)
-                    { std::cout << "error reading asdb file!\n"; return 6; }
+                {
+                    std::cout << "error reading asdb file!\n";
+                    return 6;
+                }
 
             i++;
         }
@@ -1382,7 +1434,7 @@ auto main (int argc, char* argv[]) -> int
         plextor_get_autostrategy_db_entry_count(dev);
         plextor_get_autostrategy_db(dev);
     }
-dev->silent++;
+    dev->silent++;
     if (flags & FL_TESTWRITE) {
         dev->plextor.testwrite_dvdplus = testwrite;
         plextor_set_testwrite_dvdplus(dev);
@@ -1393,7 +1445,11 @@ dev->silent++;
             plextor_set_silentmode_disable(dev, silent_save);
         else {
             if (!dev->plextor_silent.state)
-                { silent_cd = 1; silent_dvd = 1; silent_tray = 1; }
+            {
+                silent_cd = 1;
+                silent_dvd = 1;
+                silent_tray = 1;
+            }
             if (silent_cd) {
                 dev->plextor_silent.access  = silent_access;
                 dev->plextor_silent.rd      = silent_cd_rd;

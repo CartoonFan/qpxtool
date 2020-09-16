@@ -25,32 +25,32 @@ class QCheckBox;
 
 class prefCommon : public QWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	prefCommon(QPxSettings *iset, QWidget *p=0, Qt::WindowFlags fl=0);
-	~prefCommon();
+    prefCommon(QPxSettings *iset, QWidget *p=0, Qt::WindowFlags fl=0);
+    ~prefCommon();
 
 private:
-	QVBoxLayout	*layout;
+    QVBoxLayout	*layout;
 
-	QCheckBox	*ck_autow,
-				*ck_autob;
+    QCheckBox	*ck_autow,
+                *ck_autob;
 
-	QLabel		*pl_testsw,
-				*pl_testsb;
-	QGridLayout	*layout_testsb;
+    QLabel		*pl_testsw,
+                *pl_testsb;
+    QGridLayout	*layout_testsb;
 
-	QCheckBox	*ck_rt,
-				*ck_wt,
-				*ck_wt_simul,
-				*ck_errc,
-				*ck_jb,
-				*ck_ftb,
-				*ck_ftw,
-				*ck_ta;
+    QCheckBox	*ck_rt,
+                *ck_wt,
+                *ck_wt_simul,
+                *ck_errc,
+                *ck_jb,
+                *ck_ftb,
+                *ck_ftw,
+                *ck_ta;
 
-	QPxSettings *set;
+    QPxSettings *set;
 };
 
 #endif

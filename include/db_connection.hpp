@@ -18,26 +18,26 @@ class QString;
 
 class DBParams {
 public:
-	DBParams();
-	DBParams(QString driver, 
-			QString host, 
-			QString name, 
-			QString user, 
-			QString pass,
-			int port = 5432
-	);
+    DBParams();
+    DBParams(QString driver,
+             QString host,
+             QString name,
+             QString user,
+             QString pass,
+             int port = 5432
+            );
 //	DBParams(const DBParams& p);
-	~DBParams() {};
+    ~DBParams() {};
 
     bool	params_set;
-	QString	driver;
+    QString	driver;
     QString	host;
     int		port;
     QString	name;
     QString	user;
     QString	pass;
 
-	QString conn_name;
+    QString conn_name;
 };
 
 bool SqlProbeConnection(const DBParams& par, QString CONNECTION="test connection");

@@ -24,31 +24,31 @@ class QPxSettings;
 
 class prefDevices : public QWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	prefDevices(QPxSettings *iset, QWidget *p=0, Qt::WindowFlags f=0);
-	virtual ~prefDevices();
+    prefDevices(QPxSettings *iset, QWidget *p=0, Qt::WindowFlags f=0);
+    virtual ~prefDevices();
 
 protected:
-	bool eventFilter(QObject* obj, QEvent* e);
-	void hostsContextMenu(QContextMenuEvent* e);
+    bool eventFilter(QObject* obj, QEvent* e);
+    void hostsContextMenu(QContextMenuEvent* e);
 
 private slots:
-	void hostAdd();
-	void hostEdit();
-	void hostRemove();
+    void hostAdd();
+    void hostEdit();
+    void hostRemove();
 
 private:
-	QBoxLayout  *layout;
+    QBoxLayout  *layout;
 
-	QCheckBox	*ck_local;
-	QCheckBox	*ck_remote;
+    QCheckBox	*ck_local;
+    QCheckBox	*ck_remote;
 
 //	QGroupBox	*g_hosts;
 //	QBoxLayout	*l_hosts;
-	QTreeWidget	*lst_hosts;
+    QTreeWidget	*lst_hosts;
 
-	QPxSettings *set;
+    QPxSettings *set;
 };
 
 #endif

@@ -34,45 +34,45 @@
 #include "db_connection.hpp"
 
 prefReports::prefReports(QPxSettings *iset, QWidget *p, Qt::WindowFlags fl)
-	: QWidget(p,fl)
+    : QWidget(p,fl)
 {
 
 #ifndef QT_NO_DEBUG
-	qDebug("STA: prefCommon()");
+    qDebug("STA: prefCommon()");
 #endif
-	set = iset;
+    set = iset;
 
-	layout = new QVBoxLayout(this);
-	layout->setMargin(0);
-	layout->setSpacing(3);
+    layout = new QVBoxLayout(this);
+    layout->setMargin(0);
+    layout->setSpacing(3);
 
 // reports -> files
-	box_rep = new QGroupBox(tr("Autosave reports"),this);
-	box_rep->setCheckable(true);
-	layout->addWidget(box_rep);
+    box_rep = new QGroupBox(tr("Autosave reports"),this);
+    box_rep->setCheckable(true);
+    layout->addWidget(box_rep);
 
-	layout_rep = new QVBoxLayout(box_rep);
-	layout_rep->setMargin(3);
-	layout_rep->setSpacing(3);
+    layout_rep = new QVBoxLayout(box_rep);
+    layout_rep->setMargin(3);
+    layout_rep->setSpacing(3);
 
-	layout_rep_path = new QHBoxLayout();
-	layout_rep_path->setMargin(0);
-	layout_rep_path->setSpacing(3);
-	layout_rep->addLayout(layout_rep_path);
+    layout_rep_path = new QHBoxLayout();
+    layout_rep_path->setMargin(0);
+    layout_rep_path->setSpacing(3);
+    layout_rep->addLayout(layout_rep_path);
 
-	l_rep_path  = new QLabel(tr("Path:"),box_rep);
-	e_rep_path  = new QLineEdit(box_rep);
-	pb_rep_path = new QPushButton(QIcon(":images/directory.png"), "", box_rep);
-	pb_rep_path->setToolTip(tr("Select directory for reports saving..."));
+    l_rep_path  = new QLabel(tr("Path:"),box_rep);
+    e_rep_path  = new QLineEdit(box_rep);
+    pb_rep_path = new QPushButton(QIcon(":images/directory.png"), "", box_rep);
+    pb_rep_path->setToolTip(tr("Select directory for reports saving..."));
 
-	layout_rep_path->addWidget(l_rep_path);
-	layout_rep_path->addWidget(e_rep_path);
-	layout_rep_path->addWidget(pb_rep_path);
+    layout_rep_path->addWidget(l_rep_path);
+    layout_rep_path->addWidget(e_rep_path);
+    layout_rep_path->addWidget(pb_rep_path);
 
 // reports -> database
-	box_rep_db = new QGroupBox(tr("Use reports database"),this);
-	box_rep_db->setCheckable(true);
-	layout->addWidget(box_rep_db);
+    box_rep_db = new QGroupBox(tr("Use reports database"),this);
+    box_rep_db->setCheckable(true);
+    layout->addWidget(box_rep_db);
 
     layout_db = new QGridLayout(box_rep_db);
     layout_db->setMargin(3);
@@ -146,84 +146,85 @@ prefReports::prefReports(QPxSettings *iset, QWidget *p, Qt::WindowFlags fl)
     pb_db_check->setMinimumSize(40,22);
     layout_db->addWidget(pb_db_check, 6, 2);
 
-	ck_autosave_db = new QCheckBox(tr("Autosave reports into database"), box_rep);
+    ck_autosave_db = new QCheckBox(tr("Autosave reports into database"), box_rep);
     layout_db->addWidget(ck_autosave_db, 7, 0, 1, 3);
 // common
-	ck_eject = new QCheckBox(tr("Eject media after tests finished"), box_rep);
-	layout->addWidget(ck_eject);
+    ck_eject = new QCheckBox(tr("Eject media after tests finished"), box_rep);
+    layout->addWidget(ck_eject);
 
-	layout->addStretch(10);
+    layout->addStretch(10);
 
 // creating objects connections...
-	connect(box_rep,        SIGNAL(toggled(bool)), this, SLOT(box_rep_toggled(bool)));
-	connect(box_rep_db,     SIGNAL(toggled(bool)), this, SLOT(box_rep_toggled(bool)));
-	connect(ck_autosave_db, SIGNAL(toggled(bool)), this, SLOT(box_rep_toggled(bool)));
+    connect(box_rep,        SIGNAL(toggled(bool)), this, SLOT(box_rep_toggled(bool)));
+    connect(box_rep_db,     SIGNAL(toggled(bool)), this, SLOT(box_rep_toggled(bool)));
+    connect(ck_autosave_db, SIGNAL(toggled(bool)), this, SLOT(box_rep_toggled(bool)));
 
-	connect(pb_rep_path, SIGNAL(clicked()), this, SLOT(select_rep_path()));
-	connect(pb_db_check, SIGNAL(clicked()), this, SLOT(check_db_connection()));
+    connect(pb_rep_path, SIGNAL(clicked()), this, SLOT(select_rep_path()));
+    connect(pb_db_check, SIGNAL(clicked()), this, SLOT(check_db_connection()));
 
 // applying settings...
 
-	box_rep->setChecked(set->report_autosave);
-	e_rep_path->setText(set->report_path);
-	box_rep_db->setChecked(set->use_reports_db);
-	ck_autosave_db->setChecked(set->report_autosave_db);
+    box_rep->setChecked(set->report_autosave);
+    e_rep_path->setText(set->report_path);
+    box_rep_db->setChecked(set->use_reports_db);
+    ck_autosave_db->setChecked(set->report_autosave_db);
 
     db_driver->setCurrentIndex( QSqlDatabase::drivers().indexOf(set->db.driver) );
-	db_host->setText(set->db.host);
-	db_port->setValue(set->db.port);
-	db_name->setText(set->db.name);
-	db_user->setText(set->db.user);
-	db_pass->setText(set->db.pass);
+    db_host->setText(set->db.host);
+    db_port->setValue(set->db.port);
+    db_name->setText(set->db.name);
+    db_user->setText(set->db.user);
+    db_pass->setText(set->db.pass);
 
-	ck_eject->setChecked(set->actions_flags & AFLAG_EJECT_AFTER);
+    ck_eject->setChecked(set->actions_flags & AFLAG_EJECT_AFTER);
 }
 
 prefReports::~prefReports()
 {
-	if (ck_eject->isChecked()) set->actions_flags |= AFLAG_EJECT_AFTER; else set->actions_flags &= ~AFLAG_EJECT_AFTER;
+    if (ck_eject->isChecked()) set->actions_flags |= AFLAG_EJECT_AFTER;
+    else set->actions_flags &= ~AFLAG_EJECT_AFTER;
 
-	set->report_path = e_rep_path->text();
-	set->report_autosave = box_rep->isChecked();
-	set->use_reports_db = box_rep_db->isChecked();
-	set->report_autosave_db = set->use_reports_db && ck_autosave_db->isChecked();
+    set->report_path = e_rep_path->text();
+    set->report_autosave = box_rep->isChecked();
+    set->use_reports_db = box_rep_db->isChecked();
+    set->report_autosave_db = set->use_reports_db && ck_autosave_db->isChecked();
 }
 
 void prefReports::select_rep_path()
 {
 #ifndef QT_NO_DEBUG
-	qDebug() << __func__;
+    qDebug() << __func__;
 #endif
-	QString path = QFileDialog::getExistingDirectory(this, tr("Select directory..."), e_rep_path->text());
-	if (path.isEmpty()) return;
-	e_rep_path->setText(path);
+    QString path = QFileDialog::getExistingDirectory(this, tr("Select directory..."), e_rep_path->text());
+    if (path.isEmpty()) return;
+    e_rep_path->setText(path);
 }
 
 void prefReports::box_rep_toggled(bool)
 {
-	ck_eject->setEnabled(box_rep->isChecked() || (box_rep_db->isChecked() && ck_autosave_db->isChecked()));
-	if(!ck_eject->isEnabled()) ck_eject->setChecked(false);
+    ck_eject->setEnabled(box_rep->isChecked() || (box_rep_db->isChecked() && ck_autosave_db->isChecked()));
+    if(!ck_eject->isEnabled()) ck_eject->setChecked(false);
 }
 
 void prefReports::check_db_connection()
 {
 #ifndef QT_NO_DEBUG
-	qDebug() << __func__;
+    qDebug() << __func__;
 #endif
-	DBParams params;
+    DBParams params;
 
-	params.driver = db_driver->currentText();
-	params.host = db_host->text();
-	params.port = db_port->value();
-	params.name = db_name->text();
-	params.user = db_user->text();
-	params.pass = db_pass->text();
+    params.driver = db_driver->currentText();
+    params.host = db_host->text();
+    params.port = db_port->value();
+    params.name = db_name->text();
+    params.user = db_user->text();
+    params.pass = db_pass->text();
 
-	if (SqlProbeConnection(params, "test connection")) {
-		set->db = params;
-		QMessageBox::information(this,
-		    tr("Success!"),
-		    tr("Database connection successfully\nestablished with given parameters"));
-	}
+    if (SqlProbeConnection(params, "test connection")) {
+        set->db = params;
+        QMessageBox::information(this,
+                                 tr("Success!"),
+                                 tr("Database connection successfully\nestablished with given parameters"));
+    }
 }
 

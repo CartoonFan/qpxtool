@@ -74,7 +74,7 @@ int css_send_key2(drive_info* );
 int css_report_title_key(drive_info* drive, int lba, unsigned char* key);
 int css_report_asf(drive_info* );
 
-// some functions from libdvdcss 
+// some functions from libdvdcss
 
 //int css_disckey( drive_info* drive);
 //int css_title ( drive_info* drive, int lba );
@@ -84,16 +84,16 @@ int css_unscramble( dvd_key_t p_key, unsigned char *p_sec );
 int css_get_bus_key(drive_info* drive);
 
 static void css_CryptKey( int i_key_type, int i_variant,
-                      unsigned char const *p_challenge, unsigned char *p_key );
+                          unsigned char const *p_challenge, unsigned char *p_key );
 static void css_DecryptKey( unsigned char invert, unsigned char const *p_key,
-                        unsigned char const *p_crypted, unsigned char *p_result );
+                            unsigned char const *p_crypted, unsigned char *p_result );
 
 static int  css_DecryptDiscKey  ( drive_info*, unsigned char const *, dvd_key_t );
 static int  css_CrackDiscKey    ( drive_info*, unsigned char * );
 
 static int  css_RecoverTitleKey( int i_start, unsigned char const *p_crypted,
-                            unsigned char const *p_decrypted,
-                            unsigned char const *p_sector_seed, unsigned char *p_key );
+                                 unsigned char const *p_decrypted,
+                                 unsigned char const *p_sector_seed, unsigned char *p_key );
 static void css_DecryptTitleKey( dvd_key_t p_disc_key,               dvd_key_t p_titlekey );
 static int  css_CrackTitleKey( drive_info*, int i_pos, int i_len, dvd_key_t p_titlekey );
 static int  css_AttackPattern( unsigned char const p_sec[ DVDCSS_BLOCK_SIZE ], int i_pos, unsigned char *p_key );
@@ -132,8 +132,8 @@ int seek_dvd ( drive_info* drive, int lba, int flags )
 {
     /* title cracking method is too slow to be used at each seek */
     if( ( ( flags & DVDCSS_SEEK_MPEG )
-             && ( drive->media.dvdcss.method != DVDCSS_METHOD_TITLE ) )
-       || ( flags & DVDCSS_SEEK_KEY ) )
+            && ( drive->media.dvdcss.method != DVDCSS_METHOD_TITLE ) )
+            || ( flags & DVDCSS_SEEK_KEY ) )
     {
         /* check the title key */
         if( css_title( drive, lba ) )
@@ -175,28 +175,28 @@ int read_dvd(drive_info* drive, unsigned char* data, int lba, int sector_count, 
 //                                          int i_blocks,
 //                                          int i_flags )
 {
-	unsigned char* p_buffer;
+    unsigned char* p_buffer;
     int i_ret=-1, i_index;
 
 //	if (flags & DVDCSS_READ_DECRYPT) {
 //		seek_dvd(drive,lba, DVDCSS_SEEK_KEY);
 //	}
 
-	if ( !read( drive, data, lba, sector_count )) {
-		//i_ret = sector_count * DVDCSS_BLOCK_SIZE;
-		i_ret = sector_count;
-	} else {
-		if (drive->err == 0x52100) i_ret = 0;
-	}
+    if ( !read( drive, data, lba, sector_count )) {
+        //i_ret = sector_count * DVDCSS_BLOCK_SIZE;
+        i_ret = sector_count;
+    } else {
+        if (drive->err == 0x52100) i_ret = 0;
+    }
 
-    if( i_ret <= 0 
-         || drive->media.dvdcss.protection != 0x01
-         || !(flags & DVDCSS_READ_DECRYPT) )
+    if( i_ret <= 0
+            || drive->media.dvdcss.protection != 0x01
+            || !(flags & DVDCSS_READ_DECRYPT) )
     {
         return i_ret;
     }
 
-	p_buffer = data;
+    p_buffer = data;
 
     if( ! memcmp( drive->media.dvdcss.TK, "\0\0\0\0\0", 5 ) )
     {
@@ -209,7 +209,7 @@ int read_dvd(drive_info* drive, unsigned char* data, int lba, int sector_count, 
                 printf( "no key but found encrypted block\n" );
                 /* Only return the initial range of unscrambled blocks? */
                 /* or fail completely? return 0; */
-				return -1;
+                return -1;
                 break;
             }
             p_buffer = p_buffer + DVDCSS_BLOCK_SIZE;
@@ -236,340 +236,362 @@ int read_dvd(drive_info* drive, unsigned char* data, int lba, int sector_count, 
 int read_disc_regions(drive_info* drive)
 {
 //#warning "read_disc_regions()"
-	int len=8;
+    int len=8;
 //	unsigned char enc;
 //	unsigned char regmask;
-	int i;
-	drive->cmd[0] = MMC_READ_DVD_STRUCTURE;
-	drive->cmd[7] = 0x01;
-	drive->cmd[8] = len >> 8; //  -|
-	drive->cmd[9] = len & 0xFF; //  -- transfer length
-	drive->cmd[11] = 0;
-	if (( drive->err = drive->cmd.transport(READ,drive->rd_buf,len) ))
-		{ if (!drive->silent) sperror ("READ_DISC_REGIONS",drive->err); return drive->err; }
+    int i;
+    drive->cmd[0] = MMC_READ_DVD_STRUCTURE;
+    drive->cmd[7] = 0x01;
+    drive->cmd[8] = len >> 8; //  -|
+    drive->cmd[9] = len & 0xFF; //  -- transfer length
+    drive->cmd[11] = 0;
+    if (( drive->err = drive->cmd.transport(READ,drive->rd_buf,len) ))
+    {
+        if (!drive->silent) sperror ("READ_DISC_REGIONS",drive->err);
+        return drive->err;
+    }
 #if 0
-	if (!drive->silent) {
-		printf("READ_DISC_REGIONS data: ");
-		for(i=0; i<len ;i++) printf(" %02X",drive->rd_buf[i] & 0xFF);
-		printf("\n");
-	}
+    if (!drive->silent) {
+        printf("READ_DISC_REGIONS data: ");
+        for(i=0; i<len ; i++) printf(" %02X",drive->rd_buf[i] & 0xFF);
+        printf("\n");
+    }
 #endif
-	drive->media.dvdcss.protection = drive->rd_buf[4];
-	drive->media.dvdcss.regmask = drive->rd_buf[5];
+    drive->media.dvdcss.protection = drive->rd_buf[4];
+    drive->media.dvdcss.regmask = drive->rd_buf[5];
 
-	if (!drive->media.dvdcss.protection) {
-	//	printf("DVD is NOT protected\n");
-		return 0;
-	} else {
-		/*
-		switch (drive->media.dvdcss.protection) {
-			case 0x01:
-				printf("DVD is CSS-protected\n");
-				break;
-			case 0x02:
-				printf("DVD is CPRM-protected\n");
-				break;
-			default:
-				printf("Unknown DVD protection shceme!\n");
-				break;
-		}*/
+    if (!drive->media.dvdcss.protection) {
+        //	printf("DVD is NOT protected\n");
+        return 0;
+    } else {
+        /*
+        switch (drive->media.dvdcss.protection) {
+        	case 0x01:
+        		printf("DVD is CSS-protected\n");
+        		break;
+        	case 0x02:
+        		printf("DVD is CPRM-protected\n");
+        		break;
+        	default:
+        		printf("Unknown DVD protection shceme!\n");
+        		break;
+        }*/
 
 //		printf("Disc regions       : ");
-		if (drive->media.dvdcss.regmask != 0xFF) {
-			for (i=0; i<8; i++)
-				if (!((drive->media.dvdcss.regmask >> i) & 1))
-					{
-					//	printf("%d",i+1);
-						drive->rpc.region = i+1;
-					}
+        if (drive->media.dvdcss.regmask != 0xFF) {
+            for (i=0; i<8; i++)
+                if (!((drive->media.dvdcss.regmask >> i) & 1))
+                {
+                    //	printf("%d",i+1);
+                    drive->rpc.region = i+1;
+                }
 //			printf("\n");
 //		} else {
 //			printf("Invalid region mask!\n");
-		}
-	}
+        }
+    }
 
-	return 0;
+    return 0;
 }
 
 
 int read_disc_key(drive_info* drive, unsigned char DK[DVD_DISCKEY_SIZE])
 {
-	int len = 2052; // 4 (header) + 2048 (key)
-	if (!(drive->rd_capabilities & DEVICE_DVD) || !(drive->capabilities & CAP_DVD_CSS)) return -1;
+    int len = 2052; // 4 (header) + 2048 (key)
+    if (!(drive->rd_capabilities & DEVICE_DVD) || !(drive->capabilities & CAP_DVD_CSS)) return -1;
 
-	drive->cmd[0] = MMC_READ_DVD_STRUCTURE;
-	drive->cmd[7] = 0x02;
-	drive->cmd[8] = len >> 8;   //  -|
-	drive->cmd[9] = len & 0xFF; //  -- transfer length
-	drive->cmd[10] = drive->media.dvdcss.agid & 0xC0;
-	drive->cmd[11] = 0;
-	if (( drive->err = drive->cmd.transport(READ,drive->rd_buf,len) ))
-		{ if (!drive->silent) sperror ("READ_DISC_KEY",drive->err); return drive->err; }
+    drive->cmd[0] = MMC_READ_DVD_STRUCTURE;
+    drive->cmd[7] = 0x02;
+    drive->cmd[8] = len >> 8;   //  -|
+    drive->cmd[9] = len & 0xFF; //  -- transfer length
+    drive->cmd[10] = drive->media.dvdcss.agid & 0xC0;
+    drive->cmd[11] = 0;
+    if (( drive->err = drive->cmd.transport(READ,drive->rd_buf,len) ))
+    {
+        if (!drive->silent) sperror ("READ_DISC_KEY",drive->err);
+        return drive->err;
+    }
 
-	memcpy(DK, drive->rd_buf+4, 2048);
-	return 0;
+    memcpy(DK, drive->rd_buf+4, 2048);
+    return 0;
 }
 
 int report_key(drive_info* drive, unsigned char key_class, unsigned char key_format, int len, unsigned int lba)
 {
-	if (!(drive->rd_capabilities & DEVICE_DVD) || !(drive->capabilities & CAP_DVD_CSS)) return -1;
+    if (!(drive->rd_capabilities & DEVICE_DVD) || !(drive->capabilities & CAP_DVD_CSS)) return -1;
 
-	drive->cmd[0] = MMC_REPORT_KEY;
+    drive->cmd[0] = MMC_REPORT_KEY;
 
-	drive->cmd[2] = (lba >> 24) & 0xFF;
-	drive->cmd[3] = (lba >> 16) & 0xFF;
-	drive->cmd[4] = (lba >>  8) & 0xFF;
-	drive->cmd[5] = lba & 0xFF;
+    drive->cmd[2] = (lba >> 24) & 0xFF;
+    drive->cmd[3] = (lba >> 16) & 0xFF;
+    drive->cmd[4] = (lba >>  8) & 0xFF;
+    drive->cmd[5] = lba & 0xFF;
 
-	drive->cmd[7] = key_class;
-	drive->cmd[8] = len>>8;
-	drive->cmd[9] = len & 0xFF;
-	drive->cmd[10] = (drive->media.dvdcss.agid & 0xC0) | (key_format & 0x3F);
-	drive->cmd[11] = 0;
-	if (( drive->err = drive->cmd.transport(READ,drive->rd_buf,len) ))
-		{ if (!drive->silent) sperror ("MMC REPORT KEY",drive->err); return drive->err; }
-	return 0;
+    drive->cmd[7] = key_class;
+    drive->cmd[8] = len>>8;
+    drive->cmd[9] = len & 0xFF;
+    drive->cmd[10] = (drive->media.dvdcss.agid & 0xC0) | (key_format & 0x3F);
+    drive->cmd[11] = 0;
+    if (( drive->err = drive->cmd.transport(READ,drive->rd_buf,len) ))
+    {
+        if (!drive->silent) sperror ("MMC REPORT KEY",drive->err);
+        return drive->err;
+    }
+    return 0;
 }
 
-int get_rpc_state(drive_info* drive){
+int get_rpc_state(drive_info* drive) {
 //	int len=8;
-	int i;
-	unsigned char regmask;
-	unsigned char t;//,vl,ul;
-	unsigned char sh;
+    int i;
+    unsigned char regmask;
+    unsigned char t;//,vl,ul;
+    unsigned char sh;
 
-	if (!(drive->rd_capabilities & DEVICE_DVD) || !(drive->capabilities & CAP_DVD_CSS))
-		{drive->rpc.phase = 0; return -1;}
-/*
-	drive->cmd[0] = MMC_REPORT_KEY;
-	drive->cmd[7] = 0; // key class = 0 : DVD CSS/CPRM
-	drive->cmd[8] = len>>8;
-	drive->cmd[9] = len & 0xFF;
-	drive->cmd[10] = 0x08; // key format = 8 : RPC info
-	drive->cmd[11] = 0;
-*/
-	report_key(drive, 0, 0x08, 8);
-	if (drive->err)
-	{
-		if (drive->err == 0x52400) {
-			drive->rpc.phase = 1;
-			return 0;
-		} else {
-			if (!drive->silent) sperror ("READ_RPC_STATE",drive->err);
-			drive->rpc.phase = 0;
-			return drive->err;
-		}
-	}
-/*	printf("MMC_REPORT_KEY data: ");
-	for(i=0; i<len ;i++) printf(" %02X",drive->rd_buf[i] & 0xFF);
-	printf("\n");*/
-	if (ntoh16(drive->rd_buf) < 6) return 1;
-	
-	drive->rpc.ch_u = drive->rd_buf[4] & 0x07;
-	drive->rpc.ch_v = (drive->rd_buf[4] >> 3) & 0x07;
-	t  = (drive->rd_buf[4] >> 6) & 0x03;
-	regmask = drive->rd_buf[5];
-	sh = drive->rd_buf[6];
+    if (!(drive->rd_capabilities & DEVICE_DVD) || !(drive->capabilities & CAP_DVD_CSS))
+    {
+        drive->rpc.phase = 0;
+        return -1;
+    }
+    /*
+    	drive->cmd[0] = MMC_REPORT_KEY;
+    	drive->cmd[7] = 0; // key class = 0 : DVD CSS/CPRM
+    	drive->cmd[8] = len>>8;
+    	drive->cmd[9] = len & 0xFF;
+    	drive->cmd[10] = 0x08; // key format = 8 : RPC info
+    	drive->cmd[11] = 0;
+    */
+    report_key(drive, 0, 0x08, 8);
+    if (drive->err)
+    {
+        if (drive->err == 0x52400) {
+            drive->rpc.phase = 1;
+            return 0;
+        } else {
+            if (!drive->silent) sperror ("READ_RPC_STATE",drive->err);
+            drive->rpc.phase = 0;
+            return drive->err;
+        }
+    }
+    /*	printf("MMC_REPORT_KEY data: ");
+    	for(i=0; i<len ;i++) printf(" %02X",drive->rd_buf[i] & 0xFF);
+    	printf("\n");*/
+    if (ntoh16(drive->rd_buf) < 6) return 1;
 
-	drive->rpc.phase = 2;
+    drive->rpc.ch_u = drive->rd_buf[4] & 0x07;
+    drive->rpc.ch_v = (drive->rd_buf[4] >> 3) & 0x07;
+    t  = (drive->rd_buf[4] >> 6) & 0x03;
+    regmask = drive->rd_buf[5];
+    sh = drive->rd_buf[6];
+
+    drive->rpc.phase = 2;
 //	printf("\n** Unit is RPC-II\n");
 //	printf("Current region     : ");
-	if (regmask != 0xFF) {
-		for (i=0; i<8; i++)
-			if (!((regmask >> i) & 1)) {
+    if (regmask != 0xFF) {
+        for (i=0; i<8; i++)
+            if (!((regmask >> i) & 1)) {
 //				printf("%d",i+1);
-				drive->rpc.region = i+1;
-			}
+                drive->rpc.region = i+1;
+            }
 //		printf("\n");
-	} else {
+    } else {
 //		printf("does not set\n");
-		drive->rpc.region = 0;
-	}
+        drive->rpc.region = 0;
+    }
 //	printf("User changes left  : %d\n",drive->rpc.ch_u);
 //	printf("Vendor resets left : %d\n",drive->rpc.ch_v);
-	return 0;
+    return 0;
 }
 
 int css_invalidate_agid(drive_info* drive)
 {
-	if (!(drive->capabilities & CAP_DVD_CSS)) return -1;
+    if (!(drive->capabilities & CAP_DVD_CSS)) return -1;
 
-	drive->cmd[0] = MMC_REPORT_KEY;
-	drive->cmd[7] = 0;
-	drive->cmd[8] = 0;
-	drive->cmd[9] = 0;
-	drive->cmd[10] = (drive->media.dvdcss.agid & 0xC0) | 0x3F;
-	drive->cmd[11] = 0;
-	if (( drive->err = drive->cmd.transport(NONE, NULL, 0) ))
-		{ if (!drive->silent) sperror ("MMC REPORT KEY (INVALIDATE AGID)",drive->err); return drive->err; }
-	return 0;
+    drive->cmd[0] = MMC_REPORT_KEY;
+    drive->cmd[7] = 0;
+    drive->cmd[8] = 0;
+    drive->cmd[9] = 0;
+    drive->cmd[10] = (drive->media.dvdcss.agid & 0xC0) | 0x3F;
+    drive->cmd[11] = 0;
+    if (( drive->err = drive->cmd.transport(NONE, NULL, 0) ))
+    {
+        if (!drive->silent) sperror ("MMC REPORT KEY (INVALIDATE AGID)",drive->err);
+        return drive->err;
+    }
+    return 0;
 }
 
 int css_report_agid(drive_info* drive)
 {
-	if (!(drive->capabilities & CAP_DVD_CSS)) return -1;
+    if (!(drive->capabilities & CAP_DVD_CSS)) return -1;
 
-	report_key(drive, 0, 0x00, 8);
-	if (drive->err) return -1;
-	drive->media.dvdcss.agid = drive->rd_buf[7] & 0xC0;
-	printf("CSS: AGID=%x\n",drive->media.dvdcss.agid >> 6);
-	return 0;
+    report_key(drive, 0, 0x00, 8);
+    if (drive->err) return -1;
+    drive->media.dvdcss.agid = drive->rd_buf[7] & 0xC0;
+    printf("CSS: AGID=%x\n",drive->media.dvdcss.agid >> 6);
+    return 0;
 }
 
 int cprm_report_agid(drive_info* drive)
 {
-	if (!(drive->capabilities & CAP_DVD_CSS)) return -1;
+    if (!(drive->capabilities & CAP_DVD_CSS)) return -1;
 
-	report_key(drive, 0, 0x11, 8);
-	if (drive->err) return -1;
-	drive->media.dvdcss.agid = drive->rd_buf[7] & 0xC0;
-	return 0;
+    report_key(drive, 0, 0x11, 8);
+    if (drive->err) return -1;
+    drive->media.dvdcss.agid = drive->rd_buf[7] & 0xC0;
+    return 0;
 }
 
 int css_report_challenge(drive_info* drive)
 {
-	if (!(drive->capabilities & CAP_DVD_CSS)) return -1;
+    if (!(drive->capabilities & CAP_DVD_CSS)) return -1;
 
-	report_key(drive, 0, 0x01, 16);
-	if (drive->err) return -1;
+    report_key(drive, 0, 0x01, 16);
+    if (drive->err) return -1;
 
     for( int i = 0 ; i < (2*DVD_KEY_SIZE) ; i++ )
     {
         drive->media.dvdcss.CK[i] = drive->rd_buf[13-i];
     }
-	printf("Report Challenge: %02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X\n",
-			drive->media.dvdcss.CK[0],drive->media.dvdcss.CK[1],
-			drive->media.dvdcss.CK[2],drive->media.dvdcss.CK[3],
-			drive->media.dvdcss.CK[4],drive->media.dvdcss.CK[5],
-			drive->media.dvdcss.CK[6],drive->media.dvdcss.CK[7],
-			drive->media.dvdcss.CK[8],drive->media.dvdcss.CK[9]);
-	return 0;
+    printf("Report Challenge: %02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X\n",
+           drive->media.dvdcss.CK[0],drive->media.dvdcss.CK[1],
+           drive->media.dvdcss.CK[2],drive->media.dvdcss.CK[3],
+           drive->media.dvdcss.CK[4],drive->media.dvdcss.CK[5],
+           drive->media.dvdcss.CK[6],drive->media.dvdcss.CK[7],
+           drive->media.dvdcss.CK[8],drive->media.dvdcss.CK[9]);
+    return 0;
 }
 
 int css_send_challenge(drive_info* drive)
 {
-	int len = 16;
-	if (!(drive->capabilities & CAP_DVD_CSS)) return -1;
-	printf("Send Challenge: %02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X\n",
-			drive->media.dvdcss.CK[0],drive->media.dvdcss.CK[1],
-			drive->media.dvdcss.CK[2],drive->media.dvdcss.CK[3],
-			drive->media.dvdcss.CK[4],drive->media.dvdcss.CK[5],
-			drive->media.dvdcss.CK[6],drive->media.dvdcss.CK[7],
-			drive->media.dvdcss.CK[8],drive->media.dvdcss.CK[9]);
+    int len = 16;
+    if (!(drive->capabilities & CAP_DVD_CSS)) return -1;
+    printf("Send Challenge: %02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X\n",
+           drive->media.dvdcss.CK[0],drive->media.dvdcss.CK[1],
+           drive->media.dvdcss.CK[2],drive->media.dvdcss.CK[3],
+           drive->media.dvdcss.CK[4],drive->media.dvdcss.CK[5],
+           drive->media.dvdcss.CK[6],drive->media.dvdcss.CK[7],
+           drive->media.dvdcss.CK[8],drive->media.dvdcss.CK[9]);
 
-	drive->cmd[0] = MMC_SEND_KEY;
-	drive->cmd[7] = 0; // key class = 0 : DVD CSS/CPRM
-	drive->cmd[8] = len>>8;
-	drive->cmd[9] = len & 0xFF;
-	drive->cmd[10] = (drive->media.dvdcss.agid & 0xC0) | 0x01; // key format = 1 : Challenge key
-	drive->cmd[11] = 0;
+    drive->cmd[0] = MMC_SEND_KEY;
+    drive->cmd[7] = 0; // key class = 0 : DVD CSS/CPRM
+    drive->cmd[8] = len>>8;
+    drive->cmd[9] = len & 0xFF;
+    drive->cmd[10] = (drive->media.dvdcss.agid & 0xC0) | 0x01; // key format = 1 : Challenge key
+    drive->cmd[11] = 0;
 
-	drive->rd_buf[0] = 0x00;
-	drive->rd_buf[1] = 0x0E;
-	drive->rd_buf[2] = 0;
-	drive->rd_buf[3] = 0;
+    drive->rd_buf[0] = 0x00;
+    drive->rd_buf[1] = 0x0E;
+    drive->rd_buf[2] = 0;
+    drive->rd_buf[3] = 0;
 
     for( int i = 0 ; i < (2*DVD_KEY_SIZE) ; i++ )
     {
         drive->rd_buf[13-i] = drive->media.dvdcss.CK[i];
     }
-	drive->rd_buf[14]= 0;
-	drive->rd_buf[15]= 0;
+    drive->rd_buf[14]= 0;
+    drive->rd_buf[15]= 0;
 
-	if (( drive->err = drive->cmd.transport(WRITE,drive->rd_buf,len) ))
-		{ if (!drive->silent) sperror ("MMC SEND KEY (CHALLENGE)",drive->err); return drive->err; }
+    if (( drive->err = drive->cmd.transport(WRITE,drive->rd_buf,len) ))
+    {
+        if (!drive->silent) sperror ("MMC SEND KEY (CHALLENGE)",drive->err);
+        return drive->err;
+    }
 
 //	printf("Challenge KEY: ");
 //	for (int i=0; i<10; i++) printf("%02X ",drive->media.dvdcss.CK[i]);
 //	printf("\n");
-	return 0;
+    return 0;
 }
 
 int css_report_key1(drive_info* drive)
 {
-	if (!(drive->capabilities & CAP_DVD_CSS)) return -1;
+    if (!(drive->capabilities & CAP_DVD_CSS)) return -1;
 
-	report_key(drive, 0, 0x02, 12);
-	if (drive->err) return drive->err;
+    report_key(drive, 0, 0x02, 12);
+    if (drive->err) return drive->err;
 
     for( int i = 0 ; i < DVD_KEY_SIZE ; i++ )
     {
         drive->media.dvdcss.K1[i] = drive->rd_buf[8-i];
     }
-	printf("Report KEY1: %02X:%02X:%02X:%02X:%02X\n",
-			drive->media.dvdcss.K1[0],
-			drive->media.dvdcss.K1[1],
-			drive->media.dvdcss.K1[2],
-			drive->media.dvdcss.K1[3],
-			drive->media.dvdcss.K1[4]);
-	return 0;
+    printf("Report KEY1: %02X:%02X:%02X:%02X:%02X\n",
+           drive->media.dvdcss.K1[0],
+           drive->media.dvdcss.K1[1],
+           drive->media.dvdcss.K1[2],
+           drive->media.dvdcss.K1[3],
+           drive->media.dvdcss.K1[4]);
+    return 0;
 }
 
 int css_send_key2(drive_info* drive)
 {
-	int len = 12;
-	if (!(drive->capabilities & CAP_DVD_CSS)) return -1;
+    int len = 12;
+    if (!(drive->capabilities & CAP_DVD_CSS)) return -1;
 
-	printf("Send KEY2: %02X:%02X:%02X:%02X:%02X\n",
-			drive->media.dvdcss.K2[0],
-			drive->media.dvdcss.K2[1],
-			drive->media.dvdcss.K2[2],
-			drive->media.dvdcss.K2[3],
-			drive->media.dvdcss.K2[4]);
+    printf("Send KEY2: %02X:%02X:%02X:%02X:%02X\n",
+           drive->media.dvdcss.K2[0],
+           drive->media.dvdcss.K2[1],
+           drive->media.dvdcss.K2[2],
+           drive->media.dvdcss.K2[3],
+           drive->media.dvdcss.K2[4]);
 
-	drive->cmd[0] = MMC_SEND_KEY;
-	drive->cmd[7] = 0; // key class = 0 : DVD CSS/CPRM
-	drive->cmd[8] = len>>8;
-	drive->cmd[9] = len & 0xFF;
-	drive->cmd[10] = (drive->media.dvdcss.agid & 0xC0) | 0x03; // key format = 2 : KEY 2
-	drive->cmd[11] = 0;
+    drive->cmd[0] = MMC_SEND_KEY;
+    drive->cmd[7] = 0; // key class = 0 : DVD CSS/CPRM
+    drive->cmd[8] = len>>8;
+    drive->cmd[9] = len & 0xFF;
+    drive->cmd[10] = (drive->media.dvdcss.agid & 0xC0) | 0x03; // key format = 2 : KEY 2
+    drive->cmd[11] = 0;
 
-	drive->rd_buf[0] = 0x00;
-	drive->rd_buf[1] = 0x0A;
-	drive->rd_buf[2] = 0;
-	drive->rd_buf[3] = 0;
+    drive->rd_buf[0] = 0x00;
+    drive->rd_buf[1] = 0x0A;
+    drive->rd_buf[2] = 0;
+    drive->rd_buf[3] = 0;
     for( int i = 0 ; i < DVD_KEY_SIZE ; i++ )
     {
-		drive->rd_buf[8-i] = drive->media.dvdcss.K2[i];
+        drive->rd_buf[8-i] = drive->media.dvdcss.K2[i];
     }
-	drive->rd_buf[9] = 0;
-	drive->rd_buf[10]= 0;
-	drive->rd_buf[11]= 0;
+    drive->rd_buf[9] = 0;
+    drive->rd_buf[10]= 0;
+    drive->rd_buf[11]= 0;
 
-	if (( drive->err = drive->cmd.transport(WRITE,drive->rd_buf,len) ))
-		{ if (!drive->silent) sperror ("MMC SEND KEY (KEY2)",drive->err); return drive->err; }
+    if (( drive->err = drive->cmd.transport(WRITE,drive->rd_buf,len) ))
+    {
+        if (!drive->silent) sperror ("MMC SEND KEY (KEY2)",drive->err);
+        return drive->err;
+    }
 
 //	printf("Challenge KEY: ");
 //	for (int i=0; i<10; i++) printf("%02X ",drive->media.dvdcss.CK[i]);
 //	printf("\n");
-	return 0;
+    return 0;
 }
 
 int css_report_title_key(drive_info* drive, int lba, unsigned char* key)
 {
-	if (!(drive->capabilities & CAP_DVD_CSS)) return -1;
+    if (!(drive->capabilities & CAP_DVD_CSS)) return -1;
 
-	report_key(drive, 0, 0x04, 12, lba);
-	if (drive->err) return drive->err;
+    report_key(drive, 0, 0x04, 12, lba);
+    if (drive->err) return drive->err;
 
-	//memcpy((void*)drive->media.dvdcss.TK, drive->rd_buf+5, 5);
-	memcpy(key, drive->rd_buf+5, 5);
+    //memcpy((void*)drive->media.dvdcss.TK, drive->rd_buf+5, 5);
+    memcpy(key, drive->rd_buf+5, 5);
 
-	printf("Report Title KEY: ");
-	//for (int i=0; i<5; i++) printf("%02X ",drive->media.dvdcss.TK[i]);
-	for (int i=0; i<5; i++) printf("%02X ", key[i]);
-	printf("\n");
-	return 0;
+    printf("Report Title KEY: ");
+    //for (int i=0; i<5; i++) printf("%02X ",drive->media.dvdcss.TK[i]);
+    for (int i=0; i<5; i++) printf("%02X ", key[i]);
+    printf("\n");
+    return 0;
 }
 
 int css_report_asf(drive_info* drive)
 {
-	if (!(drive->capabilities & CAP_DVD_CSS)) return -1;
+    if (!(drive->capabilities & CAP_DVD_CSS)) return -1;
 
-	report_key(drive, 0, 0x05, 8);
-	if (drive->err) return -1;
-	drive->media.dvdcss.asf = drive->rd_buf[7] & 0x01;
-	if (drive->media.dvdcss.asf) return 0; else return 1;
+    report_key(drive, 0, 0x05, 8);
+    if (drive->err) return -1;
+    drive->media.dvdcss.asf = drive->rd_buf[7] & 0x01;
+    if (drive->media.dvdcss.asf) return 0;
+    else return 1;
 }
 
 /*
@@ -614,7 +636,7 @@ int css_disckey( drive_info* drive )
     {
         /* Region mismatch (or region not set) is the most likely source. */
         printf( "CSS: ASF not 1 after reading disc key (region mismatch?)\n" );
-		css_invalidate_agid( drive );
+        css_invalidate_agid( drive );
         return -1;
     }
 
@@ -628,43 +650,43 @@ int css_disckey( drive_info* drive )
     /* Decrypt disc key */
     switch( drive->media.dvdcss.method )
     {
-        case DVDCSS_METHOD_KEY:
+    case DVDCSS_METHOD_KEY:
 
-            /* Decrypt disc key with player key. */
-            css_printkey( (char*)("CSS: decrypting disc key "), p_buffer );
-            if( ! css_DecryptDiscKey( drive, p_buffer, p_disc_key ) )
-            {
-                css_printkey( (char*)("CSS: decrypted disc key is "), p_disc_key );
-                break;
-            }
-            printf( "CSS: failed to decrypt the disc key, "
-                                 "faulty drive/kernel? "
-                                 "cracking title keys instead\n" );
-
-            /* Fallback, but not to DISC as the disc key might be faulty */
-            drive->media.dvdcss.method = DVDCSS_METHOD_TITLE;
+        /* Decrypt disc key with player key. */
+        css_printkey( (char*)("CSS: decrypting disc key "), p_buffer );
+        if( ! css_DecryptDiscKey( drive, p_buffer, p_disc_key ) )
+        {
+            css_printkey( (char*)("CSS: decrypted disc key is "), p_disc_key );
             break;
+        }
+        printf( "CSS: failed to decrypt the disc key, "
+                "faulty drive/kernel? "
+                "cracking title keys instead\n" );
 
-        case DVDCSS_METHOD_DISC:
+        /* Fallback, but not to DISC as the disc key might be faulty */
+        drive->media.dvdcss.method = DVDCSS_METHOD_TITLE;
+        break;
 
-            /* Crack Disc key to be able to use it */
-            memcpy( p_disc_key, p_buffer, DVD_KEY_SIZE );
-            css_printkey( (char*)("CSS: cracking disc key "), p_disc_key );
-            if( ! css_CrackDiscKey( drive, p_disc_key ) )
-            {
-                css_printkey( (char*)("CSS: cracked disc key is "), p_disc_key );
-                break;
-            }
-            printf( "CSS: failed to crack the disc key\n" );
-            memset( drive->media.dvdcss.DK, 0, DVD_KEY_SIZE );
-            drive->media.dvdcss.method = DVDCSS_METHOD_TITLE;
+    case DVDCSS_METHOD_DISC:
+
+        /* Crack Disc key to be able to use it */
+        memcpy( p_disc_key, p_buffer, DVD_KEY_SIZE );
+        css_printkey( (char*)("CSS: cracking disc key "), p_disc_key );
+        if( ! css_CrackDiscKey( drive, p_disc_key ) )
+        {
+            css_printkey( (char*)("CSS: cracked disc key is "), p_disc_key );
             break;
+        }
+        printf( "CSS: failed to crack the disc key\n" );
+        memset( drive->media.dvdcss.DK, 0, DVD_KEY_SIZE );
+        drive->media.dvdcss.method = DVDCSS_METHOD_TITLE;
+        break;
 
-        default:
+    default:
 
-            printf( "CSS: disc key needs not be decrypted\n" );
-            memset( drive->media.dvdcss.DK, 0, DVD_KEY_SIZE );
-            break;
+        printf( "CSS: disc key needs not be decrypted\n" );
+        memset( drive->media.dvdcss.DK, 0, DVD_KEY_SIZE );
+        break;
     }
 
     memcpy( drive->media.dvdcss.DK, p_disc_key, DVD_KEY_SIZE );
@@ -692,8 +714,8 @@ int css_unscramble( dvd_key_t p_key, unsigned char *p_sec )
     i_t1 = (p_key[0] ^ p_sec[0x54]) | 0x100;
     i_t2 = p_key[1] ^ p_sec[0x55];
     i_t3 = (p_key[2] | (p_key[3] << 8) |
-           (p_key[4] << 16)) ^ (p_sec[0x56] |
-           (p_sec[0x57] << 8) | (p_sec[0x58] << 16));
+            (p_key[4] << 16)) ^ (p_sec[0x56] |
+                                 (p_sec[0x57] << 8) | (p_sec[0x58] << 16));
     i_t4 = i_t3 & 7;
     i_t3 = i_t3 * 2 + 8 - i_t4;
     p_sec += 0x80;
@@ -706,7 +728,7 @@ int css_unscramble( dvd_key_t p_key, unsigned char *p_sec )
         i_t1 = ( ( i_t1 & 1 ) << 8 ) ^ i_t4;
         i_t4 = p_css_tab5[i_t4];
         i_t6 = ((((((( i_t3 >> 3 ) ^ i_t3 ) >> 1 ) ^
-                                     i_t3 ) >> 8 ) ^ i_t3 ) >> 5 ) & 0xff;
+                   i_t3 ) >> 8 ) ^ i_t3 ) >> 5 ) & 0xff;
         i_t3 = (i_t3 << 8 ) | i_t6;
         i_t6 = p_css_tab4[i_t6];
         i_t5 += i_t6 + i_t4;
@@ -737,7 +759,7 @@ int css_get_bus_key(drive_info* drive)
 //    dvd_key_t p_key1;
 //  dvd_key_t p_key2;
 //    dvd_key_t p_key_check;
-	unsigned char   p_key_check[DVD_KEY_SIZE];
+    unsigned char   p_key_check[DVD_KEY_SIZE];
     unsigned char   i_variant = 0;
     int       i_ret = -1;
     int       i;
@@ -751,16 +773,16 @@ int css_get_bus_key(drive_info* drive)
     for( i = 0; i_ret == -1 && i < 4 ; ++i )
     {
         printf( "CSS: ReportAgid failed, "
-                             "invalidating AGID %d\n", i );
+                "invalidating AGID %d\n", i );
 
         /* This is really _not good_, should be handled by the OS.
          * Invalidating an AGID could make another process fail somewhere
          * in its authentication process. */
         drive->media.dvdcss.agid = i;
-		i_ret = css_invalidate_agid( drive );
+        i_ret = css_invalidate_agid( drive );
 
         printf( "CSS: requesting AGID\n" );
-		i_ret = css_report_agid( drive );
+        i_ret = css_report_agid( drive );
     }
 
     /* Unable to authenticate without AGID */
@@ -786,7 +808,7 @@ int css_get_bus_key(drive_info* drive)
     if( css_send_challenge( drive ) )
     {
         printf( "CSS: SendChallenge failed\n" );
-		css_invalidate_agid( drive );
+        css_invalidate_agid( drive );
         return -1;
     }
 
@@ -794,7 +816,7 @@ int css_get_bus_key(drive_info* drive)
     if( css_report_key1( drive ) )
     {
         printf( "CSS: ReportKey1 failed\n" );
-		css_invalidate_agid( drive );
+        css_invalidate_agid( drive );
         return -1;
     }
 
@@ -810,7 +832,7 @@ int css_get_bus_key(drive_info* drive)
 
         if( memcmp( p_key_check, drive->media.dvdcss.K1, DVD_KEY_SIZE ) == 0 )
         {
-			printf( "CSS: drive authenticated, using variant %d\n", i );
+            printf( "CSS: drive authenticated, using variant %d\n", i );
             i_variant = i;
             break;
         }
@@ -819,7 +841,7 @@ int css_get_bus_key(drive_info* drive)
     if( i == 32)
     {
         printf( "CSS: drive would not authenticate\n" );
-		css_invalidate_agid( drive );
+        css_invalidate_agid( drive );
         return -1;
     }
 
@@ -827,7 +849,7 @@ int css_get_bus_key(drive_info* drive)
     if( css_report_challenge( drive))
     {
         printf( "CSS: ReportKeyChallenge failed\n" );
-		css_invalidate_agid( drive );
+        css_invalidate_agid( drive );
         return -1;
     }
 
@@ -849,7 +871,7 @@ int css_get_bus_key(drive_info* drive)
     if( css_send_key2( drive ) )
     {
         printf( "CSS: SendKey2 failed\n" );
-		css_invalidate_agid( drive );
+        css_invalidate_agid( drive );
         return -1;
     }
 
@@ -873,30 +895,35 @@ int css_get_bus_key(drive_info* drive)
  * i_variant : between 0 and 31.
  *****************************************************************************/
 static void css_CryptKey( int i_key_type, int i_variant,
-                      unsigned char const *p_challenge, unsigned char *p_key )
+                          unsigned char const *p_challenge, unsigned char *p_key )
 {
     /* Permutation table for challenge */
     unsigned char pp_perm_challenge[3][10] =
-            { { 1, 3, 0, 7, 5, 2, 9, 6, 4, 8 },
-              { 6, 1, 9, 3, 8, 5, 7, 4, 0, 2 },
-              { 4, 0, 3, 5, 7, 2, 8, 6, 1, 9 } };
+    {   { 1, 3, 0, 7, 5, 2, 9, 6, 4, 8 },
+        { 6, 1, 9, 3, 8, 5, 7, 4, 0, 2 },
+        { 4, 0, 3, 5, 7, 2, 8, 6, 1, 9 }
+    };
 
     /* Permutation table for variant table for key2 and buskey */
     unsigned char pp_perm_variant[2][32] =
-            { { 0x0a, 0x08, 0x0e, 0x0c, 0x0b, 0x09, 0x0f, 0x0d,
-                0x1a, 0x18, 0x1e, 0x1c, 0x1b, 0x19, 0x1f, 0x1d,
-                0x02, 0x00, 0x06, 0x04, 0x03, 0x01, 0x07, 0x05,
-                0x12, 0x10, 0x16, 0x14, 0x13, 0x11, 0x17, 0x15 },
-              { 0x12, 0x1a, 0x16, 0x1e, 0x02, 0x0a, 0x06, 0x0e,
-                0x10, 0x18, 0x14, 0x1c, 0x00, 0x08, 0x04, 0x0c,
-                0x13, 0x1b, 0x17, 0x1f, 0x03, 0x0b, 0x07, 0x0f,
-                0x11, 0x19, 0x15, 0x1d, 0x01, 0x09, 0x05, 0x0d } };
+    {   {   0x0a, 0x08, 0x0e, 0x0c, 0x0b, 0x09, 0x0f, 0x0d,
+            0x1a, 0x18, 0x1e, 0x1c, 0x1b, 0x19, 0x1f, 0x1d,
+            0x02, 0x00, 0x06, 0x04, 0x03, 0x01, 0x07, 0x05,
+            0x12, 0x10, 0x16, 0x14, 0x13, 0x11, 0x17, 0x15
+        },
+        {   0x12, 0x1a, 0x16, 0x1e, 0x02, 0x0a, 0x06, 0x0e,
+            0x10, 0x18, 0x14, 0x1c, 0x00, 0x08, 0x04, 0x0c,
+            0x13, 0x1b, 0x17, 0x1f, 0x03, 0x0b, 0x07, 0x0f,
+            0x11, 0x19, 0x15, 0x1d, 0x01, 0x09, 0x05, 0x0d
+        }
+    };
 
     unsigned char p_variants[32] =
-            {   0xB7, 0x74, 0x85, 0xD0, 0xCC, 0xDB, 0xCA, 0x73,
-                0x03, 0xFE, 0x31, 0x03, 0x52, 0xE0, 0xB7, 0x42,
-                0x63, 0x16, 0xF2, 0x2A, 0x79, 0x52, 0xFF, 0x1B,
-                0x7A, 0x11, 0xCA, 0x1A, 0x9B, 0x40, 0xAD, 0x01 };
+    {   0xB7, 0x74, 0x85, 0xD0, 0xCC, 0xDB, 0xCA, 0x73,
+        0x03, 0xFE, 0x31, 0x03, 0x52, 0xE0, 0xB7, 0x42,
+        0x63, 0x16, 0xF2, 0x2A, 0x79, 0x52, 0xFF, 0x1B,
+        0x7A, 0x11, 0xCA, 0x1A, 0x9B, 0x40, 0xAD, 0x01
+    };
 
     /* The "secret" key */
     unsigned char p_secret[5] = { 0x55, 0xD6, 0xC4, 0xC5, 0x28 };
@@ -979,7 +1006,7 @@ static void css_CryptKey( int i_key_type, int i_variant,
         {
 
             i_lfsr0_o = ( ( i_lfsr0 >> 24 ) ^ ( i_lfsr0 >> 21 ) ^
-                        ( i_lfsr0 >> 20 ) ^ ( i_lfsr0 >> 12 ) ) & 1;
+                          ( i_lfsr0 >> 20 ) ^ ( i_lfsr0 >> 12 ) ) & 1;
             i_lfsr0 = ( i_lfsr0 << 1 ) | i_lfsr0_o;
 
             i_lfsr1_o = ( ( i_lfsr1 >> 16 ) ^ ( i_lfsr1 >> 2 ) ) & 1;
@@ -1077,7 +1104,7 @@ static void css_CryptKey( int i_key_type, int i_variant,
  *  -for title key, invert if 0xff.
  *****************************************************************************/
 static void css_DecryptKey( unsigned char invert, unsigned char const *p_key,
-                        unsigned char const *p_crypted, unsigned char *p_result )
+                            unsigned char const *p_crypted, unsigned char *p_result )
 {
     unsigned int    i_lfsr1_lo;
     unsigned int    i_lfsr1_hi;
@@ -1092,13 +1119,13 @@ static void css_DecryptKey( unsigned char invert, unsigned char const *p_key,
     i_lfsr1_hi = p_key[1];
 
     i_lfsr0    = ( ( p_key[4] << 17 )
-                 | ( p_key[3] << 9 )
-                 | ( p_key[2] << 1 ) )
+                   | ( p_key[3] << 9 )
+                   | ( p_key[2] << 1 ) )
                  + 8 - ( p_key[2] & 7 );
     i_lfsr0    = ( p_css_tab4[i_lfsr0 & 0xff] << 24 ) |
                  ( p_css_tab4[( i_lfsr0 >> 8 ) & 0xff] << 16 ) |
                  ( p_css_tab4[( i_lfsr0 >> 16 ) & 0xff] << 8 ) |
-                   p_css_tab4[( i_lfsr0 >> 24 ) & 0xff];
+                 p_css_tab4[( i_lfsr0 >> 24 ) & 0xff];
 
     i_combined = 0;
     for( i = 0 ; i < DVD_KEY_SIZE ; ++i )
@@ -1109,7 +1136,7 @@ static void css_DecryptKey( unsigned char invert, unsigned char const *p_key,
         o_lfsr1     = p_css_tab4[o_lfsr1];
 
         o_lfsr0 = ((((((( i_lfsr0 >> 8 ) ^ i_lfsr0 ) >> 1 )
-                        ^ i_lfsr0 ) >> 3 ) ^ i_lfsr0 ) >> 7 );
+                      ^ i_lfsr0 ) >> 3 ) ^ i_lfsr0 ) >> 7 );
         i_lfsr0 = ( i_lfsr0 >> 8 ) | ( o_lfsr0 << 24 );
 
         i_combined += ( o_lfsr0 ^ invert ) + o_lfsr1;
@@ -1184,9 +1211,9 @@ static const dvd_key_t player_keys[] =
  * p_disc_key: result, the 5 byte disc key
  *****************************************************************************/
 static int css_DecryptDiscKey( drive_info* drive, unsigned char const *p_struct_disckey,
-                           dvd_key_t p_disc_key )
+                               dvd_key_t p_disc_key )
 {
-	dvd_key_t p_verify;
+    dvd_key_t p_verify;
     unsigned int i, n = 0;
 
     /* Decrypt disc key with the above player keys */
@@ -1198,7 +1225,7 @@ static int css_DecryptDiscKey( drive_info* drive, unsigned char const *p_struct_
         {
             /* Check if player key n is the right key for position i. */
             css_DecryptKey( 0, player_keys[n], p_struct_disckey + 5 * i,
-                        p_disc_key );
+                            p_disc_key );
 
             /* The first part in the struct_disckey block is the
              * 'disc key' encrypted with itself.  Using this we
@@ -1255,7 +1282,7 @@ static int css_CrackDiscKey( drive_info* drive, unsigned char *p_disc_key )
 
     /* initialize lookup tables for k[1] */
     K1table = (unsigned char*) malloc( 65536 * K1TABLEWIDTH );
-    memset( K1table, 0 , 65536 * K1TABLEWIDTH );
+    memset( K1table, 0, 65536 * K1TABLEWIDTH );
     if( K1table == NULL )
     {
         return -1;
@@ -1271,12 +1298,12 @@ static int css_CrackDiscKey( drive_info* drive, unsigned char *p_disc_key )
             tmp3 = j ^ tmp2 ^ i; /* C[1] */
             tmp4 = K1table[ K1TABLEWIDTH * ( 256 * j + tmp3 ) ]; /* count of entries  here */
             tmp4++;
-/*
-            if( tmp4 == K1TABLEWIDTH )
-            {
-                print_debug( dvdcss, "Table disaster %d", tmp4 );
-            }
-*/
+            /*
+                        if( tmp4 == K1TABLEWIDTH )
+                        {
+                            print_debug( dvdcss, "Table disaster %d", tmp4 );
+                        }
+            */
             if( tmp4 < K1TABLEWIDTH )
             {
                 K1table[ K1TABLEWIDTH * ( 256 * j + tmp3 ) +    tmp4 ] = i;
@@ -1287,7 +1314,7 @@ static int css_CrackDiscKey( drive_info* drive, unsigned char *p_disc_key )
 
     /* Initing our Really big table */
     BigTable = (unsigned int*) malloc( 16777216 * sizeof(int) );
-    memset( BigTable, 0 , 16777216 * sizeof(int) );
+    memset( BigTable, 0, 16777216 * sizeof(int) );
     if( BigTable == NULL )
     {
         return -1;
@@ -1304,7 +1331,7 @@ static int css_CrackDiscKey( drive_info* drive, unsigned char *p_disc_key )
         for( j = 0 ; j < 5 ; j++ )
         {
             tmp2=((((((( tmp >> 3 ) ^ tmp ) >> 1 ) ^ tmp ) >> 8 )
-                                    ^ tmp ) >> 5 ) & 0xff;
+                   ^ tmp ) >> 5 ) & 0xff;
             tmp = ( tmp << 8) | tmp2;
             out2[j] = p_css_tab4[ tmp2 ];
         }
@@ -1376,7 +1403,7 @@ static int css_CrackDiscKey( drive_info* drive, unsigned char *p_disc_key )
 
                 if( ( B[1] ^ p_css_tab1[ B[2] ] ^ k[ 2 ]  ) == C[ 2 ] )
                 {
-                    if( ! css_investigate( &p_disc_key[0] , &C[0] ) )
+                    if( ! css_investigate( &p_disc_key[0], &C[0] ) )
                     {
                         goto end;
                     }
@@ -1396,7 +1423,7 @@ static int css_CrackDiscKey( drive_info* drive, unsigned char *p_disc_key )
 
                 if( ( B[1] ^ p_css_tab1[ B[2] ] ^ k[ 2 ]  ) == C[ 2 ] )
                 {
-                    if( ! css_investigate( &p_disc_key[0] , &C[0] ) )
+                    if( ! css_investigate( &p_disc_key[0], &C[0] ) )
                     {
                         goto end;
                     }
@@ -1423,8 +1450,8 @@ end:
  * a guessed(?) plain text and the cipher text.  Returns -1 on failure.
  *****************************************************************************/
 static int css_RecoverTitleKey( int i_start, unsigned char const *p_crypted,
-                            unsigned char const *p_decrypted,
-                            unsigned char const *p_sector_seed, unsigned char *p_key )
+                                unsigned char const *p_decrypted,
+                                unsigned char const *p_sector_seed, unsigned char *p_key )
 {
     unsigned char p_buffer[10];
     unsigned int  i_t1, i_t2, i_t3, i_t4, i_t5, i_t6;
@@ -1481,7 +1508,7 @@ static int css_RecoverTitleKey( int i_start, unsigned char const *p_crypted,
             i_t1 = ( ( i_t1 & 1 ) << 8 ) ^ i_t4;
             i_t4 = p_css_tab5[i_t4];
             i_t6 = ((((((( i_t3 >> 3 ) ^ i_t3 ) >> 1 ) ^
-                                         i_t3 ) >> 8 ) ^ i_t3 ) >> 5 ) & 0xff;
+                       i_t3 ) >> 8 ) ^ i_t3 ) >> 5 ) & 0xff;
             i_t3 = ( i_t3 << 8 ) | i_t6;
             i_t6 = p_css_tab4[i_t6];
             i_t5 += i_t6 + i_t4;
@@ -1507,7 +1534,7 @@ static int css_RecoverTitleKey( int i_start, unsigned char const *p_crypted,
                 {
                     i_t3 = ( i_t3 & 0x1ffff ) | ( j << 17 );
                     i_t6 = ((((((( i_t3 >> 3 ) ^ i_t3 ) >> 1 ) ^
-                                   i_t3 ) >> 8 ) ^ i_t3 ) >> 5 ) & 0xff;
+                               i_t3 ) >> 8 ) ^ i_t3 ) >> 5 ) & 0xff;
                     if( i_t6 == i_t1 )
                     {
                         break;
@@ -1519,7 +1546,7 @@ static int css_RecoverTitleKey( int i_start, unsigned char const *p_crypted,
             for( i_t5 = 0 ; i_t5 < 8; i_t5++ )
             {
                 if( ( ( i_t4 + i_t5 ) * 2 + 8 - ( (i_t4 + i_t5 ) & 7 ) )
-                                                                      == i_t3 )
+                        == i_t3 )
                 {
                     p_key[0] = i_try>>8;
                     p_key[1] = i_try & 0xFF;
@@ -1565,7 +1592,7 @@ static void css_DecryptTitleKey( dvd_key_t p_disc_key, dvd_key_t p_titlekey )
  * i_pos is the starting sector, i_len is the maximum number of sectors to read
  *****************************************************************************/
 static int css_CrackTitleKey( drive_info* drive, int i_pos, int i_len,
-                          dvd_key_t p_titlekey )
+                              dvd_key_t p_titlekey )
 {
     unsigned char       p_buf[ DVDCSS_BLOCK_SIZE ];
     const unsigned char p_packstart[4] = { 0x00, 0x00, 0x01, 0xba };
@@ -1590,8 +1617,8 @@ static int css_CrackTitleKey( drive_info* drive, int i_pos, int i_len,
             printf( "CSS: seek failed\n" );
         }
 
-		i_ret = read_dvd(drive, drive->rd_buf, i_pos, 1, DVDCSS_NOFLAGS);
-		memcpy(p_buf, drive->rd_buf, DVDCSS_BLOCK_SIZE);
+        i_ret = read_dvd(drive, drive->rd_buf, i_pos, 1, DVDCSS_NOFLAGS);
+        memcpy(p_buf, drive->rd_buf, DVDCSS_BLOCK_SIZE);
 //        i_ret = dvdcss_read( dvdcss, p_buf, 1, DVDCSS_NOFLAGS );
 
         /* Either we are at the end of the physical device or the auth
@@ -1605,7 +1632,7 @@ static int css_CrackTitleKey( drive_info* drive, int i_pos, int i_len,
             else if( !b_read_error )
             {
                 printf( "CSS: read error at block %i, resorting to "
-                                     "secret arcanes to recover\n", i_pos );
+                        "secret arcanes to recover\n", i_pos );
 
                 /* Reset the drive before trying to continue */
 #warning "Reset the drive before trying to continue"
@@ -1624,7 +1651,7 @@ static int css_CrackTitleKey( drive_info* drive, int i_pos, int i_len,
         if( memcmp( p_buf, p_packstart, 3 ) )
         {
             printf( "CSS: non MPEG block found at block %i "
-                                 "(end of title)\n", i_pos );
+                    "(end of title)\n", i_pos );
             break;
         }
 
@@ -1673,7 +1700,7 @@ static int css_CrackTitleKey( drive_info* drive, int i_pos, int i_len,
 
     /* Print some statistics. */
     printf( "CSS: successful attempts %d/%d, scrambled blocks %d/%d\n",
-                         i_success, i_tries, i_encrypted, i_reads );
+            i_success, i_tries, i_encrypted, i_reads );
 
     if( i_success > 0 /* b_stop_scanning */ )
     {
@@ -1710,8 +1737,8 @@ static int css_AttackPattern( unsigned char const p_sec[ DVDCSS_BLOCK_SIZE ], in
     {
         /* Find the number of bytes that repeats in cycles. */
         for( j = i + 1;
-             j < 0x80 && ( p_sec[0x7F - (j%i)] == p_sec[0x7F - j] );
-             j++ )
+                j < 0x80 && ( p_sec[0x7F - (j%i)] == p_sec[0x7F - j] );
+                j++ )
         {
             /* We have found j repeating bytes with a cycle length i. */
             if( j > i_best_plen )
@@ -1732,8 +1759,8 @@ static int css_AttackPattern( unsigned char const p_sec[ DVDCSS_BLOCK_SIZE ], in
         i_tries++;
         memset( p_key, 0, DVD_KEY_SIZE );
         res = css_RecoverTitleKey( 0,  &p_sec[0x80],
-                      &p_sec[ 0x80 - (i_best_plen / i_best_p) * i_best_p ],
-                      &p_sec[0x54] /* key_seed */, p_key );
+                                   &p_sec[ 0x80 - (i_best_plen / i_best_p) * i_best_p ],
+                                   &p_sec[0x54] /* key_seed */, p_key );
         i_success += ( res >= 0 );
 #if 0
         if( res >= 0 )
@@ -1782,7 +1809,7 @@ int css_title ( drive_info* drive, int lba)
     }
 
     if( p_title != NULL
-         && p_title->i_startlb == lba )
+            && p_title->i_startlb == lba )
     {
         /* We've already cracked this key, nothing to do */
         memcpy( drive->media.dvdcss.TK, p_title->p_key, sizeof(dvd_key_t) );
@@ -1807,8 +1834,8 @@ int css_title ( drive_info* drive, int lba)
             psz_key[DVD_KEY_SIZE * 3 - 1] = '\0';
 
             if( read( i_fd, psz_key, DVD_KEY_SIZE * 3 - 1 ) == DVD_KEY_SIZE * 3 - 1
-                 && sscanf( psz_key, "%x:%x:%x:%x:%x",
-                            &k0, &k1, &k2, &k3, &k4 ) == 5 )
+                    && sscanf( psz_key, "%x:%x:%x:%x:%x",
+                               &k0, &k1, &k2, &k3, &k4 ) == 5 )
             {
                 p_title_key[0] = k0;
                 p_title_key[1] = k1;
@@ -1855,8 +1882,8 @@ int css_title ( drive_info* drive, int lba)
             char psz_key[DVD_KEY_SIZE * 3 + 2];
 
             sprintf( psz_key, "%02x:%02x:%02x:%02x:%02x\r\n",
-                              p_title_key[0], p_title_key[1], p_title_key[2],
-                              p_title_key[3], p_title_key[4] );
+                     p_title_key[0], p_title_key[1], p_title_key[2],
+                     p_title_key[3], p_title_key[4] );
 
             write( i_fd, psz_key, DVD_KEY_SIZE * 3 + 1 );
             close( i_fd );
@@ -1923,9 +1950,9 @@ int css_titlekey( drive_info* drive, int lba, dvd_key_t p_title_key )
         }
 
         /* Get encrypted title key */
-		if (css_report_title_key(drive, lba, p_key))
-        //if( ioctl_ReadTitleKey( dvdcss->i_fd, &dvdcss->css.i_agid,
-        //                       lba, p_key ) < 0 )
+        if (css_report_title_key(drive, lba, p_key))
+            //if( ioctl_ReadTitleKey( dvdcss->i_fd, &dvdcss->css.i_agid,
+            //                       lba, p_key ) < 0 )
         {
             printf( "CSS: ReadTitleKey failed (region mismatch?)\n" );
             i_ret = -1;
@@ -1935,31 +1962,31 @@ int css_titlekey( drive_info* drive, int lba, dvd_key_t p_title_key )
         //switch( GetASF( dvdcss ) )
         switch( css_report_asf( drive ) )
         {
-            case -1:
-                /* An error getting the ASF status, something must be wrong. */
-                printf( "CSS: lost ASF requesting title key\n" );
-				css_invalidate_agid(drive);
+        case -1:
+            /* An error getting the ASF status, something must be wrong. */
+            printf( "CSS: lost ASF requesting title key\n" );
+            css_invalidate_agid(drive);
 //                ioctl_InvalidateAgid( dvdcss->i_fd, &dvdcss->css.i_agid );
-                i_ret = -1;
-                break;
+            i_ret = -1;
+            break;
 
-            case 1:
-                /* This might either be a title that has no key,
-                 * or we encountered a region error. */
-                printf( "CSS: lost ASF requesting title key\n" );
-                break;
+        case 1:
+            /* This might either be a title that has no key,
+             * or we encountered a region error. */
+            printf( "CSS: lost ASF requesting title key\n" );
+            break;
 
-            case 2:
-                /* Drive status is ok. */
-                /* If the title key request failed, but we did not loose ASF,
-                 * we might stil have the AGID.  Other code assume that we
-                 * will not after this so invalidate it(?). */
-                if( i_ret < 0 )
-                {
-					css_invalidate_agid(drive);
+        case 2:
+            /* Drive status is ok. */
+            /* If the title key request failed, but we did not loose ASF,
+             * we might stil have the AGID.  Other code assume that we
+             * will not after this so invalidate it(?). */
+            if( i_ret < 0 )
+            {
+                css_invalidate_agid(drive);
                 //    ioctl_InvalidateAgid( dvdcss->i_fd, &dvdcss->css.i_agid );
-                }
-                break;
+            }
+            break;
         }
 
         if( !( i_ret < 0 ) )
@@ -1995,7 +2022,7 @@ int css_titlekey( drive_info* drive, int lba, dvd_key_t p_title_key )
         printf( "CSS: resetting drive and cracking title key\n" );
 
         /* Read an unscrambled sector and reset the drive */
-		read(drive, drive->rd_buf, 0, 1);
+        read(drive, drive->rd_buf, 0, 1);
 //        dvdcss->pf_seek( dvdcss, 0 );
 //        dvdcss->pf_read( dvdcss, p_garbage, 1 );
 //        dvdcss->pf_seek( dvdcss, 0 );
@@ -2024,6 +2051,6 @@ int css_titlekey( drive_info* drive, int lba, dvd_key_t p_title_key )
 static void css_printkey( char *prefix, unsigned char const *data )
 {
     printf( "%s%02X:%02X:%02X:%02X:%02X\n", prefix,
-                 data[0], data[1], data[2], data[3], data[4] );
+            data[0], data[1], data[2], data[3], data[4] );
 }
 
