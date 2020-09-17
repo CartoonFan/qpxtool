@@ -14,6 +14,7 @@
 #define CHILDPROC_H
 
 #include "qscand_defs.hpp"
+#include "threads.hpp"
 #include <sys/time.h>
 #include <sys/types.h>
 
