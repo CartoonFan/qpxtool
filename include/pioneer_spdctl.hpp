@@ -9,6 +9,9 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
+#include "qpx_mmc_defs.hpp"
+#include "qscan_plugin_pioneer.hpp"
+
 #ifndef __pioneer_spdctl
 #define __pioneer_spdctl
 

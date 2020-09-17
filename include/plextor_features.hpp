@@ -13,6 +13,8 @@
  *
  */
 
+#include "qpx_mmc.hpp"
+
 #ifndef __PLEXTOR_FEATURES_H
 #define __PLEXTOR_FEATURES_H
 
