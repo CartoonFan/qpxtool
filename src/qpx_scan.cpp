@@ -48,6 +48,16 @@ char *dlerror() {
 
 qscanner::qscanner(drive_info *idev) {
   dev = idev;
+  stop_req = false; 
+  stat_req = false;
+  spd1X = 0;
+  spdKB = 0;
+  spdX = 0;
+  WT_simul = 0;
+  s = {};
+  e = {};
+  blks = {};
+  blke = {};
   writer = NULL;
   plugin = NULL;
   pluginlib = NULL;
@@ -278,7 +288,7 @@ int qscanner::plugin_attach(char *name) {
           plugin_attach(pname, 0, 1, 1);
 
           if (attached) {
-            if (strcmp(plugin->name(), name))
+            if (strcmp(plugin->name(), name) == 0)
               plugin_detach();
             else
               r = 0;

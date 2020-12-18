@@ -13,6 +13,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <iostream>
 //#include <sys/time.h>
 #include <unistd.h>
 
@@ -231,9 +232,7 @@ int yamaha_f1_do_tattoo(drive_info *drive, unsigned char *iimage,
   if (iimage) {
     //		image = (tattoo_row*) iimage;
     if (bsize != tattoo_size) {
-      printf("yamaha_f1_do_tattoo(): RAW image size must be exactly %d bytes "
-             "(3744x%d)\n",
-             tattoo_size, drive->yamaha.tattoo_rows);
+      std::cout << "yamaha_f1_do_tattoo(): RAW image size must be exactly " << tattoo_size << " bytes (3744x" << (drive->yamaha.tattoo_rows) << ")\n";
       return 1;
     }
     imagec = (char *)iimage;
@@ -260,7 +259,7 @@ int yamaha_f1_do_tattoo(drive_info *drive, unsigned char *iimage,
 
   yamaha_set_tattoo_speed(drive);
 
-  printf("Sending T@2 data (%d rows)...\n", drive->yamaha.tattoo_rows);
+  std::cout << "Sending T@2 data (" << (drive->yamaha.tattoo_rows) << " rows)...\n";
 
   //	int b=0;
   crow = imagec;

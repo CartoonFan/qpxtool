@@ -21,6 +21,7 @@ void plugin_destroy(scan_plugin *iplugin) {
 }
 
 scan_tsst::scan_tsst(drive_info *idev) : scan_plugin() {
+  lba = 0;
   dev = idev;
   if (!dev->silent)
     printf("scan_tsst()\n");
@@ -35,7 +36,7 @@ scan_tsst::~scan_tsst() {
 
 int scan_tsst::probe_drive() {
   cd_errc tmp_errc;
-  if (strncmp(dev->ven, "TSSTcorp", 8))
+  if (strncmp(dev->ven, "TSSTcorp", 8) != 0)
     return DEV_FAIL;
   if (dev->media.type & DISC_CD) {
     if (cmd_cd_errc_init())

@@ -22,18 +22,18 @@
 
 #define addTabButton(pb, icon, name, tabidx, layout)                           \
   {                                                                            \
-    pb = new QPushButton(QIcon(icon), name, bframe);                           \
-    pb->setStyleSheet(bstyle);                                                 \
-    pb->setFlat(true);                                                         \
-    pb->setCheckable(true);                                                    \
-    pb->setIconSize(QSize(24, 24));                                            \
-    pb->setMinimumHeight(26);                                                  \
-    pb->setFocusPolicy(Qt::NoFocus);                                           \
-    QFont f = pb->font();                                                      \
+    (pb) = new QPushButton(QIcon(icon), name, bframe);                        \
+    (pb)->setStyleSheet(bstyle);                                              \
+    (pb)->setFlat(true);                                                      \
+    (pb)->setCheckable(true);                                                 \
+    (pb)->setIconSize(QSize(24, 24));                                         \
+    (pb)->setMinimumHeight(26);                                               \
+    (pb)->setFocusPolicy(Qt::NoFocus);                                        \
+    QFont f = (pb)->font();                                                   \
     f.setPointSize(f.pointSize() + 1);                                         \
-    pb->setFont(f);                                                            \
-    grp->addButton(pb, tabidx++);                                              \
-    layout->addWidget(pb);                                                     \
+    (pb)->setFont(f);                                                         \
+    grp->addButton(pb, (tabidx)++);                                           \
+    (layout)->addWidget(pb);                                                  \
   }
 
 #include <QIcon>

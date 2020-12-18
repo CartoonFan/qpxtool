@@ -375,9 +375,7 @@ int get_rpc_state(drive_info *drive) {
 
   drive->rpc.ch_u = drive->rd_buf[4] & 0x07;
   drive->rpc.ch_v = (drive->rd_buf[4] >> 3) & 0x07;
-  t = (drive->rd_buf[4] >> 6) & 0x03;
   regmask = drive->rd_buf[5];
-  sh = drive->rd_buf[6];
 
   drive->rpc.phase = 2;
   //	printf("\n** Unit is RPC-II\n");
@@ -762,7 +760,6 @@ int css_get_bus_key(drive_info *drive) {
      * Invalidating an AGID could make another process fail somewhere
      * in its authentication process. */
     drive->media.dvdcss.agid = i;
-    i_ret = css_invalidate_agid(drive);
 
     printf("CSS: requesting AGID\n");
     i_ret = css_report_agid(drive);
@@ -996,7 +993,6 @@ static void css_CryptKey(int i_key_type, int i_variant,
    * of these works on 40 bits at a time and are quite
    * similar.
    */
-  i_index = 0;
   for (i = 5, i_term = 0; --i >= 0; i_term = p_scratch[i]) {
     i_index = p_bits[25 + i] ^ p_scratch[i];
     i_index = p_crypt_tab1[i_index] ^ ~p_crypt_tab2[i_index] ^ i_cse;
@@ -1244,13 +1240,12 @@ static int css_CrackDiscKey(drive_info *drive, unsigned char *p_disc_key) {
   }
 
   /* Initing our Really big table */
-  BigTable = (unsigned int *)malloc(16777216 * sizeof(int));
+  BigTable = static_cast<unsigned int *>(malloc(16777216 * sizeof(unsigned int)));
   memset(BigTable, 0, 16777216 * sizeof(int));
   if (BigTable == NULL) {
     return -1;
   }
 
-  tmp3 = 0;
 
   printf("CSS: initializing the big table\n");
 
@@ -1544,7 +1539,7 @@ static int css_CrackTitleKey(drive_info *drive, int i_pos, int i_len,
     /* Stop when we find a non MPEG stream block.
      * (We must have reached the end of the stream).
      * For now, allow all blocks that begin with a start code. */
-    if (memcmp(p_buf, p_packstart, 3)) {
+    if (memcmp(p_buf, p_packstart, 3) != 0) {
       printf("CSS: non MPEG block found at block %i "
              "(end of title)\n",
              i_pos);

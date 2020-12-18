@@ -369,7 +369,7 @@ void child_proc(child_arg_t *arg) {
         return;
       }
 
-      if ((cpid = createChildProcess(argv, &pipefd, NULL)) == -1) {
+      if (createChildProcess(argv, &pipefd, NULL) == -1) {
 #ifdef DAEMON_EN
         if (daemonized)
           // TODO: Redirect cout statements to file to emulate syslog behavior

@@ -11,6 +11,9 @@
 // "ShultZ" Kozlov
 //
 
+#include <string>
+#include <iostream>
+
 #include "qpx_transport.hpp"
 #include "colors.hpp"
 #include "sense.hpp"
@@ -113,14 +116,11 @@ void sperror(const char *cmd, int err) //,  Scsi_Command *scsi)
   sense2str(err, sense_str);
 
   if (err == -1) {
-    fprintf(stderr, COL_RED "\n:-( unable to %s : [%d] " COL_NORM, cmd,
-            saved_errno);
+      //TODO: Redirect to stderr
+    std::cout << COL_RED << "\n:-( unable to " << cmd << " : [" << saved_errno << "] " << COL_NORM;
     errno = saved_errno, perror(NULL);
   } else
-    fprintf(stderr,
-            COL_RED
-            "\n:-[ %s failed with SK=%Xh/ASC=%02Xh/ACQ=%02Xh]: %s\n" COL_NORM,
-            cmd, SK(err), ASC(err), ASCQ(err), sense_str);
+    std::cout << COL_RED << "\n:-[ " << cmd << " failed with SK=" << SK(err) << "/ASC=" << ASC(err) << "/ACQ=" << ASCQ(err) << "]: " << sense_str << "\n" << COL_NORM;
 }
 
 autofree::autofree() { ptr = NULL; }
@@ -720,11 +720,13 @@ int Scsi_Command::is_reload_needed() { return 0; }
 #elif defined(_WIN32)
 
 Scsi_Command::Scsi_Command() {
+  p = {};
   fd = INVALID_HANDLE_VALUE;
   autoclose = 1;
   filename = NULL;
 }
 Scsi_Command::Scsi_Command(void *f) {
+  p = {};
   fd = f, autoclose = 0;
   filename = NULL;
 }

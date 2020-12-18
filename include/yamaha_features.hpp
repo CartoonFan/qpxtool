@@ -14,6 +14,9 @@
 #ifndef __YAMAHA_FEATURES_H
 #define __YAMAHA_FEATURES_H
 
+#include <cstdint>
+#include "qpx_mmc.hpp"
+
 typedef char tattoo_row[3744];
 
 // AMQR

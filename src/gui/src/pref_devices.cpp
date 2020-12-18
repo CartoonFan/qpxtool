@@ -152,8 +152,6 @@ void prefDevices::hostsContextMenu(QContextMenuEvent *e) {
                          SLOT(hostEdit()));
   if (!lst_hosts->currentItem())
     act->setEnabled(false);
-  act = cmenu->addAction(QIcon(":images/add.png"), tr("Add host"), this,
-                         SLOT(hostAdd()));
   act = cmenu->addAction(QIcon(":images/x.png"), tr("Remove host"), this,
                          SLOT(hostRemove()));
   if (!lst_hosts->currentItem())

@@ -670,7 +670,7 @@ static const str_dev max_rate_tbl[16] = {
     "Reserved",   "Reserved",  "Reserved",   "Reserved",
     "Reserved",   "Reserved",  "Reserved",   "Not specified"};
 
-#define COMMAND_FAILED -0x01
+constexpr const char COMMAND_FAILED = -0x01;
 
 #define Media_BLANK 0x80
 #define Media_NOTBLANK 0x7F

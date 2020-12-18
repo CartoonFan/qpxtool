@@ -67,7 +67,7 @@ void QPxIODevice::splitInput() {
 
   int bi;
   qint64 ba;
-  while ((ba = io->bytesAvailable())) {
+  while ((io->bytesAvailable())) {
     // while ((io->bytesAvailable())) {
 #ifdef QPXIO_DEBUG
     qDebug() << "IODevice bytes: " << ba;

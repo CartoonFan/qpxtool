@@ -20,6 +20,8 @@
 #ifndef __PXFW_H
 #define __PXFW_H
 
+#include <cstdint>
+
 // const int WR_PLEXTOR	= 0x0001;
 
 /*

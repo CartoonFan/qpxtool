@@ -35,7 +35,7 @@ int scan_asus::probe_drive() {
     sperror("asus_probe", dev->err);
     return DEV_FAIL;
   }
-  if (strncmp((char *)dev->rd_buf, "ASUS", 4))
+  if (strncmp((char *)dev->rd_buf, "ASUS", 4) != 0)
     return DEV_FAIL;
   return DEV_PROBED;
 }

@@ -35,6 +35,7 @@ void plugin_destroy(scan_plugin *iplugin) {
 }
 
 scan_nec::scan_nec(drive_info *idev) : scan_plugin() {
+  lba = 0;
   dev = idev;
   if (!dev->silent)
     printf("scan_nec()\n");

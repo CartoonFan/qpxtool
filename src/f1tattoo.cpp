@@ -12,6 +12,7 @@
 #include <array>
 #include <cstdio>
 #include <cstdlib>
+#include <iostream>
 
 #include "qpx_mmc.hpp"
 #include "yamaha_features.hpp"
@@ -71,9 +72,7 @@ auto get_device_info(drive_info *drive) -> int {
   if ((flags & (FL_CURRENT | FL_TATTOO | FL_TATTOO_TEST)) != 0U &&
       (drive->ven_features & YMH_TATTOO) != 0U) {
     if ((drive->yamaha.tattoo_rows) != 0U) {
-      printf("DiscT@2 info:\ninner: %d\nouter: %d\nimage: 3744x%d\n",
-             drive->yamaha.tattoo_i, drive->yamaha.tattoo_o,
-             drive->yamaha.tattoo_rows);
+      std::cout << "DiscT@2 info:\ninner: " << drive->yamaha.tattoo_i << "\nouter: " << drive->yamaha.tattoo_o << "\nimage: 3744x" << drive->yamaha.tattoo_rows << "\n";
     } else {
       if ((drive->media.type & DISC_CD) != 0U) {
         printf("Can't write DiscT@2 on inserted disc!\n");

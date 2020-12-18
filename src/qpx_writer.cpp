@@ -18,6 +18,7 @@
 #define WTYPE_CD_DEFAULT WTYPE_TAO
 
 qpxwriter::qpxwriter(drive_info *idev) {
+  simul = false;
   dev = idev;
   stop_req = 0;
 }
@@ -292,7 +293,7 @@ int qpxwriter_cd::fixate() {
 // DVD- functions...
 //
 int qpxwriter_dvdminus::open_session() {
-  bool bfree = ((dev->capabilities & CAP_BURN_FREE));
+  bool bfree;
   bfree = 1;
   if (mode_sense(dev, MODE_PAGE_WRITE_PARAMETERS, 0, 60))
     return -1;

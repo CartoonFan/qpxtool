@@ -13,6 +13,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <errno.h>
+#include <iostream>
 
 #include "qpx_scan.hpp"
 #include "threads.hpp"
@@ -387,7 +388,7 @@ int qscanner::run_wr_transfer() {
   //	lba_end = 4096;
 
   get_wbuffer_capacity(dev, &ubuft, &ubuff);
-  printf("Write buffer capacity: %d kB\n", ubuft >> 10);
+  std::cout << "Write buffer capacity: " << (ubuft >> 10) << " kB\n";
 
   wait_unit_ready(dev, 6);
   printf("Writing blocks: %ld - %ld (%ld MB)\n", lba_sta, lba_end,
@@ -449,10 +450,7 @@ int qscanner::run_wr_transfer() {
       spdKB/(float)spd1X;
       */
       calc_cur_speed(((lba - 1) % bsize) + 1);
-      printf("lba: %7d    speed: %6.2f X  %6d kB/s, written: %4ldMB/%4ldMB, "
-             "Ubuf: %3d%%\r",
-             lba, spdX, spdKB, (lba - lba_sta) >> 9, (lba_end - lba_sta) >> 9,
-             ubufp);
+      std::cout << "lba: " << lba << "    speed: " << spdX << " X  " << spdKB << " kB/s, written: " << ((lba - lba_sta) >> 9) << "MB/" << ((lba_end - lba_sta) >> 9) << "MB, Ubuf: " << ubufp << "% \r";
       gettimeofday(&blks, NULL);
       stat_req = 0;
 #ifdef USE_FFLUSH
@@ -490,7 +488,6 @@ write_cleanup:
 
 int qscanner::run_cd_errc() {
   cd_errc err, err_tot, err_max;
-  int errc_data;
   long lba = lba_sta;
   long lbao;
   if (!attached)
@@ -498,7 +495,6 @@ int qscanner::run_cd_errc() {
   if (!(dev->media.type & DISC_CD))
     return 1;
   lba = 0;
-  errc_data = plugin->errc_data();
   //    seek(dev,lba);
   if (plugin->start_test(CHK_ERRC_CD, lba, speed)) {
     printf("CD ERRC test init failed!\n");
@@ -628,7 +624,6 @@ int qscanner::run_cd_ta() {
 
 int qscanner::run_dvd_errc() {
   dvd_errc err, err_tot, err_max;
-  int errc_data;
   long lba = lba_sta;
   long lbas;
   long lbao;
@@ -639,7 +634,6 @@ int qscanner::run_dvd_errc() {
   if (!(dev->media.type & DISC_DVD))
     return 1;
   //    lba=0; slba=0;
-  errc_data = plugin->errc_data();
   //    seek(dev,lba);
   if (plugin->start_test(CHK_ERRC_DVD, lba, speed)) {
     printf("DVD ERRC test init failed!\n");
@@ -851,7 +845,7 @@ int qscanner::run_fete() {
 
 int qscanner::run_dvd_ta() {
   struct cdvd_ta ta;
-  long lba;
+  long lba=0;
   if (!attached)
     return -1;
   if (!(dev->media.type & DISC_DVD))
@@ -881,16 +875,13 @@ int qscanner::run_dvd_ta() {
 
 int qscanner::run_bd_errc() {
   bd_errc err, err_tot, err_max;
-  int errc_data;
   long lba = lba_sta;
-  long lbas;
   long lbao;
   if (!attached)
     return -1;
   if (!(dev->media.type & DISC_BD))
     return 1;
   //    lba=0; slba=0;
-  errc_data = plugin->errc_data();
   //    seek(dev,lba);
   if (plugin->start_test(CHK_ERRC_BD, lba, speed)) {
     printf("BD ERRC test init failed!\n");
@@ -901,7 +892,6 @@ int qscanner::run_bd_errc() {
   spd1X = 4500;
   gettimeofday(&s, NULL);
   wait_unit_ready(dev, 6);
-  lbas = lba;
   printf("\nTesting %ld sectors: %ld - %ld\n", lba_end - lba_sta + 1, lba_sta,
          lba_end);
   printf("          lba |        speed        |  LDC   BIS  |  UNCR\n");

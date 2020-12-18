@@ -12,6 +12,7 @@
 
 #include <cstdio>
 #include <cstdlib>
+#include <iostream>
 
 #if (DVDCSS_KEY_CACHE > 0)
 #include <fcntl.h>
@@ -215,8 +216,7 @@ static int initAllCSSKeys(drive_info *dev) {
       /* Perform CSS key cracking for this title. */
       //	  st0=1;
       if (!dev->silent) {
-        printf("libdvdread: Get key for %s at 0x%08x, len %10d\n", filename,
-               start, len);
+        std::cout << "libdvdread: Get key for " << filename << " at 0x" << start << ", len " << len << "\n";
       }
       if (css_title(dev, (int)start) < 0) {
         if (!dev->silent) {
@@ -245,8 +245,7 @@ static int initAllCSSKeys(drive_info *dev) {
 
     /* Perform CSS key cracking for this title. */
     if (!dev->silent) {
-      printf("libdvdread: Get key for %s at 0x%08x, len %10d\n", filename,
-             start, len);
+      std::cout << "libdvdread: Get key for " << filename << " at 0x" << start << ", len " << len << "\n";
     }
     if (css_title(dev, (int)start) < 0) {
       if (!dev->silent) {
@@ -468,14 +467,7 @@ void *read_disc(void *arg) {
     }
     gettimeofday(&t_e, NULL);
 
-    printf("%s: %5.2f X, lba %7d / %7d  ( %06x / %06x ) scnt=%d\r", dev->device,
-           ((float)scnt / (float)sects1X) /
-               ((t_e.tv_sec - t_s.tv_sec) +
-                (t_e.tv_usec - t_s.tv_usec) / 1000000.0),
-           lba, dev->media.capacity, lba, dev->media.capacity,
-           //				map->get_done() * 100 /
-           // dev->media.capacity,
-           scnt);
+    std::cout << dev->device << ": " << ((float)scnt / (float)sects1X) / ((t_e.tv_sec - t_s.tv_sec) + (t_e.tv_usec - t_s.tv_usec) / 1000000.0)<< " X, lba " << lba << " / " << dev->media.capacity << "  ( " << lba << " / " << dev->media.capacity << ") scnt=" << scnt << "\r";
     if ((dev->err & 0x0FFF00) == 0x23A00) {
       printf("%s: media removed!\n", dev->device);
       map->lock();

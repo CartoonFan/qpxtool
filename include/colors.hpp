@@ -12,17 +12,21 @@
 #ifndef _COLORS_H_INCLUDED
 #define _COLORS_H_INCLUDED
 
-#define COL_GR0 "\E[30;60m"
-#define COL_RED "\E[31;60m"
-#define COL_GRN "\E[32;60m"
-#define COL_YEL "\E[33;60m"
-#define COL_BLU "\E[34;60m"
-#define COL_VIOL "\E[35;60m"
-#define COL_CYAN "\E[36;60m"
-#define COL_GR1 "\E[37;60m"
-#define COL_NO__ "\E[38;60m"
-#define COL_WHITE "\E[39;60m"
+#include <string>
 
-#define COL_NORM "\E[0m"
+
+
+constexpr const char* COL_GR0 = "\x1B[30;60m";
+constexpr const char* COL_RED = "\x1B[31;60m";
+constexpr const char* COL_GRN = "\x1B[32;60m";
+constexpr const char* COL_YEL = "\x1B[33;60m";
+constexpr const char* COL_BLU = "\x1B[34;60m";
+constexpr const char* COL_VIOL = "\x1B[35;60m";
+constexpr const char* COL_CYAN = "\x1B[36;60m";
+constexpr const char* COL_GR1 = "\x1B[37;60m";
+constexpr const char* COL_NO__ = "\x1B[38;60m";
+constexpr const char* COL_WHITE = "\x1B[39;60m";
+
+constexpr const char* COL_NORM = "\x1B[0m";
 
 #endif

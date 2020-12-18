@@ -22,6 +22,7 @@ void plugin_destroy(scan_plugin *iplugin) {
 
 scan_asus::scan_asus(drive_info *idev) : scan_plugin() {
   dev = idev;
+  lba = 0;
   if (!dev->silent)
     printf("scan_asus()\n");
   devlist = (drivedesc *)&drivelist;

@@ -78,7 +78,7 @@ char *protect_arg(const char *argv) {
     else if (*p == '\\') {
       const char *pp = p;
 
-      while (*pp && *pp == '\\')
+      while (*pp == '\\')
         pp++;
       if (*pp == '"')
         len++;
@@ -99,7 +99,7 @@ char *protect_arg(const char *argv) {
     else if (*p == '\\') {
       const char *pp = p;
 
-      while (*pp && *pp == '\\')
+      while (*pp == '\\')
         pp++;
       if (*pp == '"')
         *q++ = '\\';

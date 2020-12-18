@@ -108,7 +108,6 @@ void TextSlider::moveToEnabled() {
   if (!items.size())
     return;                             // list empty
   if (idx < 0 || idx >= items.size()) { // index out of range
-    idx = 0;
   } else {
     if (items[idx].enabled)
       return; // current item enabled
@@ -399,9 +398,9 @@ void TextSlider::paintEvent(QPaintEvent *) {
     }
     if (op.tickPosition == QSlider::TicksLeft ||
         op.tickPosition == QSlider::TicksBothSides)
-      p.translate(width() - 26, VITEMSIZE / 2);
+      p.translate(width() - 26, double (VITEMSIZE) / 2);
     else
-      p.translate(0, VITEMSIZE / 2);
+      p.translate(0, double (VITEMSIZE) / 2);
     op.rect.setWidth(26);
     op.rect.setHeight(height() - VITEMSIZE);
   } else {
@@ -430,9 +429,9 @@ void TextSlider::paintEvent(QPaintEvent *) {
     }
     if (op.tickPosition == QSlider::TicksLeft ||
         op.tickPosition == QSlider::TicksBothSides)
-      p.translate(itemw / 2, height() - 26);
+      p.translate((double)itemw / 2, height() - 26);
     else
-      p.translate(itemw / 2, 0);
+      p.translate((double)itemw / 2, 0);
     op.rect.setWidth(width() - itemw);
     op.rect.setHeight(26);
   }

@@ -34,6 +34,8 @@ void plugin_destroy(scan_plugin *iplugin) {
 }
 
 scan_benq::scan_benq(drive_info *idev) : scan_plugin() {
+  lba = 0;
+  sidx = {};
   dev = idev;
   if (!dev->silent)
     printf("scan_benq()\n");
@@ -159,7 +161,6 @@ int scan_benq::scan_block(void *data, long *ilba) {
     return r;
   case CHK_FETE:
     if (dev->media.type & DISC_DVD & ~DISC_DVDROM) {
-      r = cmd_dvd_fete_block((cdvd_ft *)data);
     } else {
       return -1;
     }

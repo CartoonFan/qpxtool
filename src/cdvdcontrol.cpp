@@ -16,14 +16,13 @@
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
-#include <string>
 
 #include "pioneer_spdctl.hpp"
 #include "plextor_features.hpp"
 #include "qpx_mmc.hpp"
 #include "yamaha_features.hpp"
 
-constexpr std::string_view version = "1.4";
+constexpr const char* version = "1.4";
 
 const uint32_t FL_HELP = 0x00000001;
 const uint32_t FL_SCAN = 0x00000002;
@@ -1169,26 +1168,26 @@ auto main(int argc, char *argv[]) -> int {
         needs_parameter(argv, i);
         return 5;
       }
-    } else if (!strcmp(argv[i], "--amqr")) {
-      flags |= FL_YMH_AMQR;
-      if (argc > (i + 1)) {
-        int amqr = 0;
-        i++;
-        if (!strcmp(argv[i], "off"))
-          amqr = 0;
-        else if (!strcmp(argv[i], "on"))
-          amqr = 1;
-      }
-    } else if (!strcmp(argv[i], "--forcespeed")) {
-      flags |= FL_YMH_FORCESPEED;
-      if (argc > (i + 1)) {
-        int forcespeed = 0;
-        i++;
-        if (!strcmp(argv[i], "off"))
-          forcespeed = 0;
-        else if (!strcmp(argv[i], "on"))
-          forcespeed = 1;
-      }
+//} else if (!strcmp(argv[i], "--amqr")) {
+//      flags |= FL_YMH_AMQR;
+//      if (argc > (i + 1)) {
+//        int amqr = 0;
+//        i++;
+//        if (!strcmp(argv[i], "off"))
+//          amqr = 0;
+//        else if (!strcmp(argv[i], "on"))
+//          amqr = 1;
+//      }
+//    } else if (!strcmp(argv[i], "--forcespeed")) {
+//      flags |= FL_YMH_FORCESPEED;
+//      if (argc > (i + 1)) {
+//        int forcespeed = 0;
+//        i++;
+//        if (!strcmp(argv[i], "off"))
+//          forcespeed = 0;
+//        else if (!strcmp(argv[i], "on"))
+//          forcespeed = 1;
+//      }
 
       //  std::cout << "\t--pio-limit [on|off]         limit (or not) read speed
       //  by 24x for CD and 8x for DVD\n"; std::cout << "\t--pio-quiet
@@ -1207,23 +1206,23 @@ auto main(int argc, char *argv[]) -> int {
         else if (!strcmp(argv[i], "on"))
           piolimit = 1;
       }
-    } else if (!strcmp(argv[i], "--pio-quiet")) {
-      flags |= FL_PIOQUIET;
-      if (argc > (i + 1)) {
-        char piosilent = PIO_SILENT_QUIET;
-        i++;
-        if (!strcmp(argv[i], "quiet"))
-          piosilent = PIO_SILENT_QUIET;
-        else if (!strcmp(argv[i], "perf"))
-          piosilent = PIO_SILENT_PERF;
-        else if (!strcmp(argv[i], "std"))
-          piosilent = PIO_SILENT_STD;
-        else
-          std::cout << "invalid --pio-quiet parameter: " << argv[i] << "\n";
-      } else {
-        needs_parameter(argv, i);
-        return 5;
-      }
+//    } else if (!strcmp(argv[i], "--pio-quiet")) {
+//      flags |= FL_PIOQUIET;
+//      if (argc > (i + 1)) {
+//        char piosilent = PIO_SILENT_QUIET;
+//        i++;
+//        if (!strcmp(argv[i], "quiet"))
+//          piosilent = PIO_SILENT_QUIET;
+//        else if (!strcmp(argv[i], "perf"))
+//          piosilent = PIO_SILENT_PERF;
+//        else if (!strcmp(argv[i], "std"))
+//          piosilent = PIO_SILENT_STD;
+//        else
+//          std::cout << "invalid --pio-quiet parameter: " << argv[i] << "\n";
+//      } else {
+//        needs_parameter(argv, i);
+//        return 5;
+//      }
 
     } else if (!strcmp(argv[i], "-v"))
       flags |= FL_VERBOSE;

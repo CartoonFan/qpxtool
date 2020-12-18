@@ -16,6 +16,8 @@
 
 #include <cstdio>
 #include <cstdlib>
+#include <iostream>
+#include <string>
 
 #include "colors.hpp"
 #include "common_functions.hpp"
@@ -72,7 +74,7 @@ int scan_liteon::cmd_cd_errc_init_old() {
     sperror("LiteOn_init_E_cx_scan", dev->err);
     return 1;
   }
-  printf(COL_YEL "LiteOn: using OLD CD ERRC commands" COL_NORM "\n");
+  std::cout << COL_YEL << "LiteOn: using OLD CD ERRC commands" << COL_NORM << "\n";
   return 0;
 }
 
@@ -96,7 +98,7 @@ int scan_liteon::cmd_cd_errc_init() {
   cd_errc_new = true;
   if (cmd_cd_errc_init_new())
     return cmd_cd_errc_init_old();
-  printf(COL_GRN "LiteOn: using new CD ERRC commands" COL_NORM "\n");
+  std::cout << COL_GRN << "LiteOn: using new CD ERRC commands" << COL_NORM << "\n";
   return 0;
 }
 

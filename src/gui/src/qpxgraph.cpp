@@ -202,7 +202,7 @@ void QPxGraph::setZoneTA(int zone) {
 #endif
   taZone = zone;
   update();
-};
+}
 
 void QPxGraph::setLayerTA(int layer) {
 #ifndef QT_NO_DEBUG
@@ -210,7 +210,7 @@ void QPxGraph::setLayerTA(int layer) {
 #endif
   taLayer = layer;
   update();
-};
+}
 
 void QPxGraph::wheelEvent(QWheelEvent *e) {
 #ifndef QT_NO_DEBUG
@@ -328,14 +328,14 @@ void QPxGraph::drawGraph(QPainter *p, QSize s, device *dev, int ttype,
 
     Vscale = (s.height() - margin_bottom) / 60.0;
     if (dev->media.type.startsWith("CD")) {
-      HscaleLBA = 450000 / sg.width();
+      HscaleLBA = (double)450000 / sg.width();
       Vscale1X = Vscale;
     } else if (dev->media.type.startsWith("DVD")) {
-      HscaleLBA = (1 << 19) * 5 * dev->media.ilayers / sg.width();
+      HscaleLBA = (double)(1 << 19) * 5 * dev->media.ilayers / sg.width();
       Vscale1X = Vscale * 3;
     } else if (dev->media.type.startsWith("BD")) {
       HscaleLBA =
-          (1 << 19) * dev->media.igbpl * dev->media.ilayers / sg.width();
+          (double)(1 << 19) * dev->media.igbpl * dev->media.ilayers / sg.width();
       Vscale1X = Vscale * 4;
     }
 
@@ -883,9 +883,9 @@ void QPxGraph::drawGrid(QPainter *p, const QSize &s, device *dev, int ttype) {
   //	int idxn, idxd;
   //	int scaleType;
   float HscaleX;
-  bool isCD = 0;
+  bool isCD = false;
   int spdMax;
-  int GBperLayer;
+  int GBperLayer = 0;
   //	TestData* data;
   QFont dfont = p->font();
   QFont lfont = dfont;
@@ -1108,7 +1108,6 @@ void QPxGraph::drawGridTA(QPainter *p, const QSize &s, device *dev, int ttype) {
   //	int idxn, idxd;
   //	int scaleType;
   float Hscale;
-  int TAgrids;
   //	TestData* data;
 
 #ifndef QT_NO_DEBUG
@@ -1128,8 +1127,6 @@ void QPxGraph::drawGridTA(QPainter *p, const QSize &s, device *dev, int ttype) {
   if (dev->media.type == "-")
     return;
   //	p->drawLine(0,s.height()-margin_bottom,s.width(),s.height()-margin_bottom);
-
-  TAgrids = 14;
   /*
       if (dev->media.type.startsWith("CD")) {
               TAgrids=11;
@@ -1393,7 +1390,7 @@ int QPxGraph::jitter2h(int h, float val) {
   return (int)(h - h * val / scale[0]->value);
 }
 int QPxGraph::asymm2h(int h, float val) {
-  return (int)(h / 2 - h * val / scale[1]->value);
+  return (double (h) / 2 - h * val / double (scale[1]->value));
 }
 
 int QPxGraph::ta2h(int h, int val) {
