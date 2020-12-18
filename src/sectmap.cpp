@@ -10,6 +10,7 @@
 
 #include <cstdio>
 #include <cstdlib>
+#include <iostream>
 #include <sys/stat.h>
 
 #include "sectmap.hpp"
@@ -27,7 +28,7 @@ smap::smap(char *fn, unsigned int sects) {
   arr = (map_block *)malloc(sizeof(map_block) * blocks);
   fill(BM_WAIT);
   mutex = new Mutex();
-  printf("* map: created for %d sectors\n", sectors);
+  std::cout << "* map: created for " << sectors << " sectors\n";
 }
 
 smap::~smap() {

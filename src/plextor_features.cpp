@@ -41,7 +41,7 @@ int plextor_reboot(drive_info *drive) {
 }
 
 int plextor_get_TLA(drive_info *drive) {
-  if (strncmp(drive->ven, "PLEXTOR ", 8) ||
+  if ((strncmp(drive->ven, "PLEXTOR ", 8) != 0) ||
       !strncmp(drive->dev, "CD-R   PREMIUM2", 15)) {
     strcpy(drive->TLA, "N/A\0");
     return 1;
@@ -853,8 +853,8 @@ int plextor_set_testwrite_dvdplus(drive_info *drive) {
   return 0;
 }
 
-int plextor_plexeraser(drive_info *drive) {
-  long i;
+auto plextor_plexeraser(drive_info *drive) -> int {
+  int64_t i = 0;
   printf("Destucting disc [mode=%02X]... \n", drive->plextor.plexeraser);
   //	return 0;
   drive->cmd[0] = PLEXTOR_PLEXERASER;
@@ -999,7 +999,7 @@ int plextor_get_autostrategy_db(drive_info *drive) //, void* database)
 // EXPERIMENTAL   STRATEGY SAVE
 
 int plextor_get_strategy(drive_info *drive) {
-  int cnt, acnt;
+  int cnt;
   int i, s, offs;
   unsigned char *entry;
   unsigned char *entry_data;
@@ -1014,7 +1014,6 @@ int plextor_get_strategy(drive_info *drive) {
       sperror("PLEXTOR_GET_STRATEGY", drive->err);
     return drive->err;
   }
-  acnt = drive->rd_buf[0];
   cnt = drive->rd_buf[6];
   drive->astrategy.dbcnt = cnt;
   for (i = 0; i < 8; i++)

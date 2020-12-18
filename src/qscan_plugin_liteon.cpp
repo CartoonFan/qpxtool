@@ -21,6 +21,8 @@ void plugin_destroy(scan_plugin *iplugin) {
 }
 
 scan_liteon::scan_liteon(drive_info *idev) : scan_plugin() {
+  lba = 0;
+  cd_errc_new = false;
   dev = idev;
   if (!dev->silent)
     printf("scan_liteon()\n");
@@ -110,7 +112,7 @@ int scan_liteon::start_test(unsigned int itest, long ilba, int &speed) {
   case CHK_FETE:
     start_stop(dev, 1);
     seek(dev, 0);
-    if (r = cmd_fete_init(speed))
+    if (cmd_fete_init(speed))
       return -1;
     r = cmd_fete_init(speed);
     break;

@@ -60,7 +60,7 @@ BOOL WINAPI sigint_handler(DWORD)
 #ifdef DAEMON_EN
 int daemonize() {
   pid_t pid;
-  switch (pid = fork()) {
+  switch (fork()) {
   case -1:
     return -1;
   case 0:
@@ -129,7 +129,6 @@ int main(int argc, char **argv) {
 
   term = 0;
   clients = 0;
-  cli_idx = -1;
   pid = getpid();
   //	for (int i=0; i<CLIENTS_MAX; i++) cpids[i]=0;
 

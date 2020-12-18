@@ -533,10 +533,8 @@ int main(int argc, char *argv[]) {
   }
 
   fseek(fwfile, 0, SEEK_SET);
-  last = 0;
   //	printf("fwblocks = %d\n",fwblocks);
   fwblocks = fwfsz / fwblk;
-  fwblocks_crc = (crc_offs + 2) / fwblk_crc;
 
 #if 0
     csum_init(&CSUM, FW_dev_ID);

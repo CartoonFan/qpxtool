@@ -585,8 +585,8 @@ static int UDFLogVolume(uint8_t *data, char *VolumeDescriptor) {
   uint32_t lbsize, MT_L, N_PM;
   Unicodedecode(&data[84], 128, VolumeDescriptor);
   lbsize = GETN4(212); // should be 2048
-  MT_L = GETN4(264);   // should be 6
-  N_PM = GETN4(268);   // should be 1
+//  MT_L = GETN4(264);   // should be 6
+//  N_PM = GETN4(268);   // should be 1
   if (lbsize != DVD_VIDEO_LB_LEN)
     return 1;
   return 0;
@@ -1116,13 +1116,12 @@ static int UDFGetDescriptor(udf_t *udf, int id, uint8_t *descriptor,
   uint32_t lbnum, MVDS_location, MVDS_length;
   struct avdp_t avdp;
   uint16_t TagID;
-  uint32_t lastsector;
+  uint32_t lastsector = 0;
   int i, terminate;
   int desc_found = 0;
   /* Find Anchor */
-  lastsector = 0;
-  lbnum = 256; /* Try #1, prime anchor */
-  terminate = 0;
+//  lbnum = 256; /* Try #1, prime anchor */
+//  terminate = 0;
   if (bufsize < DVD_VIDEO_LB_LEN) {
     return 0;
   }

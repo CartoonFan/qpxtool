@@ -516,10 +516,10 @@ void AbstractPreviewPrivate::calcParamDraw() {
       xx = offsXpage;
     else {
       if (cols == 1)
-        xx = (preview->viewport()->width() - paperWidthToScale()) / 2;
+        xx = (preview->viewport()->width() - (double)paperWidthToScale()) / 2;
       else
         xx = (preview->viewport()->width() -
-              (paperWidthToScale() * cols + interPageSpacing * (cols - 1))) /
+              (double)(paperWidthToScale() * cols + interPageSpacing * (cols - 1))) /
              2;
     }
   }
@@ -833,7 +833,7 @@ void AbstractPreview::paintEvent(QPaintEvent *) {
   QPainter *p = new QPainter(viewport());
   //    QPixmap *pix = NULL;
   int page = d->beginPageNumber;
-  const QColor bkg = viewport()->backgroundRole();
+  const QColor bkg;
   int xx = d->xx, yy = -d->yy;
   int xx2, yy2;
   int ty_sta, ty_end, tx_sta, tx_end;

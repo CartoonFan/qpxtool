@@ -1,7 +1,7 @@
 project('qpxtool', 'cpp', version: '0.7.2', license: 'GPL',
         default_options: ['optimization=g',
                           'warning_level=3',
-                          'cpp_std=c++17',
+                          'cpp_std=c++20',
                           'b_coverage=true'])
 
 

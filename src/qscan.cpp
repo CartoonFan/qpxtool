@@ -13,6 +13,7 @@
 #include <cstdlib>
 #include <fcntl.h>
 #include <unistd.h>
+#include <iostream>
 
 #include <cstring>
 #include <getopt.h>
@@ -309,13 +310,12 @@ int main(int argc, char **argv) {
       wspeed = atol(optarg);
       break;
     case 'l':
-      flags |= FL_SCANBUS;
       scanbus();
       return 0;
     case 't':
-      if (!(strcmp(optarg, "rt") && strcmp(optarg, "wt") &&
-            strcmp(optarg, "errc") && strcmp(optarg, "jb") &&
-            strcmp(optarg, "ft") && strcmp(optarg, "ta"))) {
+      if (!(strcmp(optarg, "rt") != 0 && strcmp(optarg, "wt") != 0 &&
+            strcmp(optarg, "errc") != 0 && strcmp(optarg, "jb") != 0 &&
+            strcmp(optarg, "ft") != 0 && strcmp(optarg, "ta") != 0)) {
         test = optarg;
       } else {
         printf(MSGPREF "invalid test name: %s\n", optarg);
@@ -404,7 +404,7 @@ int main(int argc, char **argv) {
     } else {
       printf(IDEV "TLA#  : N/A \n");
     }
-    printf(IDEV "Buffer: %d kB\n", dev->buffer_size);
+    std::cout << IDEV << "Buffer: " << dev->buffer_size << " kB\n";
     printf(IDEV "S/N   : %s\n", dev->serial);
     printf(IDEV "IFace : %s\n", dev->iface);
     printf(IDEV "Loader: %s\n", loader_list[dev->loader_id]);
@@ -442,11 +442,9 @@ int main(int argc, char **argv) {
     check_write_modes(dev);
   }
   if (flags & FL_INFO) {
-    printf(IDEV "Device Generic capabilities : 0x%016LX\n", dev->capabilities);
-    printf(IDEV "Device Read capabilities    : 0x%016LX\n",
-           dev->rd_capabilities);
-    printf(IDEV "Device Write capabilities   : 0x%016LX\n",
-           dev->wr_capabilities);
+    std::cout << IDEV << "Device Generic capabilities : 0x" << dev->capabilities << "\n";
+    std::cout << IDEV << "Device Read capabilities    : 0x" << dev->rd_capabilities << "\n";
+    std::cout << IDEV << "Device Write capabilities   : 0x" << dev->wr_capabilities << "\n";
   }
 
   if (dev->wr_capabilities) {
@@ -614,7 +612,7 @@ int main(int argc, char **argv) {
     scanner->plugin_attach(pname);
   }
 
-  if (!pname && ((test && (strcmp(test, "rt") && strcmp(test, "wt"))) ||
+  if (!pname && ((test && ((strcmp(test, "rt") != 0) && (strcmp(test, "wt") != 0))) ||
                  (flags & (FL_MINFO | FL_LPLUGIN)))) {
     if (!dev->silent)
       printf(MSGPREF "creating scanner...\n");

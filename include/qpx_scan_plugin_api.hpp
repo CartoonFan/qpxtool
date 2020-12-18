@@ -318,7 +318,9 @@ class drive_info;
 
 class scan_plugin {
 public:
-  scan_plugin(drive_info *idev = NULL) {
+  scan_plugin() {
+    *dev = nullptr;
+    test = 0;
     devlist = NULL;
     blklist = NULL;
   }
@@ -327,7 +329,7 @@ public:
   //    virtual int  check_drive()=0;
   virtual int check_test(unsigned int test) = 0;
   virtual int errc_data() = 0;
-  virtual int *get_test_speeds(unsigned int test) { return NULL; };
+  virtual int *get_test_speeds(unsigned int) { return NULL; };
   virtual int start_test(unsigned int test, long slba, int &speed) = 0;
   virtual int scan_block(void *data, long *ilba) = 0;
   virtual int end_test() = 0;

@@ -14,9 +14,9 @@
 //#include <stdlib.h>
 
 //#include <qpx_mmc.h>
-//#include <sectmap.h>
+#include "sectmap.hpp"
 
-#include <threads.h>
+#include "threads.hpp"
 
 const char PASS_FIRST = 0;
 const char PASS_CONT = 1;

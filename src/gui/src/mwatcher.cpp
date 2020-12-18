@@ -58,8 +58,8 @@ void MediaWatcher::run() {
 #endif
   sreq = 0;
   preq = 0;
-  // initialising surrent status
-  op = cp = test_unit_ready(dev);
+  // initialising current status
+  op = test_unit_ready(dev);
   while (!sreq) {
     if (!preq) {
       cp = test_unit_ready(dev);

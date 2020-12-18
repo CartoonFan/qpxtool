@@ -566,7 +566,7 @@ devctlSilent::devctlSilent(device *idev, QWidget *p) : QWidget(p) {
   layoutb->addWidget(ck_perm);
   layoutb->addWidget(pb_save);
 
-  cd = dev->media.type.startsWith("CD");
+  cd;
   dvd = dev->media.type.startsWith("DVD");
   /*
       qDebug() << " SM RD CD :" << dev->features.sm_cd_rd;

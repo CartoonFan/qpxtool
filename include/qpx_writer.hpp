@@ -13,6 +13,8 @@
 #ifndef QPXWRITER_H
 #define QPXWRITER_H
 
+#include <cstdint>
+
 class drive_info;
 
 class qpxwriter {

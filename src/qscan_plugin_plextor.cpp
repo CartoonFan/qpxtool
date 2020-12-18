@@ -33,6 +33,9 @@ void plugin_destroy(scan_plugin *iplugin) {
 }
 
 scan_plextor::scan_plextor(drive_info *idev) : scan_plugin() {
+  lba = 0;
+  fete_idx = 0;
+  fete_rsize = 0;
   dev = idev;
   if (!dev->silent)
     printf("scan_plextor()\n");
@@ -158,7 +161,6 @@ int scan_plextor::start_test(unsigned int itest, long ilba, int &speed) {
     break;
   case CHK_TA:
     if (dev->media.type & (DISC_DVD & ~DISC_DVDROM)) {
-      r = 0;
       test = CHK_TA_DVD;
       // TA test should run at minimum available speed (2X for DVD-, 2.4X for
       // DVD+) setting 2X for DVD+ will be 2.4

@@ -10,10 +10,14 @@
  *
  */
 
+#include <string>
+#include <iostream>
+
 #include "resultsio.hpp"
 
 #include <QDebug>
 #include <QFile>
+#include <QStringView>
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
 

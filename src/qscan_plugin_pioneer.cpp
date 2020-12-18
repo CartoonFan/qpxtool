@@ -33,6 +33,7 @@ void plugin_destroy(scan_plugin *iplugin) {
 }
 
 scan_pioneer::scan_pioneer(drive_info *idev) : scan_plugin() {
+  lba = 0;
   dev = idev;
   if (!dev->silent)
     printf("scan_pioneer()\n");
@@ -61,7 +62,8 @@ int scan_pioneer::probe_drive() {
 int scan_pioneer::errc_data() {
   if (dev->media.type & DISC_CD) {
     return (ERRC_DATA_BLER | ERRC_DATA_E22 | ERRC_DATA_UNCR);
-  } else if (dev->media.type & DISC_DVD) {
+  } 
+  if (dev->media.type & DISC_DVD) {
     return (ERRC_DATA_PIE | ERRC_DATA_PIF | ERRC_DATA_UNCR);
   }
   return 0;

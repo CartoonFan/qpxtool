@@ -13,6 +13,8 @@
 #ifndef _DB_CONNECTION_H
 #define _DB_CONNECTION_H
 
+#include <QString>
+
 class QSqlDatabase;
 class QString;
 
